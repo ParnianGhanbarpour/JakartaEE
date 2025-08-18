@@ -1,0 +1,2 @@
+# JakartaEE
+-exercises

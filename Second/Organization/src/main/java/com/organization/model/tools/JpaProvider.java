@@ -1,4 +1,4 @@
-package com.example.organization.model.tools;
+package com.organization.model.tools;
 
 
 import lombok.Getter;

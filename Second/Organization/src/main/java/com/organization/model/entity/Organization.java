@@ -1,4 +1,4 @@
-package com.example.organization.model.entity;
+package com.organization.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,8 +9,10 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 
+
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,7 +39,8 @@ public class Organization {
     private String organizationType ;
 
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Branch> branches;
+    private List<Branch> branches = new ArrayList<Branch>();
+
 
     public void addBranch(Branch branch) {
         branches.add(branch);

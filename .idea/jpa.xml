@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpaBuddyIdeaProjectConfig">
+    <option name="reLastEntityCreationPackage" value="Second/Organization/src/main/java/com/organization/model/entity" />
+    <option name="reverseEngineeringLastDbConnectionId" value="113d7b3e-651e-4f30-8dbf-2cff8777f339" />
+  </component>
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="Default" />
+    </persistence-units>
+  </component>
+</project>

@@ -1,7 +1,7 @@
-package com.example.organization.model.repository;
+package com.organization.model.repository;
 
 
-import com.example.organization.model.tools.JpaProvider;
+import com.organization.model.tools.JpaProvider;
 
 import javax.persistence.*;
 import java.util.List;

@@ -1,8 +1,8 @@
-package com.example.organization.model.service;
+package com.organization.model.service;
 
-import com.example.organization.controller.exception.OrganizationNotFoundException;
-import com.example.organization.model.entity.Organization;
-import com.example.organization.model.repository.CrudRepository;
+import com.organization.controller.exception.OrganizationNotFoundException;
+import com.organization.model.entity.Organization;
+import com.organization.model.repository.CrudRepository;
 
 import java.util.List;
 

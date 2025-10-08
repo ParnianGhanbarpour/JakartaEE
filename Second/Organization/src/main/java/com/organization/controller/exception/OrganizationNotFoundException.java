@@ -1,4 +1,4 @@
-package com.example.organization.controller.exception;
+package com.organization.controller.exception;
 
 public class OrganizationNotFoundException extends Exception {
     public OrganizationNotFoundException() {

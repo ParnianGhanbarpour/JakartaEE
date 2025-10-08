@@ -1,7 +1,7 @@
-package com.example.organization.model.service;
+package com.organization.model.service;
 
-import com.example.organization.model.entity.Branch;
-import com.example.organization.model.repository.CrudRepository;
+import com.organization.model.entity.Branch;
+import com.organization.model.repository.CrudRepository;
 
 import java.util.List;
 

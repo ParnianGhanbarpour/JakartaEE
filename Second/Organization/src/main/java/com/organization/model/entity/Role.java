@@ -1,4 +1,4 @@
-package com.example.organization.model.entity;
+package com.organization.model.entity;
 
 public enum Role {
     MANAGER,

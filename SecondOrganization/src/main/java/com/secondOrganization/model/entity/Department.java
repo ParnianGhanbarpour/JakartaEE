@@ -13,7 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @ToString(exclude = {"branch", "organization", "organizationGroups"})
-@Entity(name = "departmentEntity")
+
+@Entity
 @Table(name = "department_tbl")
 public class Department extends Base {
 

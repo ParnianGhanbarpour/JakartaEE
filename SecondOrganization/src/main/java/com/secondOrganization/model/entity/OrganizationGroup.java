@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 
-@Entity(name="organizationGroupEntity")
+@Entity
 @Table(name = "organization_group_tbl")
 public class OrganizationGroup extends Base {
 

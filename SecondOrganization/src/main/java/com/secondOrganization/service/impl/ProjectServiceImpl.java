@@ -3,6 +3,7 @@ package com.secondOrganization.service.impl;
 import com.secondOrganization.model.entity.Project;
 import com.secondOrganization.model.entity.enums.ProjectStatus;
 import com.secondOrganization.service.ProjectService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class ProjectServiceImpl implements ProjectService, Serializable {
 
     @PersistenceContext(unitName = "organization")
@@ -59,7 +60,7 @@ public class ProjectServiceImpl implements ProjectService, Serializable {
     @Transactional
     @Override
     public List<Project> findAll() throws Exception {
-        TypedQuery<Project> q = entityManager.createQuery("select p from projectEntity p where p.deleted=false", Project.class);
+        TypedQuery<Project> q = entityManager.createQuery("select p from Project p where p.deleted=false", Project.class);
         return q.getResultList();
     }
 
@@ -72,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService, Serializable {
     @Transactional
     @Override
     public List<Project> findByTitle(String title) throws Exception {
-        TypedQuery<Project> q = entityManager.createQuery("select p from projectEntity p where p.title = :title and p.deleted=false", Project.class);
+        TypedQuery<Project> q = entityManager.createQuery("select p from Project p where p.title = :title and p.deleted=false", Project.class);
         q.setParameter("title", title);
         return q.getResultList();
     }
@@ -80,7 +81,7 @@ public class ProjectServiceImpl implements ProjectService, Serializable {
     @Transactional
     @Override
     public List<Project> findByStatus(ProjectStatus status) throws Exception {
-        TypedQuery<Project> q = entityManager.createQuery("select p from projectEntity p where p.status = :status and p.deleted=false", Project.class);
+        TypedQuery<Project> q = entityManager.createQuery("select p from Project p where p.status = :status and p.deleted=false", Project.class);
         q.setParameter("status", status);
         return q.getResultList();
     }

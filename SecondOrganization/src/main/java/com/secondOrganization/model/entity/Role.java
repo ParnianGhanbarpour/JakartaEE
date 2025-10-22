@@ -19,7 +19,7 @@ import java.io.Serializable;
 @ToString
 
 
-@Entity(name="roleEntity")
+@Entity
 @Table(name="role_tbl")
 public class Role extends Base implements Serializable {
 

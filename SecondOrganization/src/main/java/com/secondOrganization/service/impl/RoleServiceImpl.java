@@ -3,6 +3,7 @@ package com.secondOrganization.service.impl;
 
 import com.secondOrganization.model.entity.Role;
 import com.secondOrganization.service.RoleService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class RoleServiceImpl implements RoleService, Serializable {
     @PersistenceContext(unitName = "organization")
     private EntityManager entityManager;
@@ -57,14 +58,14 @@ public class RoleServiceImpl implements RoleService, Serializable {
     @Transactional
     @Override
     public List<Role> findAll() throws Exception {
-        TypedQuery<Role> query = entityManager.createQuery("select oo from roleEntity oo where oo.deleted=false", Role.class);
+        TypedQuery<Role> query = entityManager.createQuery("select oo from Role oo where oo.deleted=false", Role.class);
         return query.getResultList();
     }
 
     @Transactional
     @Override
     public List<Role> findByRoleName(String roleName) throws Exception {
-        TypedQuery<Role> query = entityManager.createQuery("select oo from roleEntity oo where oo.role=:roleName", Role.class);
+        TypedQuery<Role> query = entityManager.createQuery("select oo from Role oo where oo.role=:roleName", Role.class);
         query.setParameter("roleName",roleName);
         return query.getResultList();
     }
@@ -72,7 +73,7 @@ public class RoleServiceImpl implements RoleService, Serializable {
     @Transactional
     @Override
     public List<Role> findByUser(String username) throws Exception {
-        TypedQuery<Role> query = entityManager.createQuery("select oo from roleEntity oo where oo.user=:username", Role.class);
+        TypedQuery<Role> query = entityManager.createQuery("select oo from Role oo where oo.user=:username", Role.class);
         query.setParameter("username",username);
         return query.getResultList();
     }
@@ -82,7 +83,7 @@ public class RoleServiceImpl implements RoleService, Serializable {
     public List<Role> findByUsernameAndRoleName(String username, String roleName) throws Exception {
         TypedQuery<Role> query = entityManager.
                 createQuery
-                        ("select oo from roleEntity oo where oo.user.username=:username and oo.role=:roleName and deleted=false", Role.class);
+                        ("select oo from Role oo where oo.user.username=:username and oo.role=:roleName and deleted=false", Role.class);
         query.setParameter("username",username);
         query.setParameter("roleName",roleName);
         return query.getResultList();

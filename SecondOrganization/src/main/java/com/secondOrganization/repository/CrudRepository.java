@@ -1,58 +1,42 @@
 package com.secondOrganization.repository;
 
-
-import com.secondOrganization.model.tools.JpaProvider;
-import jakarta.persistence.Entity;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-
 import java.util.List;
 
-public class CrudRepository<T, I> implements AutoCloseable {
-    private final EntityManager entityManager;
+@Stateless
+public class CrudRepository<T, I> {
 
-    public CrudRepository() {
-        entityManager = JpaProvider.getProvider().getEntityManager();
-    }
+    @PersistenceContext(unitName = "organization")
+    private EntityManager entityManager;
 
     public T save(T t) {
-        EntityTransaction entityTransaction = entityManager.getTransaction();
-        entityTransaction.begin();
         entityManager.persist(t);
-        entityTransaction.commit();
         return t;
     }
 
     public T edit(T t) {
-        EntityTransaction entityTransaction = entityManager.getTransaction();
-        entityTransaction.begin();
-        entityManager.merge(t);
-        entityTransaction.commit();
-        return t;
+        return entityManager.merge(t);
     }
 
     public T deleteById(I id, Class<T> tClass) {
-        EntityTransaction entityTransaction = entityManager.getTransaction();
-        entityTransaction.begin();
         T t = entityManager.find(tClass, id);
-        entityManager.remove(t);
-        entityTransaction.commit();
+        if (t != null) entityManager.remove(t);
         return t;
     }
 
     public List<T> findAll(Class<T> tClass) {
-        TypedQuery<T> query = entityManager.createQuery("select p from " + tClass.getAnnotation(Entity.class).name() + " p", tClass);
+        String entityName = tClass.isAnnotationPresent(jakarta.persistence.Entity.class) &&
+                !tClass.getAnnotation(jakarta.persistence.Entity.class).name().isEmpty()
+                ? tClass.getAnnotation(jakarta.persistence.Entity.class).name()
+                : tClass.getSimpleName();
+        TypedQuery<T> query = entityManager.createQuery("select e from " + entityName + " e", tClass);
         return query.getResultList();
     }
 
     public T findById(I id, Class<T> tClass) {
         return entityManager.find(tClass, id);
-    }
-
-
-    @Override
-    public void close() throws Exception {
-        entityManager.close();
     }
 }

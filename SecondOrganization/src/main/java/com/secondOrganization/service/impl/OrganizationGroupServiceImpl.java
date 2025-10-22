@@ -2,6 +2,7 @@ package com.secondOrganization.service.impl;
 
 import com.secondOrganization.model.entity.OrganizationGroup;
 import com.secondOrganization.service.OrganizationGroupService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class OrganizationGroupServiceImpl implements OrganizationGroupService, Serializable {
 
     @PersistenceContext(unitName = "organization")
@@ -58,7 +59,7 @@ public class OrganizationGroupServiceImpl implements OrganizationGroupService, S
     @Transactional
     @Override
     public List<OrganizationGroup> findAll() throws Exception {
-        TypedQuery<OrganizationGroup> q = entityManager.createQuery("select g from organizationGroupEntity g where g.deleted=false", OrganizationGroup.class);
+        TypedQuery<OrganizationGroup> q = entityManager.createQuery("select g from OrganizationGroup g where g.deleted=false", OrganizationGroup.class);
         return q.getResultList();
     }
 
@@ -71,7 +72,7 @@ public class OrganizationGroupServiceImpl implements OrganizationGroupService, S
     @Transactional
     @Override
     public List<OrganizationGroup> findByDepartmentId(Long departmentId) throws Exception {
-        TypedQuery<OrganizationGroup> q = entityManager.createQuery("select g from organizationGroupEntity g where g.department.id = :deptId and g.deleted=false", OrganizationGroup.class);
+        TypedQuery<OrganizationGroup> q = entityManager.createQuery("select g from OrganizationGroup g where g.department.id = :deptId and g.deleted=false", OrganizationGroup.class);
         q.setParameter("deptId", departmentId);
         return q.getResultList();
     }
@@ -79,7 +80,7 @@ public class OrganizationGroupServiceImpl implements OrganizationGroupService, S
     @Transactional
     @Override
     public List<OrganizationGroup> findByName(String name) throws Exception {
-        TypedQuery<OrganizationGroup> q = entityManager.createQuery("select g from organizationGroupEntity g where g.name = :name and g.deleted=false", OrganizationGroup.class);
+        TypedQuery<OrganizationGroup> q = entityManager.createQuery("select g from OrganizationGroup g where g.name = :name and g.deleted=false", OrganizationGroup.class);
         q.setParameter("name", name);
         return q.getResultList();
     }

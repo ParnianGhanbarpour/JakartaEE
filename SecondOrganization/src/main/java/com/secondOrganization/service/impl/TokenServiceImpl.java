@@ -2,6 +2,7 @@ package com.secondOrganization.service.impl;
 
 import com.secondOrganization.model.entity.Token;
 import com.secondOrganization.service.TokenService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class TokenServiceImpl implements TokenService, Serializable {
 
     @PersistenceContext(unitName = "organization")

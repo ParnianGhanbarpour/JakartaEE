@@ -21,7 +21,7 @@ import java.util.List;
 @ToString
 @SuperBuilder
 
-@Entity(name="userEntity")
+@Entity
 @Table(name="user_tbl")
 public class User extends Base implements Serializable {
 

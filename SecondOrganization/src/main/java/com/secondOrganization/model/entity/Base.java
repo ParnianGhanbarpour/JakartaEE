@@ -13,19 +13,14 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @Setter
-@SuperBuilder
 @NoArgsConstructor
-
+@SuperBuilder
 public abstract class Base {
-    @Id
-    @SequenceGenerator(
-            name = "baseSeq",
-            sequenceName = "base_seq",
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "baseSeq")
-    private Long id;
 
+    @Id
+    @SequenceGenerator(name = "base_seq_gen", sequenceName = "base_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "base_seq_gen")
+    private Long id;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -63,7 +58,4 @@ public abstract class Base {
     public String toString() {
         return new Gson().toJson(this);
     }
-
-
-
 }

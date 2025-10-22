@@ -17,7 +17,7 @@ import java.util.Set;
 @ToString(exclude = {"assignments", "persons"})
 @SuperBuilder
 
-@Entity(name = "projectEntity")
+@Entity
 @Table(name = "project_tbl")
 public class Project extends Base {
 

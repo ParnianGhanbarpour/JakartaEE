@@ -2,6 +2,7 @@ package com.secondOrganization.service.impl;
 
 import com.secondOrganization.model.entity.Branch;
 import com.secondOrganization.service.BranchService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class BranchServiceImpl implements BranchService, Serializable {
 
     @PersistenceContext(unitName = "organization")
@@ -58,7 +59,7 @@ public class BranchServiceImpl implements BranchService, Serializable {
     @Transactional
     @Override
     public List<Branch> findAll() throws Exception {
-        TypedQuery<Branch> q = entityManager.createQuery("select b from branchEntity b where b.deleted=false", Branch.class);
+        TypedQuery<Branch> q = entityManager.createQuery("select b from Branch  b where b.deleted=false", Branch.class);
         return q.getResultList();
     }
 
@@ -71,7 +72,7 @@ public class BranchServiceImpl implements BranchService, Serializable {
     @Transactional
     @Override
     public List<Branch> findByCity(String city) throws Exception {
-        TypedQuery<Branch> q = entityManager.createQuery("select b from branchEntity b where b.city = :city and b.deleted=false", Branch.class);
+        TypedQuery<Branch> q = entityManager.createQuery("select b from Branch b where b.city = :city and b.deleted=false", Branch.class);
         q.setParameter("city", city);
         return q.getResultList();
     }
@@ -79,7 +80,7 @@ public class BranchServiceImpl implements BranchService, Serializable {
     @Transactional
     @Override
     public List<Branch> findByManager(String manager) throws Exception {
-        TypedQuery<Branch> q = entityManager.createQuery("select b from branchEntity b where b.manager = :manager and b.deleted=false", Branch.class);
+        TypedQuery<Branch> q = entityManager.createQuery("select b from Branch b where b.manager = :manager and b.deleted=false", Branch.class);
         q.setParameter("manager", manager);
         return q.getResultList();
     }
@@ -87,7 +88,7 @@ public class BranchServiceImpl implements BranchService, Serializable {
     @Transactional
     @Override
     public List<Branch> findByOrganizationId(Integer organizationId) throws Exception {
-        TypedQuery<Branch> q = entityManager.createQuery("select b from branchEntity b where b.organization.id = :orgId and b.deleted=false", Branch.class);
+        TypedQuery<Branch> q = entityManager.createQuery("select b from Branch b where b.organization.id = :orgId and b.deleted=false", Branch.class);
         q.setParameter("orgId", organizationId);
         return q.getResultList();
     }

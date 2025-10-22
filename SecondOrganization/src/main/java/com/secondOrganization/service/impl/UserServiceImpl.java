@@ -6,6 +6,7 @@ import com.secondOrganization.model.entity.Department;
 import com.secondOrganization.model.entity.User;
 import com.secondOrganization.model.entity.enums.Role;
 import com.secondOrganization.service.UserService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class UserServiceImpl implements UserService, Serializable {
     @PersistenceContext(unitName = "organization")
     private EntityManager entityManager;
@@ -56,14 +57,14 @@ public class UserServiceImpl implements UserService, Serializable {
     @Transactional
     @Override
     public List<User> findAll() throws Exception {
-        TypedQuery<User> query = entityManager.createQuery("select u from userEntity u where u.deleted=false", User.class);
+        TypedQuery<User> query = entityManager.createQuery("select u from User u where u.deleted=false", User.class);
         return query.getResultList();
     }
 
     @Transactional
     @Override
     public Optional<User> findByUsername(String username) throws Exception {
-        TypedQuery<User> query = entityManager.createQuery("select u from userEntity u where u.username=:username", User.class);
+        TypedQuery<User> query = entityManager.createQuery("select u from User u where u.username=:username", User.class);
         query.setParameter("username", username);
         return Optional.ofNullable(entityManager.find(User.class, username));
     }
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService, Serializable {
     @Transactional
     @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) throws Exception {
-        TypedQuery<User> query =  entityManager.createQuery("select u from userEntity u where u.username=:username and u.password=:password",User.class);
+        TypedQuery<User> query =  entityManager.createQuery("select u from User u where u.username=:username and u.password=:password",User.class);
         query.setParameter("username", username);
         query.setParameter("password",password);
         List<User> result = query.getResultList();
@@ -81,28 +82,28 @@ public class UserServiceImpl implements UserService, Serializable {
     @Transactional
     @Override
     public List<User> findByRole(Role role) throws Exception {
-        TypedQuery<User> query = entityManager.createQuery("select u from userEntity u", User.class);
+        TypedQuery<User> query = entityManager.createQuery("select u from User u", User.class);
         return query.getResultList();
     }
 
     @Transactional
     @Override
     public List<User> findByDepartment(Department department) throws Exception {
-        TypedQuery<User> query = entityManager.createQuery("select u from userEntity u", User.class);
+        TypedQuery<User> query = entityManager.createQuery("select u from User u", User.class);
         return query.getResultList();
     }
 
     @Transactional
     @Override
     public List<User> findByActive(Boolean section) throws Exception {
-        TypedQuery<User> query = entityManager.createQuery("select u from userEntity u", User.class);
+        TypedQuery<User> query = entityManager.createQuery("select u from User u", User.class);
         return query.getResultList();
     }
 
     @Transactional
     @Override
     public List<User> findUserByUsernames(List<String> userList) throws Exception {
-        TypedQuery<User> query = entityManager.createQuery("select oo from userEntity oo where oo.username in :userList", User.class);
+        TypedQuery<User> query = entityManager.createQuery("select oo from User oo where oo.username in :userList", User.class);
 
         query.setParameter("userList", userList);
         System.out.println(query);

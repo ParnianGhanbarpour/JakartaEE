@@ -20,7 +20,7 @@ import java.util.Set;
 @SuperBuilder
 @ToString
 
-@Entity(name = "personEntity")
+@Entity
 @Table(name = "person_tbl")
 public class Person extends Base{
 

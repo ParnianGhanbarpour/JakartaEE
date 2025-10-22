@@ -2,6 +2,7 @@ package com.secondOrganization.service.impl;
 
 import com.secondOrganization.model.entity.Department;
 import com.secondOrganization.service.DepartmentService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class DepartmentServiceImp implements DepartmentService, Serializable {
     @PersistenceContext(unitName = "organization")
     private EntityManager entityManager;
@@ -50,7 +51,7 @@ public class DepartmentServiceImp implements DepartmentService, Serializable {
     @Transactional
     @Override
     public List<Department> findAll() throws Exception {
-        TypedQuery<Department> query = entityManager.createQuery("select oo from departmentEntity oo", Department.class);
+        TypedQuery<Department> query = entityManager.createQuery("select oo from Department oo", Department.class);
         return query.getResultList();
     }
 
@@ -63,8 +64,8 @@ public class DepartmentServiceImp implements DepartmentService, Serializable {
     @Transactional
     @Override
     public Optional<Department> findByTitle(String title) throws Exception {
-        TypedQuery<Department> query = entityManager.createQuery("select oo from departmentEntity oo where oo.title=:title", Department.class);
-        query.setParameter( "title",title);
+        TypedQuery<Department> query = entityManager.createQuery("select oo from Department oo where oo.name=:name", Department.class);
+        query.setParameter( "name",title);
         return Optional.ofNullable(entityManager.find(Department.class, title));
     }
 

@@ -20,7 +20,7 @@ import java.util.List;
 @SuperBuilder
 @ToString
 
-@Entity(name="organizationEntity")
+@Entity
 @Table(name="organization_tbl")
 public class Organization extends Base {
 

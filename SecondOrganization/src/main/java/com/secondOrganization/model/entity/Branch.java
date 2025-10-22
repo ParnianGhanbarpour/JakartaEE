@@ -13,10 +13,10 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"departments", "organization"})
 @SuperBuilder
 
-@Entity(name="branchEntity")
+@Entity
 @Table(name = "branch_tbl")
 public class Branch extends Base {
 
@@ -32,11 +32,11 @@ public class Branch extends Base {
     @Column(name="managerName", length = 30, nullable = false)
     private String manager;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
-    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Department> departments = new ArrayList<>();
 
     public void addDepartment(Department department) {

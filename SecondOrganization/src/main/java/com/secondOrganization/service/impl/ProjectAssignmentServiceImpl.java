@@ -2,6 +2,7 @@ package com.secondOrganization.service.impl;
 
 import com.secondOrganization.model.entity.ProjectAssignment;
 import com.secondOrganization.service.ProjectAssignmentService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class ProjectAssignmentServiceImpl implements ProjectAssignmentService, Serializable {
 
     @PersistenceContext(unitName = "organization")
@@ -60,7 +61,7 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService, S
     @Transactional
     @Override
     public List<ProjectAssignment> findAll() throws Exception {
-        TypedQuery<ProjectAssignment> q = entityManager.createQuery("select pa from projectAssignmentEntity pa where pa.deleted=false", ProjectAssignment.class);
+        TypedQuery<ProjectAssignment> q = entityManager.createQuery("select pa from ProjectAssignment pa where pa.deleted=false", ProjectAssignment.class);
         return q.getResultList();
     }
 
@@ -73,7 +74,7 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService, S
     @Transactional
     @Override
     public List<ProjectAssignment> findByProjectId(Long projectId) throws Exception {
-        TypedQuery<ProjectAssignment> q = entityManager.createQuery("select pa from projectAssignmentEntity pa where pa.project.id = :projectId and pa.deleted=false", ProjectAssignment.class);
+        TypedQuery<ProjectAssignment> q = entityManager.createQuery("select pa from ProjectAssignment pa where pa.project.id = :projectId and pa.deleted=false", ProjectAssignment.class);
         q.setParameter("projectId", projectId);
         return q.getResultList();
     }
@@ -81,7 +82,7 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService, S
     @Transactional
     @Override
     public List<ProjectAssignment> findByPersonId(Long personId) throws Exception {
-        TypedQuery<ProjectAssignment> q = entityManager.createQuery("select pa from projectAssignmentEntity pa where pa.person.id = :personId and pa.deleted=false", ProjectAssignment.class);
+        TypedQuery<ProjectAssignment> q = entityManager.createQuery("select pa from ProjectAssignment pa where pa.person.id = :personId and pa.deleted=false", ProjectAssignment.class);
         q.setParameter("personId", personId);
         return q.getResultList();
     }

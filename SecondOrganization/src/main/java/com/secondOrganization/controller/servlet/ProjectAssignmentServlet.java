@@ -33,8 +33,11 @@ public class ProjectAssignmentServlet extends HttpServlet {
             long projectId = Long.parseLong(req.getParameter("projectId"));
             long personId = Long.parseLong(req.getParameter("personId"));
 
-            Project project = projectService.findById(projectId);
-            Person person = personService.findById(personId);
+            Project project = projectService.findById(projectId)
+                    .orElseThrow(() -> new IllegalArgumentException("Project not found with id: " + projectId));
+
+            Person person = personService.findById(personId)
+                    .orElseThrow(() -> new IllegalArgumentException("Person not found with id: " + personId));
 
             ProjectAssignment assignment = ProjectAssignment.builder()
                     .project(project)
@@ -51,6 +54,7 @@ public class ProjectAssignmentServlet extends HttpServlet {
             resp.sendRedirect("/error.jsp");
         }
     }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

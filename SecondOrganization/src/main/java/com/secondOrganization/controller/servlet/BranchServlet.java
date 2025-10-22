@@ -11,6 +11,7 @@ import jakarta.servlet.http.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @WebServlet(urlPatterns = "/branch.do")
@@ -31,20 +32,27 @@ public class BranchServlet extends HttpServlet {
             String manager = req.getParameter("manager");
             long orgId = Long.parseLong(req.getParameter("organizationId"));
 
-            Organization organization = organizationService.findById(orgId);
+            Optional<Organization> optionalOrg = organizationService.findById(orgId);
 
-            Branch branch = Branch.builder()
-                    .name(name)
-                    .address(address)
-                    .city(city)
-                    .manager(manager)
-                    .organization(organization)
-                    .deleted(false)
-                    .build();
+            if (optionalOrg.isPresent()) {
+                Organization organization = optionalOrg.get();
 
-            branchService.save(branch);
-            log.info("Branch created: {}", branch);
-            resp.sendRedirect("/jsp/branch.jsp");
+                Branch branch = Branch.builder()
+                        .name(name)
+                        .address(address)
+                        .city(city)
+                        .manager(manager)
+                        .organization(organization)
+                        .deleted(false)
+                        .build();
+
+                branchService.save(branch);
+                log.info("Branch created: {}", branch);
+                resp.sendRedirect("/jsp/branch.jsp");
+            } else {
+                log.error("Organization not found with id: {}", orgId);
+                resp.sendRedirect("/error.jsp");
+            }
 
         } catch (Exception e) {
             log.error("Error saving branch", e);

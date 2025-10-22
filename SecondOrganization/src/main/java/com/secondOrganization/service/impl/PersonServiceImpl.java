@@ -2,6 +2,7 @@ package com.secondOrganization.service.impl;
 
 import com.secondOrganization.model.entity.Person;
 import com.secondOrganization.service.PersonService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class PersonServiceImpl implements PersonService, Serializable {
 
     @PersistenceContext(unitName = "organization")
@@ -115,7 +116,7 @@ public class PersonServiceImpl implements PersonService, Serializable {
     public List<Person> findByNameAndFamily(String name, String family) throws Exception {
         log.info("Finding persons by name={} and family={}", name, family);
         TypedQuery<Person> query =
-                entityManager.createQuery("select p from Person p where p.name=:name and p.family=:family and p.deleted=false", Person.class);
+                entityManager.createQuery("select p from Person  p where p.name=:name and p.family=:family and p.deleted=false", Person.class);
         query.setParameter("name", name);
         query.setParameter("family", family);
         return query.getResultList();
@@ -126,7 +127,7 @@ public class PersonServiceImpl implements PersonService, Serializable {
     public Optional<Person> findByNationalCode(String code) throws Exception {
         log.info("Finding person by national code: {}", code);
         TypedQuery<Person> query =
-                entityManager.createQuery("select p from Person p where p.nationalId=:code and p.deleted=false", Person.class);
+                entityManager.createQuery("select p from Person p where p.nationalCode=:code and p.deleted=false", Person.class);
         query.setParameter("code", code);
         return query.getResultList().stream().findFirst();
     }

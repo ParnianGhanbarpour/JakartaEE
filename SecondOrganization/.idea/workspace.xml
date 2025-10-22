@@ -9,130 +9,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jpa.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/config/LoggingInitializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/Api.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/RestServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/AccessDeniedException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/DuplicateUsernameException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/ExceptionWrapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/IdIsRequiredException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/MyException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/NoContentException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/NoUserFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/ServletFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/BranchServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/DashboardServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/DepartmentServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/LoginServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/OrganizationGroupServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/OrganizationServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/PersonServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/ProjectAssignmentServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/ProjectServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/UserServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/session/SessionListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/session/SessionManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/validation/BeanValidator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/dto/ProfileDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Base.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Branch.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Department.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Organization.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/OrganizationGroup.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Person.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Project.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/ProjectAssignment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Token.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/enums/Gender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/enums/ProjectStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/enums/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/tools/JpaProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/repository/BaseRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/repository/CacheDB.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/repository/CrudRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/repository/TokenRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/security/CsrfFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/BranchService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/DepartmentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/OrganizationGroupService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/OrganizationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/PersonService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/ProjectAssignmentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/ProjectService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/RoleService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/TokenService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/BranchServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/DepartmentServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/OrganizationGroupServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/OrganizationServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/PersonServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/ProjectAssignmentServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/ProjectServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/RoleServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/TokenServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/utils/CustomException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/utils/FutureDate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/utils/JwtUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/utils/SecurityUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/beans.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/bootstrap.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/bootstrap.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/fontawesome.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/persian-font.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/reset.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/yekan-font/Yekan.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/yekan-font/Yekan.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/yekan-font/Yekan.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/yekan-font/Yekan.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/yekan-font/yekan-regular.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/yekan-font/yekan-regular.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/yekan-font/yekan-regular.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/js/bootstrap.bundle.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/js/bootstrap.bundle.min.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/js/fontawesome.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/js/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-brands-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-brands-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-duotone-900.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-duotone-900.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-light-300.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-light-300.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-regular-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-regular-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-sharp-light-300.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-sharp-light-300.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-sharp-regular-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-sharp-regular-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-sharp-solid-900.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-sharp-solid-900.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-solid-900.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-solid-900.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-thin-100.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-thin-100.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-v4compatibility.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/webfonts/fa-v4compatibility.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../third/SecondOrganization/.idea/jpa.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../third/SecondOrganization/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../third/SecondOrganization/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../third/SecondOrganization/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../third/SecondOrganization/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../third/SecondOrganization/pom.xml" afterDir="false" />
+    <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="organization">
+      <change afterPath="$PROJECT_DIR$/META-INF/orm.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0b71cd57-1353-484f-a6c1-7d08c84bf6c1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0b71cd57-1353-484f-a6c1-7d08c84bf6c1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/BranchServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/BranchServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/OrganizationGroupServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/OrganizationGroupServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/ProjectAssignmentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/ProjectAssignmentServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Base.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Base.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Branch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Branch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Department.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Department.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Organization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Organization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/OrganizationGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/OrganizationGroup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Project.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/ProjectAssignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/ProjectAssignment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/repository/CrudRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/repository/CrudRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/BranchServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/BranchServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/DepartmentServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/DepartmentServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/OrganizationGroupServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/OrganizationGroupServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/OrganizationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/OrganizationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/PersonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/PersonServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/ProjectAssignmentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/ProjectAssignmentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/ProjectServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/ProjectServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/RoleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/RoleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/TokenServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/TokenServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,15 +71,21 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="34NhgsErKk868jLrjRLbxlAfk2H" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "TomEE Server.TomEE 10.0.27.executor": "Run",
     "TomEE Server.TomEE 10.0.271.executor": "Run",
+    "TomEE Server.TomEE 9.1.3.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/pavilion/Desktop/JavaEEExercise/SecondOrganization/src/main/java/com/secondOrganization",
@@ -180,6 +94,10 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Facets",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.45747125",
+    "settings.editor.selected.configurable": "preferences.intentionPowerPack",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -190,11 +108,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\pavilion\Desktop\JavaEEExercise\SecondOrganization\src\main\webapp" />
       <recent name="C:\Users\pavilion\Desktop\JavaEEExercise\SecondOrganization\src\main\java\com\secondOrganization" />
       <recent name="C:\Users\pavilion\Desktop\JavaEEExercise\SecondOrganization\src\main\java\com\secondOrganization\controller" />
       <recent name="C:\Users\pavilion\Desktop\JavaEEExercise\SecondOrganization\src\main\java\com\secondOrganization\model\" />
       <recent name="C:\Users\pavilion\Desktop\JavaEEExercise\SecondOrganization\src\main\resources" />
-      <recent name="C:\Users\pavilion\Desktop\JavaEEExercise\SecondOrganization\src\main\webapp\WEB-INF" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.secondOrganization.controller.servlet" />
@@ -205,7 +123,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="TomEE 10.0.271" type="TomeeConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="TomEE 10.0.271" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <configuration name="TomEE 10.0.27" type="TomeeConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="TomEE 10.0.27" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="SecondOrganization:war exploded">
@@ -293,6 +211,18 @@
         </option>
       </method>
     </configuration>
+    <configuration default="true" type="TomeeConfiguration" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
+      <deployment />
+      <server-settings />
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -311,11 +241,49 @@
       <option name="presentableId" value="Default" />
       <updated>1761060053265</updated>
       <workItem from="1761060054617" duration="18730000" />
-      <workItem from="1761118526654" duration="19977000" />
+      <workItem from="1761118526654" duration="23034000" />
+      <workItem from="1761157355653" duration="10693000" />
     </task>
+    <task id="LOCAL-00001" summary="organization">
+      <option name="closed" value="true" />
+      <created>1761141386181</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761141386181</updated>
+    </task>
+    <task id="LOCAL-00002" summary="organization">
+      <option name="closed" value="true" />
+      <created>1761141536260</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761141536260</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="organization" />
+    <option name="LAST_COMMIT_MESSAGE" value="organization" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Branch.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

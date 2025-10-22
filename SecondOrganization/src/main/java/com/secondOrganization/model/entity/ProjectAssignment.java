@@ -14,7 +14,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @SuperBuilder
 
-@Entity(name = "projectAssignmentEntity")
+@Entity
 @Table(name = "projectAssignment_tbl")
 public class ProjectAssignment extends Base{
 

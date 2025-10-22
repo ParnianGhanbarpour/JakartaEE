@@ -30,18 +30,23 @@ public class OrganizationGroupServlet extends HttpServlet {
             String specialty = req.getParameter("specialty");
             long deptId = Long.parseLong(req.getParameter("departmentId"));
 
-            Optional<Department> department = departmentService.findById(deptId);
+            Optional<Department> optionalDepartment = departmentService.findById(deptId);
 
-            OrganizationGroup group = OrganizationGroup.builder()
-                    .name(name)
-                    .specialty(specialty)
-                    .department(department)
-                    .deleted(false)
-                    .build();
+            if (optionalDepartment.isPresent()) {
+                Department department = optionalDepartment.get();
+                OrganizationGroup group = OrganizationGroup.builder()
+                        .name(name)
+                        .specialty(specialty)
+                        .department(department)
+                        .deleted(false)
+                        .build();
 
-            groupService.save(group);
-            log.info("OrganizationGroup created: {}", group);
-            resp.sendRedirect("/jsp/organizationGroup.jsp");
+                groupService.save(group);
+                resp.sendRedirect("/jsp/organizationGroup.jsp");
+            } else {
+                log.error("Department not found with id: {}", deptId);
+                resp.sendRedirect("/error.jsp");
+            }
 
         } catch (Exception e) {
             log.error("Error saving group", e);

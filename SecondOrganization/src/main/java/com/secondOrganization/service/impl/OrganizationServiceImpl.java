@@ -2,6 +2,7 @@ package com.secondOrganization.service.impl;
 
 import com.secondOrganization.model.entity.Organization;
 import com.secondOrganization.service.OrganizationService;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SessionScoped
+@ApplicationScoped
 public class OrganizationServiceImpl implements OrganizationService, Serializable {
     @PersistenceContext(unitName = "organization")
     private EntityManager entityManager;
@@ -52,7 +53,7 @@ public class OrganizationServiceImpl implements OrganizationService, Serializabl
     @Transactional
     @Override
     public List<Organization> findAll() throws Exception {
-        TypedQuery<Organization> query = entityManager.createQuery("select oo from organizationEntity oo where oo.deleted=false", Organization.class);
+        TypedQuery<Organization> query = entityManager.createQuery("select oo from Organization oo where oo.deleted=false", Organization.class);
         return query.getResultList();
     }
 
@@ -65,7 +66,7 @@ public class OrganizationServiceImpl implements OrganizationService, Serializabl
     @Transactional
     @Override
     public Optional<Organization> findByName(String name) throws Exception {
-        TypedQuery<Organization> query = entityManager.createQuery("select oo from organizationEntity oo where oo.name=:name", Organization.class);
+        TypedQuery<Organization> query = entityManager.createQuery("select oo from Organization oo where oo.name=:name", Organization.class);
         query.setParameter(name,"name");
         List<Organization> result = query.getResultList();
         return Optional.ofNullable((result.isEmpty()) ? null : result.get(0));

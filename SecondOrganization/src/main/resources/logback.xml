@@ -23,6 +23,7 @@
     <logger name="org.hibernate.loader.Loader" level="DEBUG"/>
     <logger name="org.hibernate.persister.entity.AbstractEntityPersister" level="TRACE"/>
 
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>

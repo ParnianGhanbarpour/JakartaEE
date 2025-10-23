@@ -33,7 +33,6 @@ public class DepartmentServlet extends HttpServlet {
             String phoneNumber = req.getParameter("phoneNumber");
             String orgName = req.getParameter("organizationName");
 
-            // پیدا کردن organization مرتبط از دیتابیس
             Optional<Organization> optionalOrg = organizationService.findByName(orgName);
             if (optionalOrg.isEmpty()) {
                 log.warn("Organization '{}' not found!", orgName);
@@ -55,7 +54,6 @@ public class DepartmentServlet extends HttpServlet {
             departmentService.save(department);
             log.info("Department saved successfully: {}", department);
 
-            // ارسال دوباره لیست دپارتمان‌ها برای نمایش
             req.setAttribute("departmentList", departmentService.findAll());
             req.getRequestDispatcher("/jsp/department.jsp").forward(req, resp);
 

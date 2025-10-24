@@ -10,31 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="organization">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/EncodingFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/RootRedirectFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/error-jsp/403.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/error-jsp/404.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/error-jsp/500.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/error-jsp/login-error.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/faces-config.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/error.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/index.xhtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/organization-form.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/organization-list.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/organization.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/RestServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/ServletFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/ServletFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/repository/TokenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/repository/TokenRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/security/CsrfFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/security/CsrfFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/faces-config.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/person.xhtml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -252,7 +229,7 @@
       <workItem from="1761118526654" duration="23034000" />
       <workItem from="1761157355653" duration="12145000" />
       <workItem from="1761235459763" duration="12592000" />
-      <workItem from="1761279452656" duration="21219000" />
+      <workItem from="1761279452656" duration="22721000" />
     </task>
     <task id="LOCAL-00001" summary="organization">
       <option name="closed" value="true" />
@@ -302,7 +279,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761287539760</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="organization">
+      <option name="closed" value="true" />
+      <created>1761301931270</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1761301931270</updated>
+    </task>
+    <task id="LOCAL-00008" summary="organization">
+      <option name="closed" value="true" />
+      <created>1761302719699</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1761302719699</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

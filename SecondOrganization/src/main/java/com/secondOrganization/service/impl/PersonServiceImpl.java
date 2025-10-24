@@ -3,7 +3,6 @@ package com.secondOrganization.service.impl;
 import com.secondOrganization.model.entity.Person;
 import com.secondOrganization.service.PersonService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;

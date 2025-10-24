@@ -9,7 +9,7 @@ public interface BranchService {
     void save(Branch branch) throws Exception;
     void edit(Branch branch) throws Exception;
     void remove(Branch branch) throws Exception;
-    void removeById(Integer id) throws Exception;
+    void removeById(Long id) throws Exception;
 
     List<Branch> findAll() throws Exception;
     Optional<Branch> findById(Integer id) throws Exception;

@@ -79,7 +79,7 @@ public class BranchServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             long id = Long.parseLong(req.getParameter("id"));
-            branchService.removeById((int) id);
+            branchService.removeById(id);
             resp.sendRedirect("/jsp/branch.jsp");
         } catch (Exception e) {
             log.error("Error deleting branch", e);

@@ -46,9 +46,10 @@ public class BranchServiceImpl implements BranchService, Serializable {
         }
     }
 
+
     @Transactional
     @Override
-    public void removeById(Integer id) throws Exception {
+    public void removeById(Long id) throws Exception {
         Branch b = entityManager.find(Branch.class, id);
         if (b != null) {
             b.setDeleted(true);
@@ -56,14 +57,16 @@ public class BranchServiceImpl implements BranchService, Serializable {
         }
     }
 
-    @Transactional
+
     @Override
     public List<Branch> findAll() throws Exception {
-        TypedQuery<Branch> q = entityManager.createQuery("select b from Branch  b where b.deleted=false", Branch.class);
+        TypedQuery<Branch> q = entityManager.createQuery(
+                "select b from Branch b where b.deleted=false", Branch.class);
         return q.getResultList();
     }
 
-    @Transactional
+
+
     @Override
     public Optional<Branch> findById(Integer id) throws Exception {
         return Optional.ofNullable(entityManager.find(Branch.class, id));
@@ -92,4 +95,6 @@ public class BranchServiceImpl implements BranchService, Serializable {
         q.setParameter("orgId", organizationId);
         return q.getResultList();
     }
+
+
 }

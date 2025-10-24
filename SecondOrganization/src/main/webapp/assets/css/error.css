@@ -1,0 +1,177 @@
+*{
+    overflow: hidden;
+}
+.error-container {
+    text-align: center;
+    font-size: 180px;
+    font-family: 'vazir', serif;
+    font-weight: 800;
+    margin: 20px 15px;
+}
+.error-container > span {
+    display: inline-block;
+    line-height: 0.7;
+    position: relative;
+    color: #87CEEB;
+}
+.error-container > span {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+}
+.error-container > span:nth-of-type(1) {
+    color: #4682B4;
+    animation: colordancing 4s infinite;
+}
+.error-container > span:nth-of-type(3) {
+    color: #1E90FF;
+    animation: colordancing2 4s infinite;
+}
+.error-container > span:nth-of-type(2) {
+    width: 120px;
+    height: 120px;
+    border-radius: 999px;
+}
+.error-container > span:nth-of-type(2):before,
+.error-container > span:nth-of-type(2):after {
+    content:"";
+    position: absolute;
+    top: 0; left: 0;
+    width: inherit; height: inherit;
+    border-radius: 999px;
+    box-shadow: inset 30px 0 0 rgba(135, 206, 250, 0.4),
+    inset 0 30px 0 rgba(173, 216, 230, 0.4),
+    inset -30px 0 0 rgba(100, 149, 237, 0.4),
+    inset 0 -30px 0 rgba(70, 130, 180, 0.4);
+    animation: shadowsdancing 4s infinite;
+}
+.error-container > span:nth-of-type(2):before {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.screen-reader-text {
+    position: absolute;
+    top: -9999em;
+    left: -9999em;
+}
+@keyframes shadowsDancing {
+    0% {
+        box-shadow: inset 30px 0 0 rgba(135, 206, 250, 0.4),
+        inset 0 30px 0 rgba(173, 216, 230, 0.4),
+        inset -30px 0 0 rgba(100, 149, 237, 0.4),
+        inset 0 -30px 0 rgba(70, 130, 180, 0.4);
+    }
+    25% {
+        box-shadow: inset 30px 0 0 rgba(70, 130, 180, 0.4),
+        inset 0 30px 0 rgba(135, 206, 250, 0.4),
+        inset -30px 0 0 rgba(173, 216, 230, 0.4),
+        inset 0 -30px 0 rgba(100, 149, 237, 0.4);
+    }
+    50% {
+        box-shadow: inset 30px 0 0 rgba(100, 149, 237, 0.4),
+        inset 0 30px 0 rgba(70, 130, 180, 0.4),
+        inset -30px 0 0 rgba(135, 206, 250, 0.4),
+        inset 0 -30px 0 rgba(173, 216, 230, 0.4);
+    }
+    75% {
+        box-shadow: inset 30px 0 0 rgba(173, 216, 230, 0.4),
+        inset 0 30px 0 rgba(100, 149, 237, 0.4),
+        inset -30px 0 0 rgba(70, 130, 180, 0.4),
+        inset 0 -30px 0 rgba(135, 206, 250, 0.4);
+    }
+    100% {
+        box-shadow: inset 30px 0 0 rgba(135, 206, 250, 0.4),
+        inset 0 30px 0 rgba(173, 216, 230, 0.4),
+        inset -30px 0 0 rgba(100, 149, 237, 0.4),
+        inset 0 -30px 0 rgba(70, 130, 180, 0.4);
+    }
+}
+@keyframes colorDancing {
+    0% {
+        color: #4682B4;
+    }
+    25% {
+        color: #1E90FF;
+    }
+    50% {
+        color: #6495ED;
+    }
+    75% {
+        color: #87CEEB;
+    }
+    100% {
+        color: #4682B4;
+    }
+}
+@keyframes colorDancing2 {
+    0% {
+        color: #6495ED;
+    }
+    25% {
+        color: #87CEEB;
+    }
+    50% {
+        color: #4682B4;
+    }
+    75% {
+        color: #1E90FF;
+    }
+    100% {
+        color: #6495ED;
+    }
+}
+
+/* demo stuff */
+* {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+}
+
+body {
+    background-color: #2C3E50;
+    margin-bottom: 50px;
+}
+html, button, input, select, textarea {
+    font-family: 'Montserrat', Helvetica, sans-serif;
+    color: #BDC3C7;
+}
+h1 {
+    text-align: center;
+    margin: 30px 15px;
+    color: #ECF0F1;
+}
+.zoom-area {
+    max-width: 490px;
+    margin: 30px auto 30px;
+    font-size: 19px;
+    text-align: center;
+    color: #ECF0F1;
+}
+.link-container {
+    text-align: center;
+}
+a.more-link {
+    text-transform: uppercase;
+    font-size: 16px;
+    background-color: #3498DB;
+    padding: 10px 15px;
+    border-radius: 0;
+    color: #ECF0F1;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    line-height: 1.5;
+    text-decoration: none;
+    margin-top: 50px;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+}
+a.more-link:hover {
+    background-color: #2980B9;
+}

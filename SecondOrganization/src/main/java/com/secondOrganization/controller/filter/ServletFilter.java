@@ -3,6 +3,6 @@ package com.secondOrganization.controller.filter;
 
 import jakarta.servlet.annotation.WebFilter;
 
-@WebFilter(urlPatterns = "/persons")
+//@WebFilter(urlPatterns = "/persons")
 public class ServletFilter {
 }

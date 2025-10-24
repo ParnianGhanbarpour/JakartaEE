@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/api/*") // برای REST
+//@WebFilter(urlPatterns = "/api/*")
 public class JwtAuthenticationFilter extends HttpFilter {
 
     @Inject

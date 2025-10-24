@@ -12,7 +12,7 @@ import java.util.Optional;
 @CacheDB
 public class TokenRepository extends BaseRepository<Token> {
 
-    @PersistenceContext(unitName = "cachePU")
+    @PersistenceContext(unitName = "organization")
     private EntityManager entityManager;
 
     @Override

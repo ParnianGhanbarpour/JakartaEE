@@ -67,7 +67,7 @@ public class OrganizationServiceImpl implements OrganizationService, Serializabl
     @Override
     public Optional<Organization> findByName(String name) throws Exception {
         TypedQuery<Organization> query = entityManager.createQuery("select oo from Organization oo where oo.name=:name", Organization.class);
-        query.setParameter(name,"name");
+        query.setParameter("name",name);
         List<Organization> result = query.getResultList();
         return Optional.ofNullable((result.isEmpty()) ? null : result.get(0));
     }

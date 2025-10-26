@@ -12,8 +12,8 @@ public interface BranchService {
     void removeById(Long id) throws Exception;
 
     List<Branch> findAll() throws Exception;
-    Optional<Branch> findById(Integer id) throws Exception;
+    Optional<Branch> findById(Long id) throws Exception;
     List<Branch> findByCity(String city) throws Exception;
     List<Branch> findByManager(String manager) throws Exception;
-    List<Branch> findByOrganizationId(Integer organizationId) throws Exception;
+    List<Branch> findByOrganizationId(Long organizationId) throws Exception;
 }

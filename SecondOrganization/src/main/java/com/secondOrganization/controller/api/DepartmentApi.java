@@ -96,10 +96,10 @@ public class DepartmentApi {
     }
 
     @GET
-    @Path("/title/{title}")
-    public Response findByTitle(@PathParam("title") String title) {
+    @Path("/title/{name}")
+    public Response findByName(@PathParam("name") String name) {
         try {
-            Optional<Department> department = departmentService.findByTitle(title);
+            Optional<Department> department = departmentService.findByName(name);
             if (department.isPresent()) {
                 return Response.ok().entity(department.get()).build();
             } else {
@@ -108,7 +108,7 @@ public class DepartmentApi {
                         .build();
             }
         } catch (Exception e) {
-            log.error("Error finding department by title", e);
+            log.error("Error finding department by name", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"" + e.getMessage() + "\"}")
                     .build();

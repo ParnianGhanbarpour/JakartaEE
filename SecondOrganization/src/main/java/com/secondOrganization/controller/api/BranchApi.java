@@ -78,7 +78,7 @@ public class BranchApi {
 
     @GET
     @Path("/{id}")
-    public Response findById(@PathParam("id") Integer id) {
+    public Response findById(@PathParam("id") Long id) {
         try {
             Optional<Branch> branch = branchService.findById(id);
             if (branch.isPresent()) {
@@ -90,7 +90,7 @@ public class BranchApi {
             }
         } catch (Exception e) {
             log.error("Error finding branch by id", e);
-            return Response.status(Response.Status.NO_CONTENT)
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"" + e.getMessage() + "\"}")
                     .build();
         }
@@ -113,7 +113,7 @@ public class BranchApi {
     @Path("/organization/{orgId}")
     public Response findByOrganizationId(@PathParam("orgId") Integer orgId) {
         try {
-            return Response.ok().entity(branchService.findByOrganizationId(orgId)).build();
+            return Response.ok().entity(branchService.findByOrganizationId(Long.valueOf(orgId))).build();
         } catch (Exception e) {
             log.error("Error finding branches by organization", e);
             return Response.status(Response.Status.NO_CONTENT)

@@ -80,7 +80,7 @@ public class LoginServlet extends HttpServlet {
 
             // Create departments if not present (by name)
             Department itDept;
-            Optional<Department> maybeIt = departmentService.findByTitle("فناوری اطلاعات و ارتباطات");
+            Optional<Department> maybeIt = departmentService.findByName("فناوری اطلاعات و ارتباطات");
             if (maybeIt.isPresent()) {
                 itDept = maybeIt.get();
             } else {
@@ -95,7 +95,7 @@ public class LoginServlet extends HttpServlet {
             }
 
             Department eeDept;
-            Optional<Department> maybeEe = departmentService.findByTitle("برق و الکترونیک");
+            Optional<Department> maybeEe = departmentService.findByName("برق و الکترونیک");
             if (maybeEe.isPresent()) {
                 eeDept = maybeEe.get();
             } else {

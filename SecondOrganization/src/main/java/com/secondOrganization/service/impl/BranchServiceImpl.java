@@ -3,7 +3,6 @@ package com.secondOrganization.service.impl;
 import com.secondOrganization.model.entity.Branch;
 import com.secondOrganization.service.BranchService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -46,7 +45,6 @@ public class BranchServiceImpl implements BranchService, Serializable {
         }
     }
 
-
     @Transactional
     @Override
     public void removeById(Long id) throws Exception {
@@ -57,7 +55,6 @@ public class BranchServiceImpl implements BranchService, Serializable {
         }
     }
 
-
     @Override
     public List<Branch> findAll() throws Exception {
         TypedQuery<Branch> q = entityManager.createQuery(
@@ -65,17 +62,17 @@ public class BranchServiceImpl implements BranchService, Serializable {
         return q.getResultList();
     }
 
-
-
     @Override
-    public Optional<Branch> findById(Integer id) throws Exception {
+    public Optional<Branch> findById(Long id) throws Exception {
+
         return Optional.ofNullable(entityManager.find(Branch.class, id));
     }
 
     @Transactional
     @Override
     public List<Branch> findByCity(String city) throws Exception {
-        TypedQuery<Branch> q = entityManager.createQuery("select b from Branch b where b.city = :city and b.deleted=false", Branch.class);
+        TypedQuery<Branch> q = entityManager.createQuery(
+                "select b from Branch b where b.city = :city and b.deleted=false", Branch.class);
         q.setParameter("city", city);
         return q.getResultList();
     }
@@ -83,18 +80,19 @@ public class BranchServiceImpl implements BranchService, Serializable {
     @Transactional
     @Override
     public List<Branch> findByManager(String manager) throws Exception {
-        TypedQuery<Branch> q = entityManager.createQuery("select b from Branch b where b.manager = :manager and b.deleted=false", Branch.class);
+        TypedQuery<Branch> q = entityManager.createQuery(
+                "select b from Branch b where b.manager = :manager and b.deleted=false", Branch.class);
         q.setParameter("manager", manager);
         return q.getResultList();
     }
 
     @Transactional
     @Override
-    public List<Branch> findByOrganizationId(Integer organizationId) throws Exception {
-        TypedQuery<Branch> q = entityManager.createQuery("select b from Branch b where b.organization.id = :orgId and b.deleted=false", Branch.class);
+    public List<Branch> findByOrganizationId(Long organizationId) throws Exception {
+
+        TypedQuery<Branch> q = entityManager.createQuery(
+                "select b from Branch b where b.organization.id = :orgId and b.deleted=false", Branch.class);
         q.setParameter("orgId", organizationId);
         return q.getResultList();
     }
-
-
 }

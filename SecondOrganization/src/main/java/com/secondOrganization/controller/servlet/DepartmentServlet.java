@@ -1,7 +1,9 @@
 package com.secondOrganization.controller.servlet;
 
+import com.secondOrganization.model.entity.Branch;
 import com.secondOrganization.model.entity.Department;
 import com.secondOrganization.model.entity.Organization;
+import com.secondOrganization.service.impl.BranchServiceImpl;
 import com.secondOrganization.service.impl.DepartmentServiceImp;
 import com.secondOrganization.service.impl.OrganizationServiceImpl;
 import jakarta.inject.Inject;
@@ -13,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -24,6 +27,9 @@ public class DepartmentServlet extends HttpServlet {
 
     @Inject
     private OrganizationServiceImpl organizationService;
+
+    @Inject
+    private BranchServiceImpl branchService;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,29 +43,58 @@ public class DepartmentServlet extends HttpServlet {
             if (optionalOrg.isEmpty()) {
                 log.warn("Organization '{}' not found!", orgName);
                 req.setAttribute("error", "سازمان مورد نظر یافت نشد!");
+                req.setAttribute("departmentList", departmentService.findAll());
+                req.setAttribute("organizationList", organizationService.findAll());
                 req.getRequestDispatcher("/jsp/department.jsp").forward(req, resp);
                 return;
             }
 
             Organization organization = optionalOrg.get();
 
+
+            List<Branch> branches = branchService.findByOrganizationId(organization.getId());
+            Branch branch = null;
+
+            if (!branches.isEmpty()) {
+                branch = branches.get(0);
+            } else {
+
+                branch = Branch.builder()
+                        .name("شعبه مرکزی")
+                        .address("آدرس پیش‌فرض")
+                        .city("تهران")
+                        .manager("مدیر پیش‌فرض")
+                        .organization(organization)
+                        .deleted(false)
+                        .build();
+                branchService.save(branch);
+                log.info("Default branch created for organization: {}", organization.getName());
+            }
+
             Department department = Department.builder()
+                    .name(field)
                     .field(field)
                     .duty(duty)
                     .phoneNumber(phoneNumber)
                     .organization(organization)
+                    .branch(branch)
                     .deleted(false)
                     .build();
 
             departmentService.save(department);
             log.info("Department saved successfully: {}", department);
 
-            req.setAttribute("departmentList", departmentService.findAll());
-            req.getRequestDispatcher("/jsp/department.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/department.do");
 
         } catch (Exception e) {
             log.error("Error in DepartmentServlet.doPost: {}", e.getMessage(), e);
-            req.setAttribute("error", "خطایی در ذخیره دپارتمان رخ داد!");
+            req.setAttribute("error", "خطایی در ذخیره دپارتمان رخ داد: " + e.getMessage());
+            try {
+                req.setAttribute("departmentList", departmentService.findAll());
+                req.setAttribute("organizationList", organizationService.findAll());
+            } catch (Exception ex) {
+                log.error("Error loading lists", ex);
+            }
             req.getRequestDispatcher("/jsp/department.jsp").forward(req, resp);
         }
     }

@@ -10,19 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="organization">
-      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/BranchApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/BranchApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/DepartmentApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/DepartmentApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/LoginServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/BranchService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/BranchService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/DepartmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/DepartmentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/BranchServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/BranchServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/RootRedirectFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/RootRedirectFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/DepartmentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/DepartmentServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/DepartmentServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/DepartmentServiceImp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/OrganizationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/OrganizationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/branch.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/branch.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/department.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/department.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/organization.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/organization.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,18 +198,6 @@
         </option>
       </method>
     </configuration>
-    <configuration default="true" type="TomeeConfiguration" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
-      <deployment />
-      <server-settings />
-      <predefined_log_file enabled="true" id="Tomcat" />
-      <predefined_log_file enabled="true" id="Tomcat Catalina" />
-      <predefined_log_file id="Tomcat Manager" />
-      <predefined_log_file id="Tomcat Host Manager" />
-      <predefined_log_file id="Tomcat Localhost Access" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -240,6 +221,8 @@
       <workItem from="1761235459763" duration="12592000" />
       <workItem from="1761279452656" duration="22721000" />
       <workItem from="1761503848339" duration="1821000" />
+      <workItem from="1761505862162" duration="15000" />
+      <workItem from="1761640074006" duration="2649000" />
     </task>
     <task id="LOCAL-00001" summary="organization">
       <option name="closed" value="true" />

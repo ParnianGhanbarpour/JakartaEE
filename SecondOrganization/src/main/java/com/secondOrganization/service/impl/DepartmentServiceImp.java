@@ -63,9 +63,9 @@ public class DepartmentServiceImp implements DepartmentService, Serializable {
 
     @Transactional
     @Override
-    public Optional<Department> findByName(String title) throws Exception {
+    public Optional<Department> findByName(String name) throws Exception {
         TypedQuery<Department> query = entityManager.createQuery("select oo from Department oo where oo.name=:name", Department.class);
-        query.setParameter("name", title);
+        query.setParameter("name", name);
         List<Department> result = query.getResultList();
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }

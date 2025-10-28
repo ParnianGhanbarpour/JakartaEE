@@ -20,7 +20,7 @@ public class RootRedirectFilter implements Filter {
         String contextPath = httpRequest.getContextPath();
 
         if ("/".equals(requestURI) || requestURI.equals(contextPath + "/")) {
-            httpResponse.sendRedirect(contextPath + "/faces/organization.xhtml");
+            httpResponse.sendRedirect(contextPath + "/organisation.do");
             return;
         }
 

@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -26,88 +27,86 @@ import java.util.Optional;
 public class PersonServlet extends HttpServlet {
 
     @Inject
-    private UserServiceImpl userService;
-
-    @Inject
-    private RoleServiceImpl rolesService;
-
-    @Inject
     private PersonServiceImpl personService;
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info("PersonServlet - Get");
         try {
-            String username = req.getUserPrincipal() != null ? req.getUserPrincipal().getName() : null;
-
-            if (username != null && personService.findByUsername(username).isPresent()) {
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/profile.do");
-                dispatcher.forward(req, resp);
-                return;
-            }
-
-            req.getSession().setAttribute("principalUser", username);
-            req.getSession().setAttribute("genders", Arrays.asList(Gender.values()));
+            req.setAttribute("personList", personService.findAll());
+            req.setAttribute("genders", Arrays.asList(Gender.values()));
             req.getRequestDispatcher("/jsp/person.jsp").forward(req, resp);
-
         } catch (Exception e) {
-            log.error("Error in doGet: {}", e.getMessage(), e);
-            throw new ServletException("Cannot load person form", e);
+            log.error("Error loading persons", e);
+            throw new ServletException("Cannot load persons", e);
         }
     }
 
-    @Valid
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info("PersonServlet - post");
+        String method = req.getParameter("_method");
+
+        if ("delete".equalsIgnoreCase(method)) {
+            doDelete(req, resp);
+            return;
+        }
 
         try {
             String name = req.getParameter("name");
             String family = req.getParameter("family");
             String nationalCode = req.getParameter("nationalCode");
-            String gender = req.getParameter("gender");
+            Gender gender = Gender.valueOf(req.getParameter("gender"));
 
-            String username = req.getUserPrincipal() != null ? req.getUserPrincipal().getName() : null;
+            String salaryStr = req.getParameter("salary");
+            Double salary = (salaryStr != null && !salaryStr.isEmpty())
+                    ? Double.parseDouble(salaryStr) : null;
 
-            if (username != null) {
-                Optional<User> user = userService.findByUsername(username);
-                if (user.isPresent()) {
-                    Person person = Person.builder()
-                            .name(name)
-                            .family(family)
-                            .nationalCode(nationalCode)
-                            .gender(Gender.valueOf(gender))
-                            .user(user.get())
-                            .deleted(false)
-                            .build();
+            String birthdateStr = req.getParameter("birthdate");
+            LocalDate birthdate = (birthdateStr != null && !birthdateStr.isEmpty())
+                    ? LocalDate.parse(birthdateStr) : null;
 
-                    // Validate
-                    BeanValidator<Person> validator = new BeanValidator<>();
-                    var errors = validator.validate(person);
+            Person person = Person.builder()
+                    .name(name)
+                    .family(family)
+                    .nationalCode(nationalCode)
+                    .gender(gender)
+                    .salary(salary)
+                    .birthdate(birthdate)
+                    .deleted(false)
+                    .build();
 
-                    if (!errors.isEmpty()) {
-                        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                        resp.getWriter().write(errors.toString());
-                        return;
-                    }
+            personService.save(person);
+            log.info("Person saved: {} {}", name, family);
 
-                    personService.save(person);
-                    log.info("Person saved: {} {}", name, family);
-                    resp.sendRedirect(req.getContextPath() + "/profile.do");
-
-                } else {
-                    log.warn("User not found: {}", username);
-                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "User not found");
-                }
-            } else {
-                log.warn("No authenticated user");
-                resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please login first");
-            }
+            resp.sendRedirect(req.getContextPath() + "/person.do");
 
         } catch (Exception e) {
-            log.error("Error in doPost: {}", e.getMessage(), e);
-            throw new ServletException("Cannot save person", e);
+            log.error("Error saving person", e);
+            req.setAttribute("error", "خطا در ذخیره پرسنل: " + e.getMessage());
+            loadDataAndForward(req, resp);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        try {
+            long id = Long.parseLong(req.getParameter("id"));
+            personService.removeById(id);
+            log.info("Person deleted: {}", id);
+            resp.sendRedirect(req.getContextPath() + "/person.do");
+        } catch (Exception e) {
+            log.error("Error deleting person", e);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    private void loadDataAndForward(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        try {
+            req.setAttribute("personList", personService.findAll());
+            req.setAttribute("genders", Arrays.asList(Gender.values()));
+            req.getRequestDispatcher("/jsp/person.jsp").forward(req, resp);
+        } catch (Exception e) {
+            throw new ServletException("Cannot load persons", e);
         }
     }
 }

@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(urlPatterns = "/organization.do")
 @Slf4j
@@ -18,19 +19,6 @@ public class OrganizationServlet extends HttpServlet {
 
     @Inject
     private OrganizationServiceImpl service;
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            log.info("Loading organizations...");
-            req.setAttribute("organizationList", service.findAll());
-            req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
-        } catch (Exception e) {
-            log.error("Error in doGet: {}", e.getMessage(), e);
-            req.setAttribute("error", "خطا در بارگذاری لیست: " + e.getMessage());
-            req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
-        }
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -47,18 +35,35 @@ public class OrganizationServlet extends HttpServlet {
                     .build();
 
             service.save(organization);
-            log.info("Organization saved successfully");
+            log.info("Organization saved successfully with ID: {}", organization.getId());
 
             resp.sendRedirect(req.getContextPath() + "/organization.do");
 
         } catch (Exception e) {
             log.error("Error in doPost: {}", e.getMessage(), e);
             req.setAttribute("error", "خطا در ذخیره: " + e.getMessage());
+
             try {
                 req.setAttribute("organizationList", service.findAll());
             } catch (Exception ex) {
                 log.error("Error loading list after save failure", ex);
             }
+            req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            log.info("Loading organizations...");
+            List<Organization> list = service.findAll();
+            log.info("Loaded {} organizations", list.size());
+
+            req.setAttribute("organizationList", list);
+            req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
+        } catch (Exception e) {
+            log.error("Error in doGet: {}", e.getMessage(), e);
+            req.setAttribute("error", "خطا در بارگذاری لیست: " + e.getMessage());
             req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
         }
     }

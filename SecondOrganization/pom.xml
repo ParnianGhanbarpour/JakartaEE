@@ -15,6 +15,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
+
         <jakarta.ee.version>9.1.0</jakarta.ee.version>
         <hibernate.version>6.2.0.Final</hibernate.version>
         <mysql.version>9.4.0</mysql.version>
@@ -69,6 +70,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.9</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -151,6 +157,7 @@
             <version>3.0.1</version>
         </dependency>
     </dependencies>
+
 
     <build>
 

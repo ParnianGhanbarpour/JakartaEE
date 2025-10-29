@@ -55,13 +55,13 @@
       <AutoIntrospectionLevel>3</AutoIntrospectionLevel>
       <CreatedTimestamp>2025-09-11.22:46:30</CreatedTimestamp>
       <Current>1</Current>
-      <LastIntrospectionL1Timestamp>2025-10-23.23:06:55</LastIntrospectionL1Timestamp>
-      <LastIntrospectionL2Timestamp>2025-10-23.23:06:55</LastIntrospectionL2Timestamp>
-      <LastIntrospectionL3Timestamp>2025-10-23.23:06:55</LastIntrospectionL3Timestamp>
+      <LastIntrospectionL1Timestamp>2025-10-29.18:58:07</LastIntrospectionL1Timestamp>
+      <LastIntrospectionL2Timestamp>2025-10-29.18:58:07</LastIntrospectionL2Timestamp>
+      <LastIntrospectionL3Timestamp>2025-10-29.18:58:07</LastIntrospectionL3Timestamp>
       <LastIntrospectionLevel>3</LastIntrospectionLevel>
-      <LastIntrospectionLocalTimestamp>2025-10-23.16:06:55</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-10-29.11:58:07</LastIntrospectionLocalTimestamp>
       <LastIntrospectionVersion>200820</LastIntrospectionVersion>
-      <ModifiedTimestamp>2025-10-23.05:18:09</ModifiedTimestamp>
+      <ModifiedTimestamp>2025-10-29.16:45:34</ModifiedTimestamp>
       <ObjectId>111</ObjectId>
     </schema>
     <schema id="18" parent="1" name="JAVAPROJECT">
@@ -102,9 +102,9 @@
     </schema>
     <schema id="30" parent="1" name="PUBLIC">
       <AutoIntrospectionLevel>1</AutoIntrospectionLevel>
-      <LastIntrospectionL1Timestamp>2025-10-23.23:06:55</LastIntrospectionL1Timestamp>
+      <LastIntrospectionL1Timestamp>2025-10-29.18:58:07</LastIntrospectionL1Timestamp>
       <LastIntrospectionLevel>1</LastIntrospectionLevel>
-      <LastIntrospectionLocalTimestamp>2025-10-23.16:06:55</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-10-29.11:58:07</LastIntrospectionLocalTimestamp>
       <ObjectId>1</ObjectId>
     </schema>
     <schema id="31" parent="1" name="REMOTE_SCHEDULER_AGENT">
@@ -422,9 +422,9 @@
       <CacheSize>20</CacheSize>
       <CreatedTimestamp>2025-10-22.00:39:30</CreatedTimestamp>
       <DetailsLevel>2</DetailsLevel>
-      <ModifiedTimestamp>2025-10-22.00:39:30</ModifiedTimestamp>
+      <ModifiedTimestamp>2025-10-29.16:45:34</ModifiedTimestamp>
       <ObjectId>81308</ObjectId>
-      <SequenceIdentity>1(1)</SequenceIdentity>
+      <SequenceIdentity>1(27)</SequenceIdentity>
     </sequence>
     <sequence id="89" parent="17" name="ISEQ$$_80891">
       <BelongsToColumn>1</BelongsToColumn>
@@ -826,7 +826,7 @@
     <table id="132" parent="17" name="USER_ROLES">
       <CreatedTimestamp>2025-10-23.05:15:47</CreatedTimestamp>
       <DetailsLevel>3</DetailsLevel>
-      <ModifiedTimestamp>2025-10-23.05:18:09</ModifiedTimestamp>
+      <ModifiedTimestamp>2025-10-24.15:04:14</ModifiedTimestamp>
       <ObjectId>81357</ObjectId>
       <TemporaryPreserve>1</TemporaryPreserve>
     </table>
@@ -60898,53 +60898,57 @@ PROJECT_ID</ColNames>
       <DasType>VARCHAR2(255 byte)|0s</DasType>
       <Position>2</Position>
     </column>
-    <foreign-key id="7688" parent="132" name="FK_USER_ROLES_ON_USER">
+    <column id="7688" parent="132" name="ELEMENT">
+      <DasType>VARCHAR2(20 byte)|0s</DasType>
+      <Position>3</Position>
+    </column>
+    <foreign-key id="7689" parent="132" name="FK_USER_ROLES_ON_USER">
       <ColNames>USER_USERNAME</ColNames>
       <ModifiedTimestamp>2025-10-23.05:18:09</ModifiedTimestamp>
       <OnDelete>restrict</OnDelete>
       <RefKeyName>PK_USER_TBL</RefKeyName>
       <RefTableName>USER_TBL</RefTableName>
     </foreign-key>
-    <column id="7689" parent="133" name="ID">
+    <column id="7690" parent="133" name="ID">
       <DasType>NUMBER(38)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="7690" parent="133" name="CREATED_AT">
+    <column id="7691" parent="133" name="CREATED_AT">
       <DasType>TIMESTAMP(6)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="7691" parent="133" name="MODIFIED_AT">
+    <column id="7692" parent="133" name="MODIFIED_AT">
       <DasType>TIMESTAMP(6)|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="7692" parent="133" name="LAST_ACCESS">
+    <column id="7693" parent="133" name="LAST_ACCESS">
       <DasType>TIMESTAMP(6)|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="7693" parent="133" name="DELETED">
+    <column id="7694" parent="133" name="DELETED">
       <DasType>NUMBER(1)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <column id="7694" parent="133" name="DELETED_AT">
+    <column id="7695" parent="133" name="DELETED_AT">
       <DasType>TIMESTAMP(6)|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="7695" parent="133" name="USER_USERNAME">
+    <column id="7696" parent="133" name="USER_USERNAME">
       <DasType>VARCHAR2(20 byte)|0s</DasType>
       <Position>7</Position>
     </column>
-    <column id="7696" parent="133" name="USER_PASSWORD">
+    <column id="7697" parent="133" name="USER_PASSWORD">
       <DasType>VARCHAR2(20 byte)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>8</Position>
     </column>
-    <column id="7697" parent="133" name="USER_ACTIVE">
+    <column id="7698" parent="133" name="USER_ACTIVE">
       <DasType>NUMBER(1)|0s</DasType>
       <Position>9</Position>
     </column>
-    <index id="7698" parent="133" name="PK_USER_TBL">
+    <index id="7699" parent="133" name="PK_USER_TBL">
       <ColNames>ID</ColNames>
       <CreatedTimestamp>2025-10-23.05:15:54</CreatedTimestamp>
       <ModifiedTimestamp>2025-10-23.05:15:54</ModifiedTimestamp>
@@ -60952,7 +60956,7 @@ PROJECT_ID</ColNames>
       <Unique>1</Unique>
       <TablespaceName>USERS</TablespaceName>
     </index>
-    <index id="7699" parent="133" name="UC_USER_TBL_USER_USERNAME">
+    <index id="7700" parent="133" name="UC_USER_TBL_USER_USERNAME">
       <ColNames>USER_USERNAME</ColNames>
       <CreatedTimestamp>2025-10-23.05:15:59</CreatedTimestamp>
       <ModifiedTimestamp>2025-10-23.05:15:59</ModifiedTimestamp>
@@ -60960,13 +60964,13 @@ PROJECT_ID</ColNames>
       <Unique>1</Unique>
       <TablespaceName>USERS</TablespaceName>
     </index>
-    <key id="7700" parent="133" name="PK_USER_TBL">
+    <key id="7701" parent="133" name="PK_USER_TBL">
       <InitiallyDeferred>1</InitiallyDeferred>
       <ModifiedTimestamp>2025-10-23.05:15:54</ModifiedTimestamp>
       <Primary>1</Primary>
       <UnderlyingIndexName>PK_USER_TBL</UnderlyingIndexName>
     </key>
-    <key id="7701" parent="133" name="UC_USER_TBL_USER_USERNAME">
+    <key id="7702" parent="133" name="UC_USER_TBL_USER_USERNAME">
       <InitiallyDeferred>1</InitiallyDeferred>
       <ModifiedTimestamp>2025-10-23.05:15:59</ModifiedTimestamp>
       <UnderlyingIndexName>UC_USER_TBL_USER_USERNAME</UnderlyingIndexName>

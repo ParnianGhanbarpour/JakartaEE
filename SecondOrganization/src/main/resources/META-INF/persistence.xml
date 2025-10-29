@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
-             version="3.0">
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
     <persistence-unit name="organization" transaction-type="JTA">
         <jta-data-source>organizationDataSource</jta-data-source>
         <properties>
-            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
-            <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO"/>
+
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"/>
+
+
+            <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
+
+<!--            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>-->
+<!--            <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO"/>-->
+<!--            <property name="hibernate.hbm2ddl.auto" value="update"/>-->
+<!--            <property name="hibernate.show_sql" value="true"/>-->
+<!--            <property name="hibernate.format_sql" value="true"/>-->
+
         </properties>
+
     </persistence-unit>
 </persistence>

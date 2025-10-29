@@ -19,15 +19,16 @@ public class OrganizationServlet extends HttpServlet {
     @Inject
     private OrganizationServiceImpl service;
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            req.getSession().setAttribute("organizationList", service.findAll());
+            log.info("Loading organizations...");
+            req.setAttribute("organizationList", service.findAll());
             req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
         } catch (Exception e) {
             log.error("Error in doGet: {}", e.getMessage(), e);
-            throw new ServletException("Cannot load organizations", e);
+            req.setAttribute("error", "خطا در بارگذاری لیست: " + e.getMessage());
+            req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
         }
     }
 
@@ -37,6 +38,8 @@ public class OrganizationServlet extends HttpServlet {
             String name = req.getParameter("name");
             String orgType = req.getParameter("type");
 
+            log.info("Saving organization: name={}, type={}", name, orgType);
+
             Organization organization = Organization.builder()
                     .name(name)
                     .organizationType(orgType)
@@ -44,37 +47,19 @@ public class OrganizationServlet extends HttpServlet {
                     .build();
 
             service.save(organization);
-            log.info("Organization saved: {}", name);
+            log.info("Organization saved successfully");
 
             resp.sendRedirect(req.getContextPath() + "/organization.do");
 
         } catch (Exception e) {
             log.error("Error in doPost: {}", e.getMessage(), e);
-            req.setAttribute("error", "خطا در ذخیره سازمان: " + e.getMessage());
+            req.setAttribute("error", "خطا در ذخیره: " + e.getMessage());
+            try {
+                req.setAttribute("organizationList", service.findAll());
+            } catch (Exception ex) {
+                log.error("Error loading list after save failure", ex);
+            }
             req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
-        }
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            long id = Long.parseLong(req.getParameter("id"));
-            String name = req.getParameter("name");
-            String orgType = req.getParameter("type");
-
-            Organization organization = Organization.builder()
-                    .id(id)
-                    .name(name)
-                    .organizationType(orgType)
-                    .build();
-
-            service.edit(organization);
-            log.info("Organization updated: {}", id);
-            resp.sendRedirect(req.getContextPath() + "/organization.do");
-
-        } catch (Exception e) {
-            log.error("Error in doPut: {}", e.getMessage(), e);
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -85,27 +70,17 @@ public class OrganizationServlet extends HttpServlet {
             String idParam = req.getParameter("id");
             if (idParam == null || idParam.isEmpty()) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                resp.getWriter().write("{\"error\": \"Missing ID parameter\"}");
+                resp.getWriter().write("{\"error\": \"ID not provided\"}");
                 return;
             }
 
             long id = Long.parseLong(idParam);
-
-            var orgOpt = service.findById(id);
-            if (orgOpt.isEmpty()) {
-                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                resp.getWriter().write("{\"error\": \"Organization with ID " + id + " not found\"}");
-                return;
-            }
-
             service.removeById(id);
             log.info("Organization deleted: {}", id);
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write("{\"message\": \"Organization deleted successfully\"}");
 
-        } catch (NumberFormatException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"Invalid ID format\"}");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write("{\"message\": \"Deleted successfully\"}");
+
         } catch (Exception e) {
             log.error("Error in doDelete: {}", e.getMessage(), e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -40,7 +41,7 @@
         </c:choose>
     </h1>
 
-    <form action="${pageContext.request.contextPath}/organization" method="post">
+    <form action="${pageContext.request.contextPath}/organization.do" method="post">
         <c:if test="${not empty organization}">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" value="${organization.id}">
@@ -52,9 +53,12 @@
         </div>
 
         <div class="form-group">
-            <label>آدرس:</label>
-            <input type="text" name="address" value="${organization.address}" required>
+            <label>نوع سازمان:</label>
+            <input type="text" name="type" value="${organization.organizationType}" required>
         </div>
+
+
+
 
         <button type="submit" class="btn">ذخیره</button>
         <a href="${pageContext.request.contextPath}/organization" style="margin-right: 10px;">لغو</a>

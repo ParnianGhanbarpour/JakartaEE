@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <Resource id="organizationDataSource" type="DataSource">
+        JdbcDriver = oracle.jdbc.OracleDriver
+        JdbcUrl = jdbc:oracle:thin:@localhost:1521:XE
+        UserName = Javaee
+        Password = java123
+        JtaManaged = true
+        MaxActive = 20
+        MaxIdle = 10
+        MinIdle = 2
+        MaxWait = 30000
+        TestWhileIdle = true
+        TestOnBorrow = true
+        TestOnReturn = false
+        ValidationQuery = SELECT 1 FROM DUAL
+    </Resource>
+</resources>

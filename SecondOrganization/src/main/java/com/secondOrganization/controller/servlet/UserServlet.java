@@ -1,6 +1,5 @@
 package com.secondOrganization.controller.servlet;
 
-
 import com.secondOrganization.controller.validation.BeanValidator;
 import com.secondOrganization.model.entity.Role;
 import com.secondOrganization.model.entity.User;
@@ -17,25 +16,24 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 
 @Slf4j
-@WebServlet(name = "UserServlet" , urlPatterns = "/user.do")
+@WebServlet(name = "UserServlet", urlPatterns = "/user.do")
 public class UserServlet extends HttpServlet {
 
     @Inject
     private UserServiceImpl userService;
+
     @Inject
     private RoleServiceImpl rolesService;
-    @Inject
-    private User user;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("UserServlet - Get");
         try {
             req.getSession().setAttribute("userList", rolesService.findAll());
-            req.getRequestDispatcher("/jsp/form/save/user-form.jsp").forward(req, resp);
+            req.getRequestDispatcher("/jsp/user-form.jsp").forward(req, resp);
         } catch (Exception e) {
-            log.error("User - Get : " + e.getMessage());
-            throw new RuntimeException(e);
+            log.error("Error in doGet: {}", e.getMessage(), e);
+            throw new ServletException("Cannot load users", e);
         }
     }
 
@@ -46,49 +44,54 @@ public class UserServlet extends HttpServlet {
             String username = req.getParameter("username");
             String password = req.getParameter("password");
 
-            //build user
-            user = User.builder()
+            User user = User.builder()
                     .username(username)
                     .password(password)
+                    .active(true)
                     .deleted(false)
                     .build();
 
-            //validate user
+            // Validate user
             BeanValidator<User> validator = new BeanValidator<>();
-            String validationResult = validator.validate(user).toString();
-            if (validationResult != null) {
-                resp.setStatus(400);
-                resp.getWriter().write(validationResult);
+            var errors = validator.validate(user);
+
+            if (!errors.isEmpty()) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write(errors.toString());
                 return;
             }
 
-            //check for duplicate username
+            // Check for duplicate username
             if (userService.findByUsername(username).isEmpty()) {
-                //save user
+                // Save user
                 userService.save(user);
+                log.info("User created: {}", username);
 
-                //build role for user
+                // Create role for user
                 Role userRole = Role.builder()
                         .user(user)
                         .role("user")
                         .deleted(false)
                         .build();
-                if (rolesService.findByUsernameAndRoleName(user.getUsername(), "user").isEmpty()) {
+
+                if (rolesService.findByUsernameAndRoleName(username, "user").isEmpty()) {
                     rolesService.save(userRole);
-                    log.info("New user role saved");
+                    log.info("User role created for: {}", username);
                 }
 
                 req.getSession().removeAttribute("duplicateUsername");
-                resp.sendRedirect("/user.do");
+                resp.sendRedirect(req.getContextPath() + "/user.do");
 
             } else {
+                log.warn("Duplicate username attempt: {}", username);
                 String errorMessage = "نام کاربری تکراری است!";
                 req.getSession().setAttribute("duplicateUsername", errorMessage);
-                resp.sendRedirect("/user.do");
+                resp.sendRedirect(req.getContextPath() + "/user.do");
             }
+
         } catch (Exception e) {
-            log.error("User - POST : " + e.getMessage());
-            throw new RuntimeException(e);
+            log.error("Error in doPost: {}", e.getMessage(), e);
+            throw new ServletException("Cannot save user", e);
         }
     }
 }

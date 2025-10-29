@@ -114,7 +114,7 @@
 
     <div class="form-section">
         <h4 class="mb-4">افزودن سازمان جدید</h4>
-        <form action="${pageContext.request.contextPath}/organisation.do" method="post">
+        <form action="${pageContext.request.contextPath}/organization.do" method="post">
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="name" class="form-label">نام سازمان *</label>
@@ -138,13 +138,13 @@
     <div class="table-section">
         <h4 class="text-center mb-4">لیست سازمان‌های ثبت‌شده</h4>
 
-        <c:if test="${empty organisationList}">
+        <c:if test="${empty organizationList}">
             <div class="alert alert-info text-center" role="alert">
                 هیچ سازمانی ثبت نشده است. لطفاً سازمان جدید اضافه کنید.
             </div>
         </c:if>
 
-        <c:if test="${not empty organisationList}">
+        <c:if test="${not empty organizationList}">
             <div class="table-responsive">
                 <table class="table table-hover align-middle text-center">
                     <thead>
@@ -158,7 +158,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="o" items="${organisationList}" varStatus="status">
+                    <c:forEach var="o" items="${organizationList}" varStatus="status">
                         <tr>
                             <td>${status.index + 1}</td>
                             <td>${o.id}</td>
@@ -175,7 +175,7 @@
                                 </c:choose>
                             </td>
                             <td>
-                                <form action="${pageContext.request.contextPath}/organisation.do"
+                                <form action="${pageContext.request.contextPath}/organization.do"
                                       method="post"
                                       onsubmit="return confirm('آیا از حذف «${o.name}» مطمئن هستید؟');">
                                     <input type="hidden" name="_method" value="delete"/>

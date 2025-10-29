@@ -101,7 +101,7 @@
     <p class="subtitle">به سامانه جامع مدیریت سازمان‌ها خوش آمدید</p>
 
     <div class="menu-grid">
-        <a href="${pageContext.request.contextPath}/organisation.do" class="menu-card card-org">
+        <a href="${pageContext.request.contextPath}/organization.do" class="menu-card card-org">
             <i class="bi bi-building"></i>
             <h3>مدیریت سازمان‌ها</h3>
             <p>ثبت و مدیریت اطلاعات سازمان‌ها</p>

@@ -51,7 +51,6 @@ public class UserServlet extends HttpServlet {
                     .deleted(false)
                     .build();
 
-            // Validate user
             BeanValidator<User> validator = new BeanValidator<>();
             var errors = validator.validate(user);
 
@@ -61,13 +60,10 @@ public class UserServlet extends HttpServlet {
                 return;
             }
 
-            // Check for duplicate username
             if (userService.findByUsername(username).isEmpty()) {
-                // Save user
                 userService.save(user);
                 log.info("User created: {}", username);
 
-                // Create role for user
                 Role userRole = Role.builder()
                         .user(user)
                         .role("user")

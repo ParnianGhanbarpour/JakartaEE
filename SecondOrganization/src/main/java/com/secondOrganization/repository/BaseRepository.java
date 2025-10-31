@@ -63,7 +63,6 @@ public abstract class BaseRepository<T extends Base> {
         return query.getResultList().stream().findFirst().map(e -> (T) e);
     }
 
-    // Cache stats (override در subclasses اگر نیاز)
     protected Statistics getCacheStatistics() {
         return getEntityManager().unwrap(Session.class).getSessionFactory().getStatistics();
     }

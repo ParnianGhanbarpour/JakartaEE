@@ -1,24 +1,11 @@
-/*!
-  * Bootstrap v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-  */
+
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.bootstrap = factory());
 })(this, (function () { 'use strict';
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap dom/data.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
 
-  /**
-   * Constants
-   */
 
   const elementMap = new Map();
   const Data = {
@@ -28,8 +15,6 @@
       }
       const instanceMap = elementMap.get(element);
 
-      // make it clear we only want one instance per element
-      // can be removed later when multiple key/instances are fine to be used
       if (!instanceMap.has(key) && instanceMap.size !== 0) {
         // eslint-disable-next-line no-console
         console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
@@ -50,7 +35,6 @@
       const instanceMap = elementMap.get(element);
       instanceMap.delete(key);
 
-      // free up element references if there are no instances left for an element
       if (instanceMap.size === 0) {
         elementMap.delete(element);
       }
@@ -104,7 +88,6 @@
       return 0;
     }
 
-    // Get transition-duration of the element
     let {
       transitionDuration,
       transitionDelay
@@ -182,7 +165,6 @@
       return null;
     }
 
-    // Can find the shadow root otherwise it'll return the document
     if (typeof element.getRootNode === 'function') {
       const root = element.getRootNode();
       return root instanceof ShadowRoot ? root : null;
@@ -191,7 +173,6 @@
       return element;
     }
 
-    // when we don't find a shadow root
     if (!element.parentNode) {
       return null;
     }
@@ -220,7 +201,6 @@
   const DOMContentLoadedCallbacks = [];
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
-      // add listener on the first call when the document is in loading state
       if (!DOMContentLoadedCallbacks.length) {
         document.addEventListener('DOMContentLoaded', () => {
           for (const callback of DOMContentLoadedCallbacks) {
@@ -292,8 +272,7 @@
     const listLength = list.length;
     let index = list.indexOf(activeElement);
 
-    // if the element does not exist in the list return an element
-    // depending on the direction and if cycle is allowed
+
     if (index === -1) {
       return !shouldGetNext && isCycleAllowed ? list[listLength - 1] : list[0];
     }

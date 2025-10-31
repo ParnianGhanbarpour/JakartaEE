@@ -374,13 +374,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // اعتبارسنجی کد ملی
     document.getElementById('nationalCode').addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, '');
         e.target.value = value.substring(0, 10);
     });
 
-    // اعتبارسنجی فرم
     document.querySelector('form').addEventListener('submit', function(e) {
         const nationalCode = document.getElementById('nationalCode').value;
 
@@ -390,7 +388,6 @@
             return false;
         }
 
-        // بررسی تکراری نبودن ارقام
         if (/^(\d)\1{9}$/.test(nationalCode)) {
             e.preventDefault();
             alert('کد ملی نامعتبر است! (تمام ارقام یکسان هستند)');
@@ -398,7 +395,6 @@
         }
     });
 
-    // فرمت حقوق با کاما
     const salaryInput = document.getElementById('salary');
     if (salaryInput) {
         salaryInput.addEventListener('blur', function(e) {

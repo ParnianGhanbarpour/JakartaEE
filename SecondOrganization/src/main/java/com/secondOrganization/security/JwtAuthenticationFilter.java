@@ -37,7 +37,6 @@ public class JwtAuthenticationFilter extends HttpFilter {
                 }
                 // Set SecurityContext (custom wrapper)
                 request.setAttribute("claims", claims);
-                // Proceed
                 chain.doFilter(request, response);
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

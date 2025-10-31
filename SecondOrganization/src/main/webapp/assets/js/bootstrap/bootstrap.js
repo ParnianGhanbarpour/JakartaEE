@@ -47,8 +47,7 @@
       }
       const instanceMap = elementMap.get(element);
 
-      // make it clear we only want one instance per element
-      // can be removed later when multiple key/instances are fine to be used
+
       if (!instanceMap.has(key) && instanceMap.size !== 0) {
         // eslint-disable-next-line no-console
         console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
@@ -69,19 +68,13 @@
       const instanceMap = elementMap.get(element);
       instanceMap.delete(key);
 
-      // free up element references if there are no instances left for an element
       if (instanceMap.size === 0) {
         elementMap.delete(element);
       }
     }
   };
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
+
 
   const MAX_UID = 1000000;
   const MILLISECONDS_MULTIPLIER = 1000;
@@ -136,7 +129,6 @@
       return 0;
     }
 
-    // If multiple durations are defined, take the first
     transitionDuration = transitionDuration.split(',')[0];
     transitionDelay = transitionDelay.split(',')[0];
     return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
@@ -154,7 +146,6 @@
     return typeof object.nodeType !== 'undefined';
   };
   const getElement = object => {
-    // it's a jQuery object or a node element
     if (isElement(object)) {
       return object.jquery ? object[0] : object;
     }
@@ -168,7 +159,6 @@
       return false;
     }
     const elementIsVisible = getComputedStyle(element).getPropertyValue('visibility') === 'visible';
-    // Handle `details` element as its content may falsie appear visible when it is closed
     const closedDetails = element.closest('details:not([open])');
     if (!closedDetails) {
       return elementIsVisible;
@@ -210,7 +200,6 @@
       return element;
     }
 
-    // when we don't find a shadow root
     if (!element.parentNode) {
       return null;
     }
@@ -239,7 +228,6 @@
   const DOMContentLoadedCallbacks = [];
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
-      // add listener on the first call when the document is in loading state
       if (!DOMContentLoadedCallbacks.length) {
         document.addEventListener('DOMContentLoaded', () => {
           for (const callback of DOMContentLoadedCallbacks) {
@@ -311,8 +299,6 @@
     const listLength = list.length;
     let index = list.indexOf(activeElement);
 
-    // if the element does not exist in the list return an element
-    // depending on the direction and if cycle is allowed
     if (index === -1) {
       return !shouldGetNext && isCycleAllowed ? list[listLength - 1] : list[0];
     }

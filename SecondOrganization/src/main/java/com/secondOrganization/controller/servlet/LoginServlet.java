@@ -35,6 +35,9 @@ public class LoginServlet extends HttpServlet {
     @Inject
     private DepartmentService departmentService;
 
+    @Inject
+    private BranchService branchService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("LoginServlet - GET {}", req.getRequestURI());
@@ -71,36 +74,46 @@ public class LoginServlet extends HttpServlet {
                 log.info("Created sample organization: {}", organization.getName());
             }
 
+            Branch mainBranch = createBranchIfNotExists(
+                    "شعبه مرکزی",
+                    "تهران",
+                    "خیابان آزادی",
+                    "مدیر مرکزی",
+                    organization
+            );
+
             Department itDept = createDepartmentIfNotExists(
-                    "فناوری اطلاعات و ارتباطات",
+                    "فناوری اطلاعات",
                     "آموزشی",
                     1_000_000.0,
-                    organization
+                    organization,
+                    mainBranch
             );
 
             Department eeDept = createDepartmentIfNotExists(
                     "برق و الکترونیک",
                     "آموزشی",
                     800_000.0,
-                    organization
+                    organization,
+                    mainBranch
             );
 
             User adminUser = createUserIfNotExists("admin", "admin123");
             createRoleIfNotExists(adminUser, "admin");
             createPersonIfNotExists(adminUser, "مدیر", "سیستم", "0000000000", Gender.male);
 
-            User basicUser = createUserIfNotExists("user", "user123");
-            createRoleIfNotExists(basicUser, "user");
-            createPersonIfNotExists(basicUser, "کاربر", "عادی", "1111111111", Gender.male);
-
             User managerUser = createUserIfNotExists("manager", "manager123");
             createRoleIfNotExists(managerUser, "manager");
-            createPersonIfNotExists(managerUser, "مدیر", "واحد", "2222222222", Gender.female);
+            createPersonIfNotExists(managerUser, "مدیر", "واحد", "1111111111", Gender.female);
 
-            log.info("Sample data initialization completed successfully");
+            User basicUser = createUserIfNotExists("user", "user123");
+            createRoleIfNotExists(basicUser, "user");
+            createPersonIfNotExists(basicUser, "کاربر", "عادی", "2222222222", Gender.male);
+
+            log.info(" Sample data initialization completed successfully");
 
         } catch (Exception e) {
-            log.error("Error during sample data initialization: {}", e.getMessage(), e);
+            log.error(" Error during sample data initialization: {}", e.getMessage(), e);
         }
     }
 
@@ -125,7 +138,7 @@ public class LoginServlet extends HttpServlet {
                 User user = userOpt.get();
 
                 if (!user.isActive()) {
-                    req.setAttribute("loginError", "حساب کاربری شما غیرفعال است. با مدیر تماس بگیرید");
+                    req.setAttribute("loginError", "حساب کاربری شما غیرفعال است");
                     req.getRequestDispatcher("/login.jsp").forward(req, resp);
                     return;
                 }
@@ -146,28 +159,28 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("personId", person.getId());
                 });
 
-                log.info("User {} logged in successfully with role: {}", username, userRole);
-
+                log.info(" User {} logged in successfully with role: {}", username, userRole);
                 resp.sendRedirect(req.getContextPath() + "/dashboard.jsp");
 
             } else {
-                log.warn("Failed login attempt for user: {}", username);
+                log.warn(" Failed login attempt for user: {}", username);
                 req.setAttribute("loginError", "نام کاربری یا رمز عبور اشتباه است");
                 req.getRequestDispatcher("/login.jsp").forward(req, resp);
             }
 
         } catch (Exception e) {
-            log.error("Login error for user {}: {}", username, e.getMessage(), e);
-            req.setAttribute("loginError", "خطا در ورود به سیستم. لطفاً دوباره تلاش کنید");
+            log.error(" Login error for user {}: {}", username, e.getMessage(), e);
+            req.setAttribute("loginError", "خطا در ورود به سیستم");
             req.getRequestDispatcher("/login.jsp").forward(req, resp);
         }
     }
+
 
     private User createUserIfNotExists(String username, String password) throws Exception {
         Optional<User> userOpt = userService.findByUsername(username);
 
         if (userOpt.isPresent()) {
-            log.info("User {} already exists", username);
+            log.info("✓ User {} already exists", username);
             return userOpt.get();
         }
 
@@ -178,7 +191,7 @@ public class LoginServlet extends HttpServlet {
                 .deleted(false)
                 .build();
         userService.save(user);
-        log.info("Created user: {}", username);
+        log.info("✓ Created user: {}", username);
         return user;
     }
 
@@ -192,7 +205,7 @@ public class LoginServlet extends HttpServlet {
                     .deleted(false)
                     .build();
             roleService.save(role);
-            log.info("Created role {} for user {}", roleName, user.getUsername());
+            log.info("✓ Created role {} for user {}", roleName, user.getUsername());
         }
     }
 
@@ -211,15 +224,41 @@ public class LoginServlet extends HttpServlet {
                     .deleted(false)
                     .build();
             personService.save(person);
-            log.info("Created person for user {}", user.getUsername());
+            log.info("✓ Created person for user {}", user.getUsername());
         }
     }
 
+    private Branch createBranchIfNotExists(String name, String city, String address,
+                                           String manager, Organization org) throws Exception {
+        List<Branch> branches = branchService.findByOrganizationId(org.getId());
+
+        for (Branch b : branches) {
+            if (b.getName().equals(name)) {
+                log.info("✓ Branch {} already exists", name);
+                return b;
+            }
+        }
+
+        Branch branch = Branch.builder()
+                .name(name)
+                .city(city)
+                .address(address)
+                .manager(manager)
+                .organization(org)
+                .deleted(false)
+                .build();
+        branchService.save(branch);
+        log.info("✓ Created branch: {}", name);
+        return branch;
+    }
+
     private Department createDepartmentIfNotExists(String name, String field,
-                                                   Double budget, Organization org) throws Exception {
+                                                   Double budget, Organization org,
+                                                   Branch branch) throws Exception {
         Optional<Department> deptOpt = departmentService.findByName(name);
 
         if (deptOpt.isPresent()) {
+            log.info("✓ Department {} already exists", name);
             return deptOpt.get();
         }
 
@@ -228,10 +267,11 @@ public class LoginServlet extends HttpServlet {
                 .field(field)
                 .budget(budget)
                 .organization(org)
+                .branch(branch)
                 .deleted(false)
                 .build();
         departmentService.save(dept);
-        log.info("Created department: {}", name);
+        log.info("✓ Created department: {}", name);
         return dept;
     }
 }

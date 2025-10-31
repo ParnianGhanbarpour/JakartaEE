@@ -1,5 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!-- Protection: Redirect to login if not authenticated -->
+<c:if test="${empty sessionScope.username}">
+    <c:redirect url="/login.do"/>
+</c:if>
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -23,7 +29,7 @@
             overflow-x: hidden;
         }
 
-        /* Sidebar */
+        /* ========== SIDEBAR ========== */
         .sidebar {
             position: fixed;
             right: 0;
@@ -35,6 +41,7 @@
             transition: all 0.3s ease;
             z-index: 1000;
             box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+            overflow-y: auto;
         }
 
         .sidebar-header {
@@ -112,14 +119,19 @@
             width: 24px;
         }
 
-        /* Main Content */
+        .sidebar-divider {
+            margin: 20px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* ========== MAIN CONTENT ========== */
         .main-content {
             margin-right: 280px;
             padding: 30px;
             min-height: 100vh;
         }
 
-        /* Top Bar */
+        /* ========== TOP BAR ========== */
         .top-bar {
             background: white;
             border-radius: 16px;
@@ -135,83 +147,61 @@
             font-size: 28px;
             font-weight: 700;
             color: #1e293b;
-            margin: 0;
+            margin: 0 0 5px 0;
         }
 
         .top-bar-title p {
             color: #64748b;
-            margin: 5px 0 0 0;
+            margin: 0;
             font-size: 14px;
         }
 
-        .top-bar-actions {
+        .top-bar-user {
             display: flex;
+            align-items: center;
             gap: 15px;
-            align-items: center;
         }
 
-        .top-bar-search {
-            position: relative;
-        }
-
-        .top-bar-search input {
-            width: 300px;
-            padding: 10px 40px 10px 20px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .top-bar-search input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-
-        .top-bar-search i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
-
-        .top-bar-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            background: #f8fafc;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .top-bar-profile:hover {
-            background: #f1f5f9;
-        }
-
-        .top-bar-profile img {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             object-fit: cover;
+            border: 3px solid #f1f5f9;
         }
 
-        .top-bar-profile-info h4 {
-            font-size: 14px;
+        .user-info h4 {
+            font-size: 15px;
             font-weight: 600;
-            margin: 0;
             color: #1e293b;
+            margin: 0 0 4px 0;
         }
 
-        .top-bar-profile-info p {
-            font-size: 12px;
-            color: #64748b;
-            margin: 0;
+        .role-badge {
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
         }
 
-        /* Stats Cards */
+        .role-admin {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .role-manager {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .role-user {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+
+        /* ========== STATS CARDS ========== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -294,26 +284,6 @@
             background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         }
 
-        .stat-card-change {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .stat-card-change.up {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-
-        .stat-card-change.down {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
         .stat-card-body h3 {
             font-size: 14px;
             font-weight: 500;
@@ -328,7 +298,7 @@
             margin: 0;
         }
 
-        /* Quick Actions */
+        /* ========== QUICK ACTIONS ========== */
         .quick-actions {
             background: white;
             border-radius: 16px;
@@ -337,18 +307,11 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .quick-actions-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .quick-actions-header h3 {
+        .quick-actions h3 {
             font-size: 20px;
             font-weight: 700;
             color: #1e293b;
-            margin: 0;
+            margin: 0 0 24px 0;
         }
 
         .quick-actions-grid {
@@ -388,129 +351,22 @@
             color: white;
         }
 
-        .quick-action-btn:nth-child(1) .quick-action-icon {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .quick-action-btn:nth-child(2) .quick-action-icon {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .quick-action-btn:nth-child(3) .quick-action-icon {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .quick-action-btn:nth-child(4) .quick-action-icon {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        }
-
-        .quick-action-btn:nth-child(5) .quick-action-icon {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-
-        .quick-action-btn:nth-child(6) .quick-action-icon {
-            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
-        }
-
         .quick-action-text h4 {
             font-size: 15px;
             font-weight: 600;
             color: #1e293b;
             margin: 0;
+            text-align: center;
         }
 
         .quick-action-text p {
             font-size: 12px;
             color: #64748b;
             margin: 4px 0 0 0;
+            text-align: center;
         }
 
-        /* Recent Activity */
-        .recent-activity {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .recent-activity-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .recent-activity-header h3 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1e293b;
-            margin: 0;
-        }
-
-        .activity-item {
-            display: flex;
-            gap: 16px;
-            padding: 16px;
-            border-radius: 12px;
-            transition: all 0.2s;
-            margin-bottom: 8px;
-        }
-
-        .activity-item:hover {
-            background: #f8fafc;
-        }
-
-        .activity-icon {
-            width: 48px;
-            height: 48px;
-            min-width: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-        }
-
-        .activity-icon.purple {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .activity-icon.green {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        }
-
-        .activity-icon.blue {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .activity-icon.orange {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-
-        .activity-content {
-            flex: 1;
-        }
-
-        .activity-content h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1e293b;
-            margin: 0 0 4px 0;
-        }
-
-        .activity-content p {
-            font-size: 13px;
-            color: #64748b;
-            margin: 0;
-        }
-
-        .activity-time {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        /* Responsive */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .sidebar {
                 width: 70px;
@@ -530,15 +386,11 @@
                 flex-direction: column;
                 gap: 15px;
             }
-
-            .top-bar-search input {
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
-<!-- Sidebar -->
+<!-- ========== SIDEBAR ========== -->
 <aside class="sidebar">
     <div class="sidebar-header">
         <a href="#" class="sidebar-logo">
@@ -551,30 +403,43 @@
     </div>
 
     <ul class="sidebar-nav">
+        <!-- Dashboard - همه کاربران -->
         <li class="sidebar-nav-item">
             <a href="${pageContext.request.contextPath}/dashboard.jsp" class="sidebar-nav-link active">
                 <i class="bi bi-speedometer2"></i>
                 <span>داشبورد</span>
             </a>
         </li>
-        <li class="sidebar-nav-item">
-            <a href="${pageContext.request.contextPath}/organization.do" class="sidebar-nav-link">
-                <i class="bi bi-building"></i>
-                <span>سازمان‌ها</span>
-            </a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a href="${pageContext.request.contextPath}/department.do" class="sidebar-nav-link">
-                <i class="bi bi-diagram-3"></i>
-                <span>دپارتمان‌ها</span>
-            </a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a href="${pageContext.request.contextPath}/branch.do" class="sidebar-nav-link">
-                <i class="bi bi-geo-alt"></i>
-                <span>شعب</span>
-            </a>
-        </li>
+
+        <!-- Admin & Manager Only -->
+        <c:if test="${sessionScope.isAdmin || sessionScope.isManager}">
+            <li class="sidebar-nav-item">
+                <a href="${pageContext.request.contextPath}/organization.do" class="sidebar-nav-link">
+                    <i class="bi bi-building"></i>
+                    <span>سازمان‌ها</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="${pageContext.request.contextPath}/department.do" class="sidebar-nav-link">
+                    <i class="bi bi-diagram-3"></i>
+                    <span>دپارتمان‌ها</span>
+                </a>
+            </li>
+        </c:if>
+
+        <!-- Admin Only -->
+        <c:if test="${sessionScope.isAdmin}">
+            <li class="sidebar-nav-item">
+                <a href="${pageContext.request.contextPath}/branch.do" class="sidebar-nav-link">
+                    <i class="bi bi-geo-alt"></i>
+                    <span>شعب</span>
+                </a>
+            </li>
+        </c:if>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- All Users -->
         <li class="sidebar-nav-item">
             <a href="${pageContext.request.contextPath}/organizationGroup.do" class="sidebar-nav-link">
                 <i class="bi bi-collection"></i>
@@ -593,28 +458,79 @@
                 <span>پروژه‌ها</span>
             </a>
         </li>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Logout -->
+        <li class="sidebar-nav-item">
+            <a href="${pageContext.request.contextPath}/logout.do" class="sidebar-nav-link" style="color: #ef4444;">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>خروج از سیستم</span>
+            </a>
+        </li>
     </ul>
 </aside>
 
-<!-- Main Content -->
+<!-- ========== MAIN CONTENT ========== -->
 <main class="main-content">
     <!-- Top Bar -->
     <div class="top-bar">
         <div class="top-bar-title">
-            <h1>داشبورد</h1>
-            <p>خوش آمدید! امروز جمعه، 30 آبان 1403</p>
+            <h1>
+                <c:choose>
+                    <c:when test="${sessionScope.isAdmin}">
+                        <i class="bi bi-shield-check"></i> داشبورد مدیریت
+                    </c:when>
+                    <c:when test="${sessionScope.isManager}">
+                        <i class="bi bi-person-gear"></i> داشبورد مدیر
+                    </c:when>
+                    <c:otherwise>
+                        <i class="bi bi-person"></i> داشبورد کاربر
+                    </c:otherwise>
+                </c:choose>
+            </h1>
+            <p>
+                خوش آمدید
+                <strong>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.personName}">
+                            ${sessionScope.personName}
+                        </c:when>
+                        <c:otherwise>
+                            ${sessionScope.username}
+                        </c:otherwise>
+                    </c:choose>
+                </strong>
+            </p>
         </div>
-        <div class="top-bar-actions">
-            <div class="top-bar-search">
-                <input type="text" placeholder="جستجو...">
-                <i class="bi bi-search"></i>
-            </div>
-            <div class="top-bar-profile">
-                <img src="https://ui-avatars.com/api/?name=Admin&background=667eea&color=fff" alt="Profile">
-                <div class="top-bar-profile-info">
-                    <h4>مدیر سیستم</h4>
-                    <p>ادمین</p>
-                </div>
+
+        <div class="top-bar-user">
+            <img src="https://ui-avatars.com/api/?name=${sessionScope.username}&background=667eea&color=fff&bold=true"
+                 alt="Avatar" class="user-avatar">
+            <div class="user-info">
+                <h4>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.personName}">
+                            ${sessionScope.personName}
+                        </c:when>
+                        <c:otherwise>
+                            ${sessionScope.username}
+                        </c:otherwise>
+                    </c:choose>
+                </h4>
+                <span class="role-badge role-${sessionScope.userRole}">
+                        <c:choose>
+                            <c:when test="${sessionScope.isAdmin}">
+                                <i class="bi bi-shield-check"></i> مدیر سیستم
+                            </c:when>
+                            <c:when test="${sessionScope.isManager}">
+                                <i class="bi bi-person-gear"></i> مدیر
+                            </c:when>
+                            <c:otherwise>
+                                <i class="bi bi-person"></i> کاربر
+                            </c:otherwise>
+                        </c:choose>
+                    </span>
             </div>
         </div>
     </div>
@@ -625,10 +541,6 @@
             <div class="stat-card-header">
                 <div class="stat-card-icon">
                     <i class="bi bi-building"></i>
-                </div>
-                <div class="stat-card-change up">
-                    <i class="bi bi-arrow-up"></i>
-                    12%
                 </div>
             </div>
             <div class="stat-card-body">
@@ -642,10 +554,6 @@
                 <div class="stat-card-icon">
                     <i class="bi bi-diagram-3"></i>
                 </div>
-                <div class="stat-card-change up">
-                    <i class="bi bi-arrow-up"></i>
-                    8%
-                </div>
             </div>
             <div class="stat-card-body">
                 <h3>دپارتمان‌های فعال</h3>
@@ -657,10 +565,6 @@
             <div class="stat-card-header">
                 <div class="stat-card-icon">
                     <i class="bi bi-people"></i>
-                </div>
-                <div class="stat-card-change up">
-                    <i class="bi bi-arrow-up"></i>
-                    23%
                 </div>
             </div>
             <div class="stat-card-body">
@@ -674,10 +578,6 @@
                 <div class="stat-card-icon">
                     <i class="bi bi-kanban"></i>
                 </div>
-                <div class="stat-card-change down">
-                    <i class="bi bi-arrow-down"></i>
-                    5%
-                </div>
             </div>
             <div class="stat-card-body">
                 <h3>پروژه‌های فعال</h3>
@@ -688,52 +588,34 @@
 
     <!-- Quick Actions -->
     <div class="quick-actions">
-        <div class="quick-actions-header">
-            <h3>دسترسی سریع</h3>
-        </div>
+        <h3><i class="bi bi-lightning-charge"></i> دسترسی سریع</h3>
         <div class="quick-actions-grid">
-            <a href="${pageContext.request.contextPath}/organization.do" class="quick-action-btn">
-                <div class="quick-action-icon">
-                    <i class="bi bi-plus-circle"></i>
-                </div>
-                <div class="quick-action-text">
-                    <h4>سازمان جدید</h4>
-                    <p>افزودن سازمان</p>
-                </div>
-            </a>
+            <!-- Admin & Manager Only -->
+            <c:if test="${sessionScope.isAdmin || sessionScope.isManager}">
+                <a href="${pageContext.request.contextPath}/organization.do" class="quick-action-btn">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="bi bi-plus-circle"></i>
+                    </div>
+                    <div class="quick-action-text">
+                        <h4>سازمان جدید</h4>
+                        <p>افزودن سازمان</p>
+                    </div>
+                </a>
 
-            <a href="${pageContext.request.contextPath}/department.do" class="quick-action-btn">
-                <div class="quick-action-icon">
-                    <i class="bi bi-folder-plus"></i>
-                </div>
-                <div class="quick-action-text">
-                    <h4>دپارتمان جدید</h4>
-                    <p>ایجاد دپارتمان</p>
-                </div>
-            </a>
+                <a href="${pageContext.request.contextPath}/department.do" class="quick-action-btn">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="bi bi-folder-plus"></i>
+                    </div>
+                    <div class="quick-action-text">
+                        <h4>دپارتمان جدید</h4>
+                        <p>ایجاد دپارتمان</p>
+                    </div>
+                </a>
+            </c:if>
 
-            <a href="${pageContext.request.contextPath}/branch.do" class="quick-action-btn">
-                <div class="quick-action-icon">
-                    <i class="bi bi-pin-map"></i>
-                </div>
-                <div class="quick-action-text">
-                    <h4>شعبه جدید</h4>
-                    <p>ثبت شعبه</p>
-                </div>
-            </a>
-
-            <a href="${pageContext.request.contextPath}/organizationGroup.do" class="quick-action-btn">
-                <div class="quick-action-icon">
-                    <i class="bi bi-people"></i>
-                </div>
-                <div class="quick-action-text">
-                    <h4>گروه جدید</h4>
-                    <p>ایجاد گروه کاری</p>
-                </div>
-            </a>
-
+            <!-- All Users -->
             <a href="${pageContext.request.contextPath}/person.do" class="quick-action-btn">
-                <div class="quick-action-icon">
+                <div class="quick-action-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
                     <i class="bi bi-person-plus"></i>
                 </div>
                 <div class="quick-action-text">
@@ -743,7 +625,7 @@
             </a>
 
             <a href="${pageContext.request.contextPath}/project.do" class="quick-action-btn">
-                <div class="quick-action-icon">
+                <div class="quick-action-icon" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
                     <i class="bi bi-clipboard-plus"></i>
                 </div>
                 <div class="quick-action-text">
@@ -751,102 +633,40 @@
                     <p>ثبت پروژه</p>
                 </div>
             </a>
-        </div>
-    </div>
 
-    <!-- Recent Activity -->
-    <div class="recent-activity">
-        <div class="recent-activity-header">
-            <h3>فعالیت‌های اخیر</h3>
-            <a href="#" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 14px;">
-                مشاهده همه
-                <i class="bi bi-arrow-left"></i>
+            <a href="${pageContext.request.contextPath}/organizationGroup.do" class="quick-action-btn">
+                <div class="quick-action-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="quick-action-text">
+                    <h4>گروه جدید</h4>
+                    <p>ایجاد گروه کاری</p>
+                </div>
             </a>
-        </div>
-
-        <div class="activity-item">
-            <div class="activity-icon purple">
-                <i class="bi bi-building"></i>
-            </div>
-            <div class="activity-content">
-                <h4>سازمان جدید ثبت شد</h4>
-                <p>شرکت فناوری پارس در سیستم ثبت شد</p>
-            </div>
-            <div class="activity-time">
-                2 ساعت پیش
-            </div>
-        </div>
-
-        <div class="activity-item">
-            <div class="activity-icon green">
-                <i class="bi bi-person-check"></i>
-            </div>
-            <div class="activity-content">
-                <h4>پرسنل جدید اضافه شد</h4>
-                <p>علی احمدی به دپارتمان IT اضافه شد</p>
-            </div>
-            <div class="activity-time">
-                5 ساعت پیش
-            </div>
-        </div>
-
-        <div class="activity-item">
-            <div class="activity-icon blue">
-                <i class="bi bi-kanban"></i>
-            </div>
-            <div class="activity-content">
-                <h4>پروژه به‌روزرسانی شد</h4>
-                <p>وضعیت پروژه طراحی سایت به "تکمیل شده" تغییر کرد</p>
-            </div>
-            <div class="activity-time">
-                1 روز پیش
-            </div>
-        </div>
-
-        <div class="activity-item">
-            <div class="activity-icon orange">
-                <i class="bi bi-geo-alt"></i>
-            </div>
-            <div class="activity-content">
-                <h4>شعبه جدید افتتاح شد</h4>
-                <p>شعبه تهران - ونک به سیستم اضافه شد</p>
-            </div>
-            <div class="activity-time">
-                2 روز پیش
-            </div>
         </div>
     </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Active link highlighting
-    document.querySelectorAll('.sidebar-nav-link').forEach(link => {
-        link.addEventListener('click', function() {
-            document.querySelectorAll('.sidebar-nav-link').forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-
-    // Animate numbers on page load
-    function animateValue(element, start, end, duration) {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            element.textContent = Math.floor(progress * (end - start) + start).toLocaleString('fa-IR');
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            }
-        };
-        window.requestAnimationFrame(step);
-    }
-
+    // Animate stats on load
     window.addEventListener('load', () => {
         const stats = document.querySelectorAll('.stat-card-body h2');
-        stats.forEach((stat, index) => {
+        stats.forEach((stat) => {
             const endValue = parseInt(stat.textContent.replace(/,/g, ''));
-            animateValue(stat, 0, endValue, 1500);
+            let startValue = 0;
+            const duration = 1500;
+            const increment = endValue / (duration / 16);
+
+            const counter = setInterval(() => {
+                startValue += increment;
+                if (startValue >= endValue) {
+                    stat.textContent = endValue.toLocaleString('fa-IR');
+                    clearInterval(counter);
+                } else {
+                    stat.textContent = Math.floor(startValue).toLocaleString('fa-IR');
+                }
+            }, 16);
         });
     });
 </script>

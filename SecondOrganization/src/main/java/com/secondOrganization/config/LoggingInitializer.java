@@ -13,9 +13,7 @@ public class LoggingInitializer {
     @PostConstruct
     public void init() {
         try {
-            // حذف handlers قبلی (جلوگیری از duplicate logs)
             SLF4JBridgeHandler.removeHandlersForRootLogger();
-            // نصب bridge
             SLF4JBridgeHandler.install();
             logger.info("SLF4J Bridge installed successfully");
         } catch (Exception e) {

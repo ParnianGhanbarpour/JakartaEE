@@ -23,7 +23,6 @@ public class Token extends Base {
     private String username;
     private LocalDateTime expiry;
 
-    // Getters/Setters
     public String getTokenValue() {
         return tokenValue;
     }

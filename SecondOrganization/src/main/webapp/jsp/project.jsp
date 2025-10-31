@@ -361,7 +361,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // اعتبارسنجی تاریخ‌ها
     document.querySelector('form').addEventListener('submit', function(e) {
         const startDate = new Date(document.getElementById('startDate').value);
         const endDate = new Date(document.getElementById('endDate').value);
@@ -380,7 +379,6 @@
         }
     });
 
-    // فرمت نمایش بودجه با کامای سه‌رقمی
     document.getElementById('budget').addEventListener('input', function(e) {
         let value = e.target.value.replace(/,/g, '');
         if (!isNaN(value) && value !== '') {

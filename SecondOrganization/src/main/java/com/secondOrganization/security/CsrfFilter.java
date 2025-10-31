@@ -29,7 +29,6 @@ public class CsrfFilter extends HttpFilter {
         chain.doFilter(request, response);
     }
 
-    // در login یا init، generate token
     public static void generateCsrfToken(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String token = UUID.randomUUID().toString();

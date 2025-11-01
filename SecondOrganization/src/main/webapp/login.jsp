@@ -25,7 +25,9 @@
             justify-content: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 20px 0;
         }
 
         /* Animated Background */
@@ -63,7 +65,8 @@
             z-index: 10;
             width: 100%;
             max-width: 450px;
-            padding: 20px;
+            padding: 0 20px;
+            margin: 20px auto;
         }
 
         .login-card {
@@ -187,6 +190,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .form-checkbox {
@@ -215,6 +220,7 @@
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s;
+            white-space: nowrap;
         }
 
         .forgot-password:hover {
@@ -252,6 +258,7 @@
             align-items: center;
             gap: 12px;
             animation: shake 0.5s;
+            word-break: break-word;
         }
 
         @keyframes shake {
@@ -282,7 +289,17 @@
         .login-footer p {
             font-size: 14px;
             color: #64748b;
-            margin: 0;
+            margin: 0 0 12px 0;
+        }
+
+        .login-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-footer a:hover {
+            color: #764ba2;
         }
 
         .demo-accounts {
@@ -304,6 +321,7 @@
         .demo-account {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 8px 12px;
             background: white;
             border-radius: 8px;
@@ -311,6 +329,7 @@
             font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
+            gap: 10px;
         }
 
         .demo-account:hover {
@@ -327,7 +346,12 @@
             color: inherit;
         }
 
-        /* Loader */
+        .demo-account .demo-pass {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
         .loader {
             display: none;
             width: 20px;
@@ -351,17 +375,127 @@
             display: block;
         }
 
-        @media (max-width: 576px) {
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            body::before,
+            body::after {
+                display: none;
+            }
+
+            .login-container {
+                padding: 0 15px;
+            }
+
             .login-card {
                 padding: 32px 24px;
+                border-radius: 20px;
+            }
+
+            .login-header {
+                margin-bottom: 32px;
+            }
+
+            .login-logo {
+                width: 70px;
+                height: 70px;
+                margin-bottom: 16px;
+            }
+
+            .login-logo i {
+                font-size: 36px;
             }
 
             .login-header h1 {
                 font-size: 24px;
             }
 
+            .login-header p {
+                font-size: 13px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-input {
+                padding: 12px 42px 12px 14px;
+                font-size: 14px;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .btn-login {
+                padding: 12px;
+                font-size: 15px;
+            }
+
             .demo-accounts {
+                padding: 14px;
+            }
+
+            .demo-account {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+                gap: 6px;
+            }
+
+            .demo-account .demo-pass {
                 font-size: 12px;
+            }
+
+            .login-footer {
+                margin-top: 24px;
+                padding-top: 20px;
+            }
+
+            .login-footer p {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 24px 20px;
+            }
+
+            .login-logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .login-logo i {
+                font-size: 32px;
+            }
+
+            .login-header h1 {
+                font-size: 22px;
+            }
+
+            .demo-accounts h6 {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .login-card {
+                padding: 28px 32px;
+            }
+
+            .login-header {
+                margin-bottom: 28px;
+            }
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+            .demo-accounts {
+                margin-top: 20px;
             }
         }
     </style>
@@ -454,19 +588,32 @@
                     <i class="bi bi-person-fill-gear"></i>
                     <strong>مدیر:</strong> admin
                 </div>
-                <span>admin123</span>
+                <span class="demo-pass">admin123</span>
+            </div>
+            <div class="demo-account" onclick="fillLogin('manager', 'manager123')">
+                <div>
+                    <i class="bi bi-person-badge"></i>
+                    <strong>مدیر واحد:</strong> manager
+                </div>
+                <span class="demo-pass">manager123</span>
             </div>
             <div class="demo-account" onclick="fillLogin('user', 'user123')">
                 <div>
                     <i class="bi bi-person-fill"></i>
                     <strong>کاربر:</strong> user
                 </div>
-                <span>user123</span>
+                <span class="demo-pass">user123</span>
             </div>
         </div>
 
         <!-- Footer -->
         <div class="login-footer">
+            <p>
+                حساب کاربری ندارید؟
+                <a href="${pageContext.request.contextPath}/signup.do">
+                    <i class="bi bi-person-plus"></i> ثبت‌نام کنید
+                </a>
+            </p>
             <p>
                 <i class="bi bi-shield-check"></i>
                 سامانه مدیریت سازمانی | نسخه 1.0.0
@@ -524,14 +671,21 @@
         });
     }, 5000);
 
-    // Keyboard shortcut for demo login
+    // Keyboard shortcuts for demo login
     document.addEventListener('keydown', function(e) {
         // Ctrl + Shift + A = Admin
         if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+            e.preventDefault();
             fillLogin('admin', 'admin123');
+        }
+        // Ctrl + Shift + M = Manager
+        if (e.ctrlKey && e.shiftKey && e.key === 'M') {
+            e.preventDefault();
+            fillLogin('manager', 'manager123');
         }
         // Ctrl + Shift + U = User
         if (e.ctrlKey && e.shiftKey && e.key === 'U') {
+            e.preventDefault();
             fillLogin('user', 'user123');
         }
     });

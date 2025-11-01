@@ -8,7 +8,7 @@
   </component>
   <component name="PersistenceUnitSettings">
     <persistence-units>
-      <persistence-unit name="Default" defaultSearchScope="Project" />
+      <persistence-unit moduleName="SecondOrganization" name="Default" />
     </persistence-units>
   </component>
 </project>

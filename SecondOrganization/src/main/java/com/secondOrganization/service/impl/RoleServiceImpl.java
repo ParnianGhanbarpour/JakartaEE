@@ -72,7 +72,7 @@ public class RoleServiceImpl implements RoleService, Serializable {
     @Transactional
     @Override
     public List<Role> findByUser(String username) throws Exception {
-        TypedQuery<Role> query = entityManager.createQuery("select oo from Role oo where oo.user=:username", Role.class);
+        TypedQuery<Role> query = entityManager.createQuery("select oo from Role oo where oo.user.username=:username and oo.deleted=false", Role.class);
         query.setParameter("username",username);
         return query.getResultList();
     }

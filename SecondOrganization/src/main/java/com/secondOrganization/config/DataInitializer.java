@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Data Initializer - ایجاد داده‌های اولیه سیستم
- * این کلاس با استفاده از @Startup و @Singleton حتماً اجرا می‌شود
- */
+
 @Slf4j
 @Singleton
 @Startup
@@ -46,7 +43,6 @@ public class DataInitializer {
         log.info("========================================");
 
         try {
-            // پاک کردن داده‌های قبلی (اختیاری - فقط برای توسعه)
             // clearOldData();
 
             Organization mainOrg = createOrganizationIfNotExists("مجتمع فنی تهران", "آموزشی");
@@ -273,7 +269,6 @@ public class DataInitializer {
         try {
             log.warn("⚠️  Clearing old data (Development mode only)...");
             // TODO: Implement if needed
-            // این بخش را فقط در development استفاده کنید
         } catch (Exception e) {
             log.error("Error clearing old data: {}", e.getMessage());
         }

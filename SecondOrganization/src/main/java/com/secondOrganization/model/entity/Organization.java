@@ -24,10 +24,10 @@ import java.util.List;
 @Table(name="organization_tbl")
 public class Organization extends Base {
 
-    @Column(name = "org_name", length = 30)
+    @Column(name = "org_name", length = 50)
     @JsonbProperty("نام سازمان")
-    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,20}$", message = "نام سازمان معتبر نیست !")
-    @Size(min = 3, max = 20, message = "اسم باید بین سه تا بیست حرف باشد .")
+    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,50}$", message = "نام سازمان معتبر نیست !")
+    @Size(min = 3, max = 50, message = "اسم باید بین سه تا بیست حرف باشد .")
     @NotBlank(message = "فیلد را پر کنید ! ")
     private String name;
 

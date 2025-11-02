@@ -4,7 +4,6 @@ package com.secondOrganization.service.impl;
 import com.secondOrganization.model.entity.Role;
 import com.secondOrganization.service.RoleService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -83,7 +82,7 @@ public class RoleServiceImpl implements RoleService, Serializable {
     public List<Role> findByUsernameAndRoleName(String username, String roleName) throws Exception {
         TypedQuery<Role> query = entityManager.
                 createQuery
-                        ("select oo from Role oo where oo.user.username=:username and oo.role=:roleName and deleted=false", Role.class);
+                        ("select oo from Role oo where oo.user.username=:username and oo.role=:roleName and oo.deleted=false", Role.class);
         query.setParameter("username",username);
         query.setParameter("roleName",roleName);
         return query.getResultList();

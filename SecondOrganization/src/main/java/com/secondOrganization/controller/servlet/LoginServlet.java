@@ -39,6 +39,9 @@ public class LoginServlet extends HttpServlet {
     @Inject
     private BranchService branchService;
 
+    @Inject
+    private OrganizationGroupService organizationGroupService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("LoginServlet - GET {}", req.getRequestURI());
@@ -99,17 +102,29 @@ public class LoginServlet extends HttpServlet {
                     mainBranch
             );
 
+            OrganizationGroup defaultGroup = createOrganizationGroupIfNotExists(
+                    "گروه پیش‌فرض",
+                    "عمومی",
+                    itDept
+            );
+
+            OrganizationGroup devGroup = createOrganizationGroupIfNotExists(
+                    "گروه توسعه",
+                    "برنامه‌نویسی",
+                    itDept
+            );
+
             User adminUser = createUserIfNotExists("admin", "admin123");
             createRoleIfNotExists(adminUser, "admin");
-            createPersonIfNotExists(adminUser, "مدیر", "سیستم", "0000000000", Gender.male);
+            createPersonIfNotExists(adminUser, "مدیر", "سیستم", "0000000000", Gender.male, defaultGroup);
 
             User managerUser = createUserIfNotExists("manager", "manager123");
             createRoleIfNotExists(managerUser, "manager");
-            createPersonIfNotExists(managerUser, "مدیر", "واحد", "1111111111", Gender.female);
+            createPersonIfNotExists(managerUser, "مدیر", "واحد", "1111111111", Gender.female, defaultGroup);
 
             User basicUser = createUserIfNotExists("user", "user123");
             createRoleIfNotExists(basicUser, "user");
-            createPersonIfNotExists(basicUser, "کاربر", "عادی", "2222222222", Gender.male);
+            createPersonIfNotExists(basicUser, "کاربر", "عادی", "2222222222", Gender.male, devGroup);
 
             log.info(" Sample data initialization completed successfully");
 
@@ -176,7 +191,6 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-
     private User createUserIfNotExists(String username, String password) throws Exception {
         Optional<User> userOpt = userService.findByUsername(username);
 
@@ -211,7 +225,8 @@ public class LoginServlet extends HttpServlet {
     }
 
     private void createPersonIfNotExists(User user, String name, String family,
-                                         String nationalCode, Gender gender) throws Exception {
+                                         String nationalCode, Gender gender,
+                                         OrganizationGroup group) throws Exception {
         Optional<Person> personOpt = personService.findByUsername(user.getUsername());
 
         if (personOpt.isEmpty()) {
@@ -223,6 +238,7 @@ public class LoginServlet extends HttpServlet {
                     .salary(5000000.0)
                     .birthdate(LocalDate.of(1990, 1, 1))
                     .user(user)
+                    .organizationGroup(group)
                     .deleted(false)
                     .build();
             personService.save(person);
@@ -275,5 +291,27 @@ public class LoginServlet extends HttpServlet {
         departmentService.save(dept);
         log.info("✓ Created department: {}", name);
         return dept;
+    }
+
+    private OrganizationGroup createOrganizationGroupIfNotExists(
+            String name, String specialty, Department department) throws Exception {
+
+        List<OrganizationGroup> existingGroups = organizationGroupService.findByName(name);
+
+        if (!existingGroups.isEmpty()) {
+            log.info("✓ OrganizationGroup '{}' already exists", name);
+            return existingGroups.get(0);
+        }
+
+        OrganizationGroup group = OrganizationGroup.builder()
+                .name(name)
+                .specialty(specialty)
+                .department(department)
+                .deleted(false)
+                .build();
+
+        organizationGroupService.save(group);
+        log.info("✓ Created organization group: {}", name);
+        return group;
     }
 }

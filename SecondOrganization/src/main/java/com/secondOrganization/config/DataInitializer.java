@@ -215,7 +215,8 @@ public class DataInitializer {
     }
 
     private void createPersonIfNotExists(User user, String name, String family,
-                                         String nationalCode, Gender gender, Double salary) throws Exception {
+                                         String nationalCode, Gender gender,
+                                         Double salary, OrganizationGroup group) throws Exception {
         Optional<Person> personOpt = personService.findByUsername(user.getUsername());
 
         if (personOpt.isPresent()) {

@@ -9,6 +9,7 @@ import jakarta.ejb.Startup;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +37,9 @@ public class DataInitializer {
     @Inject
     private BranchService branchService;
 
+    @Inject
+    private OrganizationGroupService organizationGroupService;
+
     @PostConstruct
     public void init() {
         log.info("========================================");
@@ -43,7 +47,6 @@ public class DataInitializer {
         log.info("========================================");
 
         try {
-            // clearOldData();
 
             Organization mainOrg = createOrganizationIfNotExists("مجتمع فنی تهران", "آموزشی");
             Organization secondOrg = createOrganizationIfNotExists("شرکت نرم‌افزاری پارس", "خصوصی");
@@ -74,6 +77,8 @@ public class DataInitializer {
                     mainBranch
             );
 
+
+
             Department hrDept = createDepartmentIfNotExists(
                     "منابع انسانی",
                     "HR",
@@ -82,6 +87,18 @@ public class DataInitializer {
                     500_000.0,
                     mainOrg,
                     mainBranch
+            );
+
+            OrganizationGroup defaultGroup = createOrganizationGroupIfNotExists(
+                    "گروه پیش‌فرض",
+                    "عمومی",
+                    itDept
+            );
+
+            OrganizationGroup devGroup = createOrganizationGroupIfNotExists(
+                    "گروه توسعه",
+                    "برنامه‌نویسی",
+                    itDept
             );
 
             log.info(" Creating sample users...");
@@ -94,7 +111,8 @@ public class DataInitializer {
                     "سیستم",
                     "0000000000",
                     Gender.male,
-                    10_000_000.0
+                    10_000_000.0,
+                    defaultGroup
             );
 
             User managerUser = createUserIfNotExists("manager", "manager123");
@@ -105,7 +123,8 @@ public class DataInitializer {
                     "واحد",
                     "1111111111",
                     Gender.female,
-                    8_000_000.0
+                    8_000_000.0,
+                    defaultGroup
             );
 
             User basicUser = createUserIfNotExists("user", "user123");
@@ -116,7 +135,8 @@ public class DataInitializer {
                     "عادی",
                     "2222222222",
                     Gender.male,
-                    5_000_000.0
+                    5_000_000.0,
+                    devGroup
             );
 
             log.info("========================================");
@@ -132,6 +152,29 @@ public class DataInitializer {
             log.error(" Error during data initialization: {}", e.getMessage(), e);
         }
     }
+
+    private OrganizationGroup createOrganizationGroupIfNotExists(
+            String name, String specialty, Department department) throws Exception {
+
+        List<OrganizationGroup> existingGroups = organizationGroupService.findByName(name);
+
+        if (!existingGroups.isEmpty()) {
+            log.info("    OrganizationGroup '{}' already exists", name);
+            return existingGroups.get(0);
+        }
+
+        OrganizationGroup group = OrganizationGroup.builder()
+                .name(name)
+                .specialty(specialty)
+                .department(department)
+                .deleted(false)
+                .build();
+
+        organizationGroupService.save(group);
+        log.info("    Created organization group: {}", name);
+        return group;
+    }
+
 
     private User createUserIfNotExists(String username, String password) throws Exception {
         Optional<User> userOpt = userService.findByUsername(username);
@@ -186,6 +229,8 @@ public class DataInitializer {
                 .nationalCode(nationalCode)
                 .gender(gender)
                 .salary(salary)
+                .birthdate(LocalDate.now().minusYears(30))
+                .organizationGroup(group)
                 .user(user)
                 .deleted(false)
                 .build();

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -220,6 +221,7 @@ public class LoginServlet extends HttpServlet {
                     .nationalCode(nationalCode)
                     .gender(gender)
                     .salary(5000000.0)
+                    .birthdate(LocalDate.of(1990, 1, 1))
                     .user(user)
                     .deleted(false)
                     .build();

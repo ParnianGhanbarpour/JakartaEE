@@ -30,7 +30,7 @@ public class Department extends Base {
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
-    @Column(name = "budget")
+    @Column(name = "budget", precision = 14, scale = 2)
     private Double budget;
 
 

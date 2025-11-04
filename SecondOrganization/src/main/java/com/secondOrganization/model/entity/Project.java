@@ -39,9 +39,9 @@ public class Project extends Base {
     @Future(message = "تاریخ پایان باید در آینده باشد")
     private LocalDateTime endDate;
 
-    @Column(name = "budget", nullable = false, columnDefinition = "NUMBER(12,2)")
+    @Column(name = "budget", nullable = false, precision = 14, scale = 2)
     @DecimalMin(value = "0.0", inclusive = false, message = "بودجه باید بیشتر از صفر باشد")
-    @Digits(integer = 10, fraction = 2, message = "بودجه باید عددی معتبر با حداکثر ۱۰ رقم صحیح و ۲ رقم اعشار باشد")
+    @Digits(integer = 12, fraction = 2, message = "بودجه باید عددی معتبر با حداکثر ۱۲ رقم صحیح و ۲ رقم اعشار باشد")
     private double budget;
 
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR2(20)")

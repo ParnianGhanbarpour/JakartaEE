@@ -36,20 +36,17 @@ public class Person extends Base{
     @NotBlank(message = "فیلد نباید خالی باشد.")
     private String family;
 
-    @Column(name = "p_nationalCode", length = 10)
+    @Column(name = "p_nationalCode", length = 10, unique = true)
 //    @Pattern(regexp = "^[0-9]{10}$", message = "کد ملی باید فقط شامل ۱۰ رقم عددی باشد")
     @Size(min = 10, max = 10, message = "کد ملی باید دقیقاً ۱۰ رقم باشد")
     @NotBlank(message = "کد ملی نمی‌تواند خالی باشد")
     private String nationalCode;
 
-    @Column(name = "p_salary")
+    @Column(name = "p_salary", precision = 14, scale = 2)
     @DecimalMin(value = "0.0", inclusive = true, message = "حقوق نمی‌تواند منفی باشد")
-    @Digits(integer = 12, fraction = 2, message = "حقوق باید عددی معتبر با حداکثر 12 رقم صحیح و ۲ رقم اعشار باشد")
-    @NotNull(message = "حقوق نمی‌تواند خالی باشد")
     private Double salary;
 
     @Column(name = "p_birthdate")
-    @NotNull(message = "تاریخ تولد نمی‌تواند خالی باشد")
     private LocalDate birthdate;
 
     @Enumerated(EnumType.ORDINAL)
@@ -60,7 +57,7 @@ public class Person extends Base{
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(name = "group_id", nullable = true)
     private OrganizationGroup organizationGroup;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

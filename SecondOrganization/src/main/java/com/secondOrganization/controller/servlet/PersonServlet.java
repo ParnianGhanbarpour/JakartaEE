@@ -1,7 +1,10 @@
 package com.secondOrganization.controller.servlet;
 
+import com.secondOrganization.model.entity.OrganizationGroup;
 import com.secondOrganization.model.entity.Person;
+import com.secondOrganization.model.entity.User;
 import com.secondOrganization.model.entity.enums.Gender;
+import com.secondOrganization.service.OrganizationGroupService;
 import com.secondOrganization.service.UserService;
 import com.secondOrganization.service.impl.PersonServiceImpl;
 
@@ -16,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Slf4j
 @WebServlet(urlPatterns = "/person.do")
@@ -27,11 +31,15 @@ public class PersonServlet extends HttpServlet {
     @Inject
     private UserService userService;
 
+    @Inject
+    private OrganizationGroupService organizationGroupService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             req.setAttribute("personList", personService.findAll());
             req.setAttribute("genders", Arrays.asList(Gender.values()));
+            req.setAttribute("organizationGroupList", organizationGroupService.findAll());
             req.getRequestDispatcher("/jsp/person.jsp").forward(req, resp);
         } catch (Exception e) {
             log.error("Error loading persons", e);
@@ -54,32 +62,125 @@ public class PersonServlet extends HttpServlet {
             String nationalCode = req.getParameter("nationalCode");
             Gender gender = Gender.valueOf(req.getParameter("gender"));
             String username = req.getParameter("username");
+            String groupIdStr = req.getParameter("organizationGroupId");
+
+            if (name == null || name.trim().isEmpty()) {
+                req.setAttribute("error", "نام الزامی است");
+                loadDataAndForward(req, resp);
+                return;
+            }
+
+            if (family == null || family.trim().isEmpty()) {
+                req.setAttribute("error", "نام خانوادگی الزامی است");
+                loadDataAndForward(req, resp);
+                return;
+            }
+
+            if (nationalCode == null || nationalCode.trim().isEmpty()) {
+                req.setAttribute("error", "کد ملی الزامی است");
+                loadDataAndForward(req, resp);
+                return;
+            }
+
+            Optional<Person> existingPerson = personService.findByNationalCode(nationalCode);
+            if (existingPerson.isPresent()) {
+                req.setAttribute("error", "کد ملی تکراری است!");
+                loadDataAndForward(req, resp);
+                return;
+            }
 
             String salaryStr = req.getParameter("salary");
-            Double salary = (salaryStr != null && !salaryStr.isEmpty())
-                    ? Double.parseDouble(salaryStr) : null;
+            Double salary = null;
+            if (salaryStr != null && !salaryStr.trim().isEmpty()) {
+                try {
+                    salary = Double.parseDouble(salaryStr.replace(",", ""));
+                } catch (NumberFormatException e) {
+                    req.setAttribute("error", "مقدار حقوق نامعتبر است");
+                    loadDataAndForward(req, resp);
+                    return;
+                }
+            }
 
             String birthdateStr = req.getParameter("birthdate");
-            LocalDate birthdate = (birthdateStr != null && !birthdateStr.isEmpty())
-                    ? LocalDate.parse(birthdateStr) : null;
+            LocalDate birthdate = null;
+            if (birthdateStr != null && !birthdateStr.trim().isEmpty()) {
+                birthdate = LocalDate.parse(birthdateStr);
+            }
+
+            OrganizationGroup group = null;
+            if (groupIdStr != null && !groupIdStr.trim().isEmpty()) {
+                Long groupId = Long.parseLong(groupIdStr);
+                Optional<OrganizationGroup> groupOpt = organizationGroupService.findById(groupId);
+                if (groupOpt.isPresent()) {
+                    group = groupOpt.get();
+                } else {
+                    req.setAttribute("error", "گروه سازمانی یافت نشد");
+                    loadDataAndForward(req, resp);
+                    return;
+                }
+            }
+
+            User user = null;
+            if (username != null && !username.trim().isEmpty()) {
+                Optional<User> userOpt = userService.findByUsername(username);
+                if (userOpt.isPresent()) {
+                    user = userOpt.get();
+
+                    Optional<Person> existingUserPerson = personService.findByUsername(username);
+                    if (existingUserPerson.isPresent()) {
+                        req.setAttribute("error", "این کاربر قبلاً در سیستم ثبت شده است");
+                        loadDataAndForward(req, resp);
+                        return;
+                    }
+                } else {
+                    user = User.builder()
+                            .username(username)
+                            .password(username + "123")  //temporary password
+                            .active(true)
+                            .deleted(false)
+                            .build();
+                    userService.save(user);
+                    log.info("User created: {}", username);
+                }
+            } else {
+                username = "user_" + nationalCode;
+
+                int counter = 1;
+                String finalUsername = username;
+                while (userService.findByUsername(finalUsername).isPresent()) {
+                    finalUsername = username + "_" + counter;
+                    counter++;
+                }
+
+                user = User.builder()
+                        .username(finalUsername)
+                        .password(nationalCode) // nationalCode=پسورد اولیه
+                        .active(true)
+                        .deleted(false)
+                        .build();
+                userService.save(user);
+                log.info(" Auto-created User: {}", finalUsername);
+            }
 
             Person person = Person.builder()
-                    .name(name)
-                    .family(family)
-                    .nationalCode(nationalCode)
+                    .name(name.trim())
+                    .family(family.trim())
+                    .nationalCode(nationalCode.trim())
                     .gender(gender)
                     .salary(salary)
                     .birthdate(birthdate)
+                    .user(user)
+                    .organizationGroup(group)
                     .deleted(false)
                     .build();
 
             personService.save(person);
-            log.info("Person saved: {} {}", name, family);
+            log.info("Person saved: {} {} (National Code: {})", name, family, nationalCode);
 
-            resp.sendRedirect(req.getContextPath() + "/person.do");
+            resp.sendRedirect(req.getContextPath() + "/person.do?success=true");
 
         } catch (Exception e) {
-            log.error("Error saving person", e);
+            log.error(" Error saving person", e);
             req.setAttribute("error", "خطا در ذخیره پرسنل: " + e.getMessage());
             loadDataAndForward(req, resp);
         }
@@ -90,10 +191,10 @@ public class PersonServlet extends HttpServlet {
         try {
             long id = Long.parseLong(req.getParameter("id"));
             personService.removeById(id);
-            log.info("Person deleted: {}", id);
-            resp.sendRedirect(req.getContextPath() + "/person.do");
+            log.info(" Person deleted: {}", id);
+            resp.sendRedirect(req.getContextPath() + "/person.do?deleted=true");
         } catch (Exception e) {
-            log.error("Error deleting person", e);
+            log.error(" Error deleting person", e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
@@ -103,12 +204,10 @@ public class PersonServlet extends HttpServlet {
         try {
             req.setAttribute("personList", personService.findAll());
             req.setAttribute("genders", Arrays.asList(Gender.values()));
+            req.setAttribute("organizationGroupList", organizationGroupService.findAll());
             req.getRequestDispatcher("/jsp/person.jsp").forward(req, resp);
         } catch (Exception e) {
             throw new ServletException("Cannot load persons", e);
         }
     }
-
-
-
 }

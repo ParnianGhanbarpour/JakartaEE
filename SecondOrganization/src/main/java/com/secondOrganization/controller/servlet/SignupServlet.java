@@ -1,9 +1,13 @@
 package com.secondOrganization.controller.servlet;
 
+import com.secondOrganization.model.entity.OrganizationGroup;
 import com.secondOrganization.model.entity.Person;
+import com.secondOrganization.model.entity.Role;
 import com.secondOrganization.model.entity.User;
 import com.secondOrganization.model.entity.enums.Gender;
+import com.secondOrganization.service.OrganizationGroupService;
 import com.secondOrganization.service.PersonService;
+import com.secondOrganization.service.RoleService;
 import com.secondOrganization.service.UserService;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
@@ -16,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,6 +32,12 @@ public class SignupServlet extends HttpServlet {
 
     @Inject
     private PersonService personService;
+
+    @Inject
+    private RoleService roleService;
+
+    @Inject
+    private OrganizationGroupService organizationGroupService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -47,8 +58,6 @@ public class SignupServlet extends HttpServlet {
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
         String email = req.getParameter("email");
-
-
         String name = req.getParameter("name");
         String family = req.getParameter("family");
         String nationalCode = req.getParameter("nationalCode");
@@ -83,23 +92,20 @@ public class SignupServlet extends HttpServlet {
                 return;
             }
 
-            if (name == null || name.trim().isEmpty()) {
-                req.setAttribute("signupError", "نام نمی‌تواند خالی باشد");
-                req.getRequestDispatcher("/signup.jsp").forward(req, resp);
-                return;
-            }
-
-            if (family == null || family.trim().isEmpty()) {
-                req.setAttribute("signupError", "نام خانوادگی نمی‌تواند خالی باشد");
-                req.getRequestDispatcher("/signup.jsp").forward(req, resp);
-                return;
-            }
-
             Optional<User> existingUser = userService.findByUsername(username);
             if (existingUser.isPresent()) {
                 req.setAttribute("signupError", "نام کاربری قبلاً استفاده شده است");
                 req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                 return;
+            }
+
+            if (nationalCode != null && !nationalCode.trim().isEmpty()) {
+                Optional<Person> existingPerson = personService.findByNationalCode(nationalCode);
+                if (existingPerson.isPresent()) {
+                    req.setAttribute("signupError", "کد ملی قبلاً ثبت شده است");
+                    req.getRequestDispatcher("/signup.jsp").forward(req, resp);
+                    return;
+                }
             }
 
             User newUser = User.builder()
@@ -110,16 +116,63 @@ public class SignupServlet extends HttpServlet {
                     .build();
 
             userService.save(newUser);
-            log.info("✓ User created successfully: {}", username);
+            log.info(" User created successfully: {}", username);
+
+            Role userRole = Role.builder()
+                    .user(newUser)
+                    .role("user")
+                    .deleted(false)
+                    .build();
+            roleService.save(userRole);
+            log.info(" Role 'user' assigned to: {}", username);
+
+            OrganizationGroup defaultGroup = null;
+            try {
+                List<OrganizationGroup> groups = organizationGroupService.findByName("گروه پیش‌فرض");
+                if (!groups.isEmpty()) {
+                    defaultGroup = groups.get(0);
+                    log.info(" Default group found: {}", defaultGroup.getName());
+                }
+            } catch (Exception e) {
+                log.warn(" No default group found, continuing without it");
+            }
+
+            Double salary = null;
+            if (salaryStr != null && !salaryStr.trim().isEmpty()) {
+                try {
+                    salary = Double.parseDouble(salaryStr.replace(",", ""));
+                } catch (NumberFormatException e) {
+                    log.warn("Invalid salary value: {}", salaryStr);
+                }
+            }
+
+            LocalDate parsedBirthdate = null;
+            if (birthdate != null && !birthdate.trim().isEmpty()) {
+                try {
+                    parsedBirthdate = LocalDate.parse(birthdate);
+                } catch (Exception e) {
+                    log.warn("Invalid birthdate: {}", birthdate);
+                }
+            }
+
+            Gender personGender = Gender.male; // پیش‌فرض
+            if (gender != null && !gender.trim().isEmpty()) {
+                try {
+                    personGender = Gender.valueOf(gender);
+                } catch (IllegalArgumentException e) {
+                    log.warn("Invalid gender: {}, using default", gender);
+                }
+            }
 
             Person newPerson = Person.builder()
-                    .name(name.trim())
-                    .family(family.trim())
+                    .name(name != null ? name.trim() : username)
+                    .family(family != null ? family.trim() : "کاربر")
                     .nationalCode(nationalCode != null ? nationalCode.trim() : null)
-                    .salary(salaryStr != null && !salaryStr.trim().isEmpty() ? Double.parseDouble(salaryStr) : null)
-                    .birthdate(birthdate != null && !birthdate.trim().isEmpty() ? LocalDate.parse(birthdate) : null)
-                    .gender(Gender.valueOf(gender))
+                    .salary(salary)
+                    .birthdate(parsedBirthdate)
+                    .gender(personGender)
                     .user(newUser)
+                    .organizationGroup(defaultGroup)
                     .deleted(false)
                     .build();
 
@@ -136,7 +189,7 @@ public class SignupServlet extends HttpServlet {
                 Optional<User> createdUser = userService.findByUsername(username);
                 if (createdUser.isPresent()) {
                     userService.remove(createdUser.get());
-                    log.info(" Rollback: User deleted due to person creation failure");
+                    log.info(" Rollback: User deleted due to error");
                 }
             } catch (Exception rollbackEx) {
                 log.error(" Error during rollback: {}", rollbackEx.getMessage());
@@ -146,7 +199,6 @@ public class SignupServlet extends HttpServlet {
             req.getRequestDispatcher("/signup.jsp").forward(req, resp);
         }
     }
-
 
     @Override
     public void init() throws ServletException {

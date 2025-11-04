@@ -56,7 +56,7 @@ public class Person extends Base{
     private Gender gender;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_username")
+    @JoinColumn(name = "user_username",nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)

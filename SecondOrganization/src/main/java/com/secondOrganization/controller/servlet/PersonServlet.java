@@ -1,26 +1,21 @@
 package com.secondOrganization.controller.servlet;
 
-import com.secondOrganization.controller.validation.BeanValidator;
 import com.secondOrganization.model.entity.Person;
-import com.secondOrganization.model.entity.User;
 import com.secondOrganization.model.entity.enums.Gender;
+import com.secondOrganization.service.UserService;
 import com.secondOrganization.service.impl.PersonServiceImpl;
-import com.secondOrganization.service.impl.RoleServiceImpl;
-import com.secondOrganization.service.impl.UserServiceImpl;
+
 import jakarta.inject.Inject;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Optional;
 
 @Slf4j
 @WebServlet(urlPatterns = "/person.do")
@@ -28,6 +23,9 @@ public class PersonServlet extends HttpServlet {
 
     @Inject
     private PersonServiceImpl personService;
+
+    @Inject
+    private UserService userService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,6 +53,7 @@ public class PersonServlet extends HttpServlet {
             String family = req.getParameter("family");
             String nationalCode = req.getParameter("nationalCode");
             Gender gender = Gender.valueOf(req.getParameter("gender"));
+            String username = req.getParameter("username");
 
             String salaryStr = req.getParameter("salary");
             Double salary = (salaryStr != null && !salaryStr.isEmpty())
@@ -109,4 +108,7 @@ public class PersonServlet extends HttpServlet {
             throw new ServletException("Cannot load persons", e);
         }
     }
+
+
+
 }

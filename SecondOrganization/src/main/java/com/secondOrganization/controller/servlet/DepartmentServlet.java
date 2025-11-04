@@ -34,6 +34,7 @@ public class DepartmentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            String name = req.getParameter("name");
             String field = req.getParameter("field");
             String duty = req.getParameter("duty");
             String phoneNumber = req.getParameter("phoneNumber");
@@ -57,10 +58,12 @@ public class DepartmentServlet extends HttpServlet {
 
             if (!branches.isEmpty()) {
                 branch = branches.get(0);
+                log.info("Using existing branch: {}", branch.getName());
+
             } else {
 
                 branch = Branch.builder()
-                        .name("شعبه مرکزی")
+                        .name( "شعبه مرکزی"  + organization.getName())
                         .address("آدرس پیش‌فرض")
                         .city("تهران")
                         .manager("مدیر پیش‌فرض")
@@ -72,7 +75,7 @@ public class DepartmentServlet extends HttpServlet {
             }
 
             Department department = Department.builder()
-                    .name(field)
+                    .name(name)
                     .field(field)
                     .duty(duty)
                     .phoneNumber(phoneNumber)

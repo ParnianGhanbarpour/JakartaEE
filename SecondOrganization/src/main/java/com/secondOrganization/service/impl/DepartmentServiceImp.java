@@ -3,7 +3,6 @@ package com.secondOrganization.service.impl;
 import com.secondOrganization.model.entity.Department;
 import com.secondOrganization.service.DepartmentService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.SessionScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -60,6 +59,31 @@ public class DepartmentServiceImp implements DepartmentService, Serializable {
     public Optional<Department> findById(Long id) throws Exception {
         return Optional.ofNullable(entityManager.find(Department.class, id));
     }
+
+
+    @Transactional
+    @Override
+    public List<Department> findAllWithOrganizationAndBranch() {
+        log.info("دریافت تمام دپارتمان‌ها به همراه سازمان و شعبه");
+
+        try {
+            List<Department> departments = entityManager.createQuery(
+                    "SELECT DISTINCT d FROM Department d " +
+                            "LEFT JOIN FETCH d.organization " +
+                            "LEFT JOIN FETCH d.branch " +
+                            "ORDER BY d.id",
+                    Department.class
+            ).getResultList();
+
+            log.info("تعداد دپارتمان‌های یافت شده: {}", departments.size());
+            return departments;
+
+        } catch (Exception e) {
+            log.error("خطا در دریافت دپارتمان‌ها: {}", e.getMessage());
+            throw new RuntimeException("خطا در دریافت دپارتمان‌ها", e);
+        }
+    }
+
 
     @Transactional
     @Override

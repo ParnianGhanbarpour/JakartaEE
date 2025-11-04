@@ -24,7 +24,11 @@ public class BranchServiceImpl implements BranchService, Serializable {
     @Override
     public void save(Branch branch) throws Exception {
         log.info("Saving branch: {}", branch);
+        if (branch.getOrganization() != null && branch.getOrganization().getId() == null) {
+            throw new IllegalArgumentException("Organization must be persisted first");
+        }
         entityManager.persist(branch);
+        log.info("Branch saved successfully with ID: {}", branch.getId());
     }
 
     @Transactional
@@ -57,22 +61,49 @@ public class BranchServiceImpl implements BranchService, Serializable {
 
     @Override
     public List<Branch> findAll() throws Exception {
+        log.info("Fetching all branches with organization");
+
         TypedQuery<Branch> q = entityManager.createQuery(
-                "select b from Branch b where b.deleted=false", Branch.class);
-        return q.getResultList();
+                "SELECT b FROM Branch b " +
+                        "LEFT JOIN FETCH b.organization " +
+                        "WHERE b.deleted = false", Branch.class);
+
+        List<Branch> branches = q.getResultList();
+        log.info("Found {} branches", branches.size());
+
+        for (Branch branch : branches) {
+            log.info("Branch: {}, Organization: {}",
+                    branch.getName(),
+                    branch.getOrganization() != null ? branch.getOrganization().getName() : "null");
+        }
+        return branches;
     }
 
     @Override
     public Optional<Branch> findById(Long id) throws Exception {
+        log.info("Finding branch by ID: {}", id);
 
-        return Optional.ofNullable(entityManager.find(Branch.class, id));
+        TypedQuery<Branch> q = entityManager.createQuery(
+                "SELECT b FROM Branch b " +
+                        "LEFT JOIN FETCH b.organization " +
+                        "WHERE b.id = :id AND b.deleted = false", Branch.class);
+        q.setParameter("id", id);
+        try {
+            Branch branch = q.getSingleResult();
+            return Optional.of(branch);
+        } catch (Exception e) {
+            log.warn("Branch not found with ID: {}", id);
+            return Optional.empty();
+        }
     }
 
     @Transactional
     @Override
     public List<Branch> findByCity(String city) throws Exception {
         TypedQuery<Branch> q = entityManager.createQuery(
-                "select b from Branch b where b.city = :city and b.deleted=false", Branch.class);
+                "SELECT b FROM Branch b " +
+                        "LEFT JOIN FETCH b.organization " +
+                        "WHERE b.city = :city AND b.deleted = false", Branch.class);
         q.setParameter("city", city);
         return q.getResultList();
     }
@@ -81,18 +112,28 @@ public class BranchServiceImpl implements BranchService, Serializable {
     @Override
     public List<Branch> findByManager(String manager) throws Exception {
         TypedQuery<Branch> q = entityManager.createQuery(
-                "select b from Branch b where b.manager = :manager and b.deleted=false", Branch.class);
+                "SELECT b FROM Branch b " +
+                        "LEFT JOIN FETCH b.organization " +
+                        "WHERE b.manager = :manager AND b.deleted = false", Branch.class);
         q.setParameter("manager", manager);
         return q.getResultList();
     }
 
+
     @Transactional
     @Override
     public List<Branch> findByOrganizationId(Long organizationId) throws Exception {
+        log.info("Finding branches by organization ID: {}", organizationId);
 
         TypedQuery<Branch> q = entityManager.createQuery(
-                "select b from Branch b where b.organization.id = :orgId and b.deleted=false", Branch.class);
+                "SELECT b FROM Branch b " +
+                        "LEFT JOIN FETCH b.organization " +
+                        "WHERE b.organization.id = :orgId AND b.deleted = false", Branch.class);
         q.setParameter("orgId", organizationId);
-        return q.getResultList();
+
+        List<Branch> branches = q.getResultList();
+        log.info("Found {} branches for organization ID: {}", branches.size(), organizationId);
+
+        return branches;
     }
 }

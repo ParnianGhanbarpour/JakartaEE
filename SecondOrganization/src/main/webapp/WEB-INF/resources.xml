@@ -14,5 +14,8 @@
         TestOnBorrow = true
         TestOnReturn = false
         ValidationQuery = SELECT 1 FROM DUAL
+        RemoveAbandoned = true
+        RemoveAbandonedTimeout = 60
+        LogAbandoned = true
     </Resource>
 </resources>

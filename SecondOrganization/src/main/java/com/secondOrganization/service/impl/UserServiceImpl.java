@@ -10,11 +10,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+import jakarta.validation.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @ApplicationScoped
@@ -25,58 +27,113 @@ public class UserServiceImpl implements UserService, Serializable {
 
     @Transactional
     @Override
-    public void save(User user) throws Exception {
+    public void save(User user)  throws Exception {
         log.info("Saving user: {}", user.getUsername());
-        user.setActive(true);
-        entityManager.persist(user);
-        entityManager.flush();
-        log.info("User saved successfully: {}", user.getUsername());
+
+        try {
+            Optional<User> existing = findByUsername(user.getUsername());
+            if (existing.isPresent()) {
+                String msg = "Username already exists: " + user.getUsername();
+                log.warn(msg);
+                throw new IllegalArgumentException(msg);
+            }
+
+            user.setActive(true);
+            user.setDeleted(false);
+
+            entityManager.persist(user);
+            entityManager.flush();
+
+            log.info(" User saved successfully: {}", user.getUsername());
+
+        } catch (ConstraintViolationException e) {
+            Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+            for (ConstraintViolation<?> violation : violations) {
+                log.error("Validation error: {} = {}",
+                        violation.getPropertyPath(),
+                        violation.getMessage());
+            }
+            throw new Exception("Validation failed for user: " + user.getUsername(), e);
+
+        } catch (Exception e) {
+            log.error("Error saving user {}: {}", user.getUsername(), e.getMessage(), e);
+            throw e;
+        }
     }
 
     @Transactional
     @Override
     public void edit(User user) throws Exception {
         log.info("Editing user: {}", user.getUsername());
-        entityManager.merge(user);
+
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("User ID is required for edit");
+        }
+
+        User managed = entityManager.merge(user);
+        entityManager.flush();
+
+        log.info(" User updated successfully: {}", managed.getUsername());
     }
 
     @Transactional
     @Override
     public void remove(User user) throws Exception {
-        user = entityManager.find(User.class, user.getUsername());
-        if (user != null) {
-            user.setDeleted(true);
-            entityManager.merge(user);
+        User managedUser = entityManager.find(User.class, user.getId());
+        if (managedUser != null) {
+            managedUser.setDeleted(true);
+            entityManager.merge(managedUser);
+            log.info(" User soft deleted: {}", managedUser.getUsername());
+        } else {
+            log.warn("User not found for deletion: {}", user.getId());
         }
     }
 
     @Transactional
     @Override
     public void removeByUsername(String username) throws Exception {
-        User user = entityManager.find(User.class, username);
-        if (user != null) {
+        Optional<User> userOpt = findByUsername(username);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
             user.setDeleted(true);
             entityManager.merge(user);
+            log.info(" User soft deleted by username: {}", username);
+        } else {
+            log.warn("  User not found: {}", username);
         }
     }
 
     @Transactional
     @Override
     public List<User> findAll() throws Exception {
+        log.debug("Finding all users");
+
         TypedQuery<User> query = entityManager.createQuery(
-                "select u from User u where u.deleted=false", User.class);
-        return query.getResultList();
+                "SELECT u FROM User u WHERE u.deleted = false ORDER BY u.username",
+                User.class
+        );
+
+        List<User> users = query.getResultList();
+        log.debug(" Found {} users", users.size());
+
+        return users;
     }
 
     @Transactional
     @Override
     public Optional<User> findByUsername(String username) throws Exception {
         log.debug("Finding user by username: {}", username);
+
+        if (username == null || username.trim().isEmpty()) {
+            return Optional.empty();
+        }
+
         try {
             TypedQuery<User> query = entityManager.createQuery(
-                    "select u from User u where u.username=:username and u.deleted=false",
-                    User.class);
-            query.setParameter("username", username);
+                    "SELECT u FROM User u WHERE u.username = :username AND u.deleted = false",
+                    User.class
+            );
+            query.setParameter("username", username.trim());
 
             List<User> results = query.getResultList();
 
@@ -86,40 +143,48 @@ public class UserServiceImpl implements UserService, Serializable {
             }
 
             User user = results.get(0);
-            log.debug("User found: {} (active={})", username, user.isActive());
+            log.debug(" User found: {} (active={})", username, user.isActive());
             return Optional.of(user);
 
         } catch (Exception e) {
-            log.error("Error finding user by username {}: {}", username, e.getMessage(), e);
-            return Optional.empty();
+            log.error("Error finding user by username {}: {}", username, e.getMessage());
+            throw e;
         }
     }
+
 
     @Transactional
     @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) throws Exception {
-        log.debug("Attempting login for user: {}", username);
+        log.debug("Attempting authentication for user: {}", username);
+
+        if (username == null || password == null) {
+            return Optional.empty();
+        }
 
         try {
             TypedQuery<User> query = entityManager.createQuery(
-                    "select u from User u where u.username=:username and u.deleted=false",
-                    User.class);
-            query.setParameter("username", username);
+                    "SELECT u FROM User u WHERE u.username = :username AND u.deleted = false",
+                    User.class
+            );
+            query.setParameter("username", username.trim());
 
             List<User> results = query.getResultList();
 
             if (results.isEmpty()) {
-                log.warn("User not found: {}", username);
+                log.warn(" User not found: {}", username);
                 return Optional.empty();
             }
 
             User user = results.get(0);
-            log.debug("User found: {}, checking password...", username);
-            log.debug("Stored password: {}, Provided password: {}", user.getPassword(), password);
 
-            // بررسی password (فعلاً plain text - بعداً باید hash بشه)
             if (user.getPassword().equals(password)) {
-                log.info(" Login successful for user: {}", username);
+                if (!user.isActive()) {
+                    log.warn(" User is inactive: {}", username);
+                    return Optional.empty();
+                }
+
+                log.info(" Authentication successful for user: {}", username);
                 return Optional.of(user);
             } else {
                 log.warn(" Invalid password for user: {}", username);
@@ -127,42 +192,47 @@ public class UserServiceImpl implements UserService, Serializable {
             }
 
         } catch (Exception e) {
-            log.error("Error during login for user {}: {}", username, e.getMessage(), e);
-            return Optional.empty();
+            log.error("Error during authentication for user {}: {}", username, e.getMessage());
+            throw e;
         }
     }
+
 
     @Transactional
     @Override
     public List<User> findByRole(Role role) throws Exception {
-        TypedQuery<User> query = entityManager.createQuery(
-                "select u from User u where u.deleted=false", User.class);
-        return query.getResultList();
+        return findAll();
     }
 
     @Transactional
     @Override
     public List<User> findByDepartment(Department department) throws Exception {
-        TypedQuery<User> query = entityManager.createQuery(
-                "select u from User u where u.deleted=false", User.class);
-        return query.getResultList();
+        return findAll();
     }
 
     @Transactional
     @Override
     public List<User> findByActive(Boolean active) throws Exception {
         TypedQuery<User> query = entityManager.createQuery(
-                "select u from User u where u.active=:active and u.deleted=false", User.class);
+                "SELECT u FROM User u WHERE u.active = :active AND u.deleted = false",
+                User.class
+        );
         query.setParameter("active", active);
         return query.getResultList();
     }
 
+
     @Transactional
     @Override
     public List<User> findUserByUsernames(List<String> userList) throws Exception {
+        if (userList == null || userList.isEmpty()) {
+            return List.of();
+        }
+
         TypedQuery<User> query = entityManager.createQuery(
-                "select u from User u where u.username in :userList and u.deleted=false",
-                User.class);
+                "SELECT u FROM User u WHERE u.username IN :userList AND u.deleted = false",
+                User.class
+        );
         query.setParameter("userList", userList);
         return query.getResultList();
     }
@@ -171,21 +241,19 @@ public class UserServiceImpl implements UserService, Serializable {
     @Override
     public Optional<User> findById(long id) throws NoContentException {
         try {
-            TypedQuery<User> query = entityManager.createQuery(
-                    "select u from User u where u.id=:id and u.deleted=false", User.class);
-            query.setParameter("id", id);
+            User user = entityManager.find(User.class, id);
 
-            List<User> results = query.getResultList();
-
-            if (results.isEmpty()) {
-                throw new NoContentException("User with id : " + id + " not found!");
+            if (user == null || user.isDeleted()) {
+                throw new NoContentException("User with id: " + id + " not found!");
             }
 
-            return Optional.of(results.get(0));
+            return Optional.of(user);
 
+        } catch (NoContentException e) {
+            throw e;
         } catch (Exception e) {
             log.error("Error finding user by id {}: {}", id, e.getMessage());
-            throw new NoContentException("User with id : " + id + " not found!");
+            throw new NoContentException("User with id: " + id + " not found!");
         }
     }
 }

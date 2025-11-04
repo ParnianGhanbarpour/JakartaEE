@@ -3,7 +3,7 @@ package com.secondOrganization.model.entity;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,7 @@ public class Organization extends Base {
 
     @Column(name = "org_name", length = 50)
     @JsonbProperty("نام سازمان")
-    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,50}$", message = "نام سازمان معتبر نیست !")
+//    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,50}$", message = "نام سازمان معتبر نیست !")
     @Size(min = 3, max = 50, message = "اسم باید بین سه تا پنجاه حرف باشد .")
     @NotBlank(message = "فیلد را پر کنید ! ")
     private String name;

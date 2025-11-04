@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
     <persistence-unit name="organization" transaction-type="JTA">
-        <jta-data-source>organizationDataSource</jta-data-source>
+
+        <jta-data-source>java:comp/env/jdbc/organizationDS</jta-data-source>
+
+        <class>com.secondOrganization.model.entity.Base</class>
+        <class>com.secondOrganization.model.entity.User</class>
+        <class>com.secondOrganization.model.entity.Person</class>
+        <class>com.secondOrganization.model.entity.Organization</class>
+        <class>com.secondOrganization.model.entity.Department</class>
+        <class>com.secondOrganization.model.entity.Branch</class>
+        <class>com.secondOrganization.model.entity.OrganizationGroup</class>
+        <class>com.secondOrganization.model.entity.Project</class>
+        <class>com.secondOrganization.model.entity.ProjectAssignment</class>
+        <class>com.secondOrganization.model.entity.Role</class>
+        <class>com.secondOrganization.model.entity.Token</class>
+
+        <shared-cache-mode>NONE</shared-cache-mode>
+
         <properties>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
@@ -9,6 +25,18 @@
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"/>
 
+            <property name="hibernate.connection.provider_class"
+                      value="org.hibernate.connection.C3P0ConnectionProvider"/>
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+
+
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.jdbc.batch_size" value="10"/>
 
             <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
             <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>

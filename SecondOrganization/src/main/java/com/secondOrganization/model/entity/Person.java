@@ -25,19 +25,19 @@ import java.util.Set;
 public class Person extends Base{
 
     @Column(name = "p_name", length = 20)
-    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,20}$", message = "نام نامعتبر است!")
+//    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,20}$", message = "نام نامعتبر است!")
     @Size(min = 3, max = 20, message = "اسم باید بین 3 تا 20 حرف باشد")
     @NotBlank(message = "فیلد نباید خالی باشد!")
     private String name;
 
     @Column(name = "p_family", length = 20)
-    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,20}$", message = "نام خانوادگی نامعتبر است")
+//    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,20}$", message = "نام خانوادگی نامعتبر است")
     @Size(min = 3, max = 20, message = "نام خانوادگی باید بین 3 تا 20 حرف باشد")
     @NotBlank(message = "فیلد نباید خالی باشد.")
     private String family;
 
     @Column(name = "p_nationalCode", length = 10)
-    @Pattern(regexp = "^[0-9]{10}$", message = "کد ملی باید فقط شامل ۱۰ رقم عددی باشد")
+//    @Pattern(regexp = "^[0-9]{10}$", message = "کد ملی باید فقط شامل ۱۰ رقم عددی باشد")
     @Size(min = 10, max = 10, message = "کد ملی باید دقیقاً ۱۰ رقم باشد")
     @NotBlank(message = "کد ملی نمی‌تواند خالی باشد")
     private String nationalCode;

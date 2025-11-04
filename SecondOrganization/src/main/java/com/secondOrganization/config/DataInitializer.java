@@ -47,6 +47,11 @@ public class DataInitializer {
         log.info("========================================");
 
         try {
+            Optional<User> existingAdmin = userService.findByUsername("admin");
+            if (existingAdmin.isPresent()) {
+                log.info(" Initial data already exists. Skipping initialization.");
+                return;
+            }
 
             Organization mainOrg = createOrganizationIfNotExists("مجتمع فنی تهران", "آموزشی");
             Organization secondOrg = createOrganizationIfNotExists("شرکت نرم‌افزاری پارس", "خصوصی");
@@ -310,13 +315,4 @@ public class DataInitializer {
         return dept;
     }
 
-
-    private void clearOldData() {
-        try {
-            log.warn("⚠️  Clearing old data (Development mode only)...");
-            // TODO: Implement if needed
-        } catch (Exception e) {
-            log.error("Error clearing old data: {}", e.getMessage());
-        }
-    }
 }

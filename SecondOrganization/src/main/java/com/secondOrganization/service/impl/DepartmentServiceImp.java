@@ -16,82 +16,128 @@ import java.util.Optional;
 @Slf4j
 @ApplicationScoped
 public class DepartmentServiceImp implements DepartmentService, Serializable {
+
     @PersistenceContext(unitName = "organization")
     private EntityManager entityManager;
 
     @Transactional
     @Override
     public void save(Department department) throws Exception {
-        log.info("Section Saved");
-        entityManager.persist(department);
+        try {
+            log.info("Saving Department: {}", department.getName());
+            entityManager.persist(department);
+            entityManager.flush();
+            log.info("Department Saved Successfully");
+        } catch (Exception e) {
+            log.error("Error saving department: {}", e.getMessage(), e);
+            throw new Exception("خطا در ذخیره دپارتمان: " + e.getMessage(), e);
+        }
     }
 
     @Transactional
     @Override
     public void edit(Department department) throws Exception {
-        entityManager.merge(department);
+        try {
+            log.info("Updating Department: {}", department.getName());
+            entityManager.merge(department);
+            entityManager.flush();
+            log.info("Department Updated Successfully");
+        } catch (Exception e) {
+            log.error("Error updating department: {}", e.getMessage(), e);
+            throw new Exception("خطا در به‌روزرسانی دپارتمان: " + e.getMessage(), e);
+        }
     }
 
     @Transactional
     @Override
     public void remove(Department department) throws Exception {
-        department.setDeleted(true);
-        entityManager.merge(department);
+        try {
+            log.info("Soft deleting Department: {}", department.getName());
+            Department managedDept = entityManager.merge(department);
+            managedDept.setDeleted(true);
+            entityManager.flush();
+            log.info("Department Soft Deleted Successfully");
+        } catch (Exception e) {
+            log.error("Error soft deleting department: {}", e.getMessage(), e);
+            throw new Exception("خطا در حذف دپارتمان: " + e.getMessage(), e);
+        }
     }
 
     @Transactional
     @Override
     public void removeById(Long id) throws Exception {
-        Department department = entityManager.find(Department.class, id);
-        department.setDeleted(true);
-        entityManager.merge(department);
+        try {
+            log.info("Soft deleting Department by ID: {}", id);
+            Department department = entityManager.find(Department.class, id);
+            if (department != null) {
+                department.setDeleted(true);
+                entityManager.flush();
+                log.info("Department Soft Deleted Successfully by ID: {}", id);
+            } else {
+                throw new Exception("دپارتمان با شناسه " + id + " یافت نشد");
+            }
+        } catch (Exception e) {
+            log.error("Error soft deleting department by ID: {}", e.getMessage(), e);
+            throw new Exception("خطا در حذف دپارتمان: " + e.getMessage(), e);
+        }
     }
 
-    @Transactional
     @Override
     public List<Department> findAll() throws Exception {
-        TypedQuery<Department> query = entityManager.createQuery("select oo from Department oo", Department.class);
-        return query.getResultList();
+        try {
+            TypedQuery<Department> query = entityManager.createQuery(
+                    "SELECT d FROM Department d WHERE d.deleted = false", Department.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            log.error("Error finding all departments: {}", e.getMessage(), e);
+            throw new Exception("خطا در دریافت لیست دپارتمان‌ها", e);
+        }
     }
 
-    @Transactional
     @Override
     public Optional<Department> findById(Long id) throws Exception {
-        return Optional.ofNullable(entityManager.find(Department.class, id));
+        try {
+            Department department = entityManager.find(Department.class, id);
+            return (department != null && !department.isDeleted()) ?
+                    Optional.of(department) : Optional.empty();
+        } catch (Exception e) {
+            log.error("Error finding department by ID {}: {}", id, e.getMessage(), e);
+            throw new Exception("خطا در یافتن دپارتمان", e);
+        }
     }
 
-
-    @Transactional
     @Override
     public List<Department> findAllWithOrganizationAndBranch() {
-        log.info("دریافت تمام دپارتمان‌ها به همراه سازمان و شعبه");
-
         try {
+            log.info("Fetching all departments with organization and branch");
             List<Department> departments = entityManager.createQuery(
                     "SELECT DISTINCT d FROM Department d " +
                             "LEFT JOIN FETCH d.organization " +
                             "LEFT JOIN FETCH d.branch " +
-                            "ORDER BY d.id",
-                    Department.class
+                            "WHERE d.deleted = false " +
+                            "ORDER BY d.id", Department.class
             ).getResultList();
 
-            log.info("تعداد دپارتمان‌های یافت شده: {}", departments.size());
+            log.info("Number of departments found: {}", departments.size());
             return departments;
-
         } catch (Exception e) {
-            log.error("خطا در دریافت دپارتمان‌ها: {}", e.getMessage());
+            log.error("Error fetching departments with organization and branch: {}", e.getMessage(), e);
             throw new RuntimeException("خطا در دریافت دپارتمان‌ها", e);
         }
     }
 
-
-    @Transactional
     @Override
     public Optional<Department> findByName(String name) throws Exception {
-        TypedQuery<Department> query = entityManager.createQuery("select oo from Department oo where oo.name=:name", Department.class);
-        query.setParameter("name", name);
-        List<Department> result = query.getResultList();
-        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
+        try {
+            TypedQuery<Department> query = entityManager.createQuery(
+                    "SELECT d FROM Department d WHERE d.name = :name AND d.deleted = false",
+                    Department.class);
+            query.setParameter("name", name);
+            List<Department> result = query.getResultList();
+            return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
+        } catch (Exception e) {
+            log.error("Error finding department by name {}: {}", name, e.getMessage(), e);
+            throw new Exception("خطا در یافتن دپارتمان با نام", e);
+        }
     }
-
 }

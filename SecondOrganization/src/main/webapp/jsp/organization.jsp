@@ -30,7 +30,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         h2 {
-            color: #5a67d8;
+            color: #919cff;
             font-weight: bold;
             margin-bottom: 25px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
@@ -59,6 +59,23 @@
             font-weight: bold;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-home {
+            background: linear-gradient(135deg, #1c3551 0%, #7fbbff 100%);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            color: white;
         }
         .btn-custom:hover {
             transform: translateY(-2px);
@@ -108,6 +125,11 @@
 </head>
 <body>
 <div class="container">
+
+    <a href="${pageContext.request.contextPath}/dashboard.jsp" class="btn-home">
+        <i class="bi bi-house-door"></i> بازگشت به داشبورد
+    </a>
+
     <h2 class="text-center">
         <i class="bi bi-building"></i> سامانه مدیریت سازمان‌ها
     </h2>

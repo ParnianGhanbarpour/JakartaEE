@@ -7,9 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مدیریت دپارتمان‌ها</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         body {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #ccb5cd 0%, #f5576c 100%);
             font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
             min-height: 100vh;
             padding: 20px 0;
@@ -45,17 +46,34 @@
             transition: all 0.3s;
         }
         .form-control:focus, .form-select:focus {
-            border-color: #f093fb;
+            border-color: #c8a5cd;
             box-shadow: 0 0 0 0.2rem rgba(240, 147, 251, 0.25);
         }
         .btn-custom {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #ffcefb 0%, #f5576c 100%);
             color: white;
             border: none;
             padding: 12px 40px;
             border-radius: 25px;
             font-weight: bold;
             transition: all 0.3s;
+        }
+        .btn-home {
+            background: linear-gradient(135deg, #1c3551 0%, #7fbbff 100%);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            color: white;
         }
         .btn-custom:hover {
             transform: translateY(-3px);
@@ -72,7 +90,7 @@
             overflow: hidden;
         }
         .table thead {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #743f8c 0%, #bc5766 100%);
             color: white;
         }
         .table tbody tr:hover {
@@ -80,10 +98,18 @@
             transform: scale(1.005);
             transition: all 0.2s;
         }
+        .required::after {
+            content: " *";
+            color: #e53e3e;
+        }
     </style>
 </head>
 <body>
 <div class="container">
+    <a href="${pageContext.request.contextPath}/dashboard.jsp" class="btn-home">
+        <i class="bi bi-house-door"></i> بازگشت به داشبورد
+    </a>
+
     <h2 class="text-center">
         <i class="bi bi-diagram-3"></i> سامانه مدیریت دپارتمان‌ها
     </h2>
@@ -92,40 +118,81 @@
         <h4 class="mb-4">افزودن دپارتمان جدید</h4>
 
         <c:if test="${not empty error}">
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
                 <strong>خطا!</strong> ${error}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         </c:if>
 
-        <form action="${pageContext.request.contextPath}/department.do" method="post">
+        <c:if test="${not empty success}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill"></i>
+                <strong>موفقیت!</strong> ${success}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </c:if>
+
+        <form action="${pageContext.request.contextPath}/department.do" method="post" id="departmentForm">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label for="field" class="form-label">رشته فعالیت *</label>
-                    <input type="text" name="field" id="field" class="form-control"
-                           required placeholder="مثلاً: فناوری اطلاعات">
+                    <label for="name" class="form-label required">نام دپارتمان</label>
+                    <input type="text" name="name" id="name" class="form-control"
+                           required placeholder="مثلاً: دپارتمان فناوری اطلاعات"
+                           value="${param.name}">
                 </div>
+
+                <div class="col-md-6">
+                    <label for="field" class="form-label required">رشته فعالیت</label>
+                    <input type="text" name="field" id="field" class="form-control"
+                           required placeholder="مثلاً: فناوری اطلاعات"
+                           value="${param.field}">
+                </div>
+
                 <div class="col-md-6">
                     <label for="duty" class="form-label">وظیفه</label>
                     <input type="text" name="duty" id="duty" class="form-control"
-                           placeholder="مثلاً: توسعه نرم‌افزار">
+                           placeholder="مثلاً: توسعه نرم‌افزار"
+                           value="${param.duty}">
                 </div>
+
                 <div class="col-md-6">
                     <label for="phoneNumber" class="form-label">شماره تماس</label>
-                    <input type="text" name="phoneNumber" id="phoneNumber" class="form-control"
-                           placeholder="مثلاً: 021-12345678">
+                    <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control"
+                           placeholder="مثلاً: 021-12345678"
+                           value="${param.phoneNumber}">
                 </div>
+
                 <div class="col-md-6">
-                    <label for="organizationName" class="form-label">نام سازمان *</label>
-                    <select name="organizationName" id="organizationName" class="form-select" required>
-                        <option value="">-- انتخاب کنید --</option>
+                    <label for="organizationName" class="form-label required">سازمان</label>
+                    <select name="organizationName" id="organizationName" class="form-select" required
+                            onchange="filterBranches()">
+                        <option value="">-- لطفاً سازمان را انتخاب کنید --</option>
                         <c:forEach var="org" items="${organizationList}">
-                            <option value="${org.name}">${org.name}</option>
+                            <option value="${org.name}"
+                                ${param.organizationName eq org.name ? 'selected' : ''}>
+                                    ${org.name}
+                            </option>
                         </c:forEach>
                     </select>
                 </div>
+
+                <div class="col-md-6">
+                    <label for="branchId" class="form-label required">شعبه</label>
+                    <select name="branchId" id="branchId" class="form-select" required>
+                        <option value="">-- ابتدا سازمان را انتخاب کنید --</option>
+                    </select>
+                    <div class="form-text" id="branchHelpText">
+                        پس از انتخاب سازمان، شعبه‌های مربوطه نمایش داده می‌شوند
+                    </div>
+                </div>
+
                 <div class="col-12 text-center mt-4">
-                    <button type="submit" class="btn btn-custom">
+                    <button type="submit" class="btn btn-custom me-3">
                         <i class="bi bi-save"></i> ذخیره دپارتمان
+                    </button>
+                    <button type="reset" class="btn btn-secondary" onclick="resetForm()">
+                        <i class="bi bi-arrow-clockwise"></i> بازنشانی فرم
                     </button>
                 </div>
             </div>
@@ -137,6 +204,7 @@
 
         <c:if test="${empty departmentList}">
             <div class="alert alert-info text-center" role="alert">
+                <i class="bi bi-info-circle"></i>
                 هیچ دپارتمانی ثبت نشده است.
             </div>
         </c:if>
@@ -147,31 +215,147 @@
                     <thead>
                     <tr>
                         <th>ردیف</th>
-                        <th>کد</th>
+                        <th>نام دپارتمان</th>
                         <th>رشته فعالیت</th>
                         <th>وظیفه</th>
                         <th>شماره تماس</th>
                         <th>سازمان</th>
+                        <th>شعبه</th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach var="d" items="${departmentList}" varStatus="status">
                         <tr>
                             <td>${status.index + 1}</td>
-                            <td>${d.id}</td>
-                            <td><strong>${d.field}</strong></td>
-                            <td>${d.duty}</td>
-                            <td>${d.phoneNumber}</td>
-                            <td>${d.organization.name}</td>
+                            <td><strong>${d.name}</strong></td>
+                            <td>${d.field}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty d.duty}">${d.duty}</c:when>
+                                    <c:otherwise>-</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty d.phoneNumber}">${d.phoneNumber}</c:when>
+                                    <c:otherwise>-</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">${d.organization.name}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">${d.branch.name}</span>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="mt-3 text-center text-muted">
+                <small>تعداد کل: ${departmentList.size()} دپارتمان</small>
             </div>
         </c:if>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const organizationBranches = {};
+
+    <c:forEach var="branch" items="${allBranches}">
+    <c:if test="${not empty branch.organization}">
+    const orgName = '${branch.organization.name}';
+    if (!organizationBranches[orgName]) {
+        organizationBranches[orgName] = [];
+    }
+    organizationBranches[orgName].push({
+        id: ${branch.id},
+        name: '${branch.name}',
+        city: '${branch.city}'
+    });
+    </c:if>
+    </c:forEach>
+
+    function filterBranches() {
+        const organizationSelect = document.getElementById('organizationName');
+        const branchSelect = document.getElementById('branchId');
+        const helpText = document.getElementById('branchHelpText');
+
+        const selectedOrganization = organizationSelect.value;
+
+        branchSelect.innerHTML = '';
+
+        if (!selectedOrganization) {
+            branchSelect.innerHTML = '<option value="">-- ابتدا سازمان را انتخاب کنید --</option>';
+            helpText.textContent = 'پس از انتخاب سازمان، شعبه‌های مربوطه نمایش داده می‌شوند';
+            return;
+        }
+
+        const branches = organizationBranches[selectedOrganization];
+
+        if (!branches || branches.length === 0) {
+            branchSelect.innerHTML = '<option value="">-- این سازمان شعبه‌ای ندارد --</option>';
+            helpText.textContent = 'این سازمان هیچ شعبه‌ای ندارد. لطفاً ابتدا در بخش مدیریت شعبه‌ها، شعبه ایجاد کنید.';
+        } else {
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '-- لطفاً شعبه را انتخاب کنید --';
+            branchSelect.appendChild(defaultOption);
+
+            branches.forEach(branch => {
+                const option = document.createElement('option');
+                option.value = branch.id;
+                option.textContent = branch.name + (branch.city ? ' - ' + branch.city : '');
+                branchSelect.appendChild(option);
+            });
+
+            helpText.textContent = branches.length + ' شعبه یافت شد. لطفاً یکی را انتخاب کنید.';
+        }
+    }
+
+    function resetForm() {
+        const branchSelect = document.getElementById('branchId');
+        branchSelect.innerHTML = '<option value="">-- ابتدا سازمان را انتخاب کنید --</option>';
+        document.getElementById('branchHelpText').textContent =
+            'پس از انتخاب سازمان، شعبه‌های مربوطه نمایش داده می‌شوند';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const initialOrganization = document.getElementById('organizationName').value;
+        if (initialOrganization) {
+            filterBranches();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const branchId = urlParams.get('branchId');
+            if (branchId) {
+                setTimeout(() => {
+                    const branchSelect = document.getElementById('branchId');
+                    branchSelect.value = branchId;
+                }, 100);
+            }
+        }
+    });
+
+    document.getElementById('departmentForm').addEventListener('submit', function(e) {
+        const name = document.getElementById('name').value.trim();
+        const field = document.getElementById('field').value.trim();
+        const organization = document.getElementById('organizationName').value;
+        const branch = document.getElementById('branchId').value;
+
+        let errors = [];
+
+        if (!name) errors.push('نام دپارتمان اجباری است');
+        if (!field) errors.push('رشته فعالیت اجباری است');
+        if (!organization) errors.push('انتخاب سازمان اجباری است');
+        if (!branch) errors.push('انتخاب شعبه اجباری است');
+
+        if (errors.length > 0) {
+            e.preventDefault();
+            alert('لطفاً موارد زیر را بررسی کنید:\n' + errors.join('\n'));
+        }
+    });
+</script>
 </body>
 </html>

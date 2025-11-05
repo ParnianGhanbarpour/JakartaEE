@@ -62,6 +62,23 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
         }
+        .btn-home {
+            background: linear-gradient(135deg, #1c3551 0%, #7fbbff 100%);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            color: white;
+        }
         .btn-danger {
             background: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
             border: none;
@@ -103,6 +120,11 @@
 </head>
 <body>
 <div class="container">
+
+    <a href="${pageContext.request.contextPath}/dashboard.jsp" class="btn-home">
+        <i class="bi bi-house-door"></i> بازگشت به داشبورد
+    </a>
+
     <h2 class="text-center">
         <i class="bi bi-geo-alt"></i> سامانه مدیریت شعب سازمان
     </h2>

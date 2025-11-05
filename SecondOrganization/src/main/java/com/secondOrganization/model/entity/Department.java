@@ -54,4 +54,5 @@ public class Department extends Base {
         organizationGroups.remove(organizationGroup);
         organizationGroup.setDepartment(null);
     }
+
 }

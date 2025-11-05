@@ -10,7 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            background: linear-gradient(135deg, #90efb2 0%, #2aac90 100%);
             font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
             min-height: 100vh;
             padding: 20px 0;
@@ -37,7 +37,7 @@
             }
         }
         h2, h4 {
-            color: #16a34a;
+            color: rgba(106, 255, 239, 0.54);
             font-weight: bold;
             margin-bottom: 25px;
         }
@@ -61,11 +61,11 @@
             transition: all 0.3s;
         }
         .form-control:focus, .form-select:focus {
-            border-color: #43e97b;
+            border-color: #90efb2;
             box-shadow: 0 0 0 0.2rem rgba(67, 233, 123, 0.25);
         }
         .btn-custom {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            background: linear-gradient(135deg, #90efb2 0%, #38f9d7 100%);
             color: white;
             border: none;
             padding: 12px 40px;
@@ -112,7 +112,7 @@
             overflow: hidden;
         }
         .table thead {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            background: linear-gradient(135deg, rgba(106, 255, 239, 0.54) 0%, #90efb2 100%);
             color: white;
         }
         .table tbody tr:hover {

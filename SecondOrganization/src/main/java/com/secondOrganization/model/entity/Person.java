@@ -51,7 +51,7 @@ public class Person extends Base{
     @Enumerated(EnumType.ORDINAL)
     private Gender gender;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "user_username",nullable = false)
     private User user;
 

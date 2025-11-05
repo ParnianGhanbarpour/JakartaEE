@@ -350,9 +350,9 @@
                             <td class="text-center"><strong>${status.index + 1}</strong></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                <span class="person-avatar me-2">
-                                        ${person.name.substring(0,1)}${person.family.substring(0,1)}
-                                </span>
+                    <span class="person-avatar me-2">
+                            ${person.name.substring(0,1)}${person.family.substring(0,1)}
+                    </span>
                                     <strong>${person.name} ${person.family}</strong>
                                 </div>
                             </td>
@@ -362,24 +362,24 @@
                             <td class="text-center">
                                 <c:choose>
                                     <c:when test="${person.gender == 'male'}">
-                                    <span class="gender-badge gender-male">
-                                        <i class="bi bi-gender-male"></i> مرد
-                                    </span>
+                        <span class="gender-badge gender-male">
+                            <i class="bi bi-gender-male"></i> مرد
+                        </span>
                                     </c:when>
                                     <c:otherwise>
-                                    <span class="gender-badge gender-female">
-                                        <i class="bi bi-gender-female"></i> زن
-                                    </span>
+                        <span class="gender-badge gender-female">
+                            <i class="bi bi-gender-female"></i> زن
+                        </span>
                                     </c:otherwise>
                                 </c:choose>
                             </td>
                             <td class="text-center">
                                 <c:choose>
                                     <c:when test="${not empty person.salary}">
-                                    <span class="salary-badge">
-                                        <i class="bi bi-currency-dollar"></i>
-                                        ${person.salary}
-                                    </span>
+                        <span class="salary-badge">
+                            <i class="bi bi-currency-dollar"></i>
+                            ${person.salary}
+                        </span>
                                     </c:when>
                                     <c:otherwise>
                                         <small class="text-muted">-</small>
@@ -398,14 +398,16 @@
                             </td>
                             <td>
                                 <c:choose>
-                                    <c:when test="${not empty person.user}">
-                                    <span class="badge bg-primary">
-                                        <i class="bi bi-person-check"></i>
-                                        ${person.user.username}
-                                    </span>
+                                    <c:when test="${not empty person.user and not empty person.user.username}">
+                        <span class="badge bg-success">
+                            <i class="bi bi-person-check"></i>
+                            ${person.user.username}
+                        </span>
                                     </c:when>
                                     <c:otherwise>
-                                        <small class="text-muted">بدون کاربر</small>
+                                        <small class="text-muted">
+                                            <i class="bi bi-x-circle"></i> بدون کاربر
+                                        </small>
                                     </c:otherwise>
                                 </c:choose>
                             </td>
@@ -415,25 +417,12 @@
                                         <small>
                                             <i class="bi bi-collection"></i>
                                                 ${person.organizationGroup.name}
+                                            <br>
+                                            <small class="text-muted">${person.organizationGroup.department.name}</small>
                                         </small>
                                     </c:when>
                                     <c:otherwise>
                                         <small class="text-muted">بدون گروه</small>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${not empty person.user and not empty person.user.username}">
-                                    <span class="badge bg-primary">
-                                        <i class="bi bi-person-check"></i>
-                                        ${person.user.username}
-                                    </span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <small class="text-muted">
-                                            <i class="bi bi-x-circle"></i> بدون کاربر
-                                        </small>
                                     </c:otherwise>
                                 </c:choose>
                             </td>

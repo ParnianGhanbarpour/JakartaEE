@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -202,7 +203,17 @@ public class PersonServlet extends HttpServlet {
     private void loadDataAndForward(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         try {
-            req.setAttribute("personList", personService.findAll());
+            List<Person> personList = personService.findAll();
+
+            log.info("=== DEBUG: Loaded {} persons ===", personList.size());
+            for (Person person : personList) {
+                log.info("Person: {} {} - User: {} - Username: {}",
+                        person.getName(), person.getFamily(),
+                        person.getUser() != null ? "exists" : "null",
+                        person.getUser() != null ? person.getUser().getUsername() : "N/A");
+            }
+
+            req.setAttribute("personList", personList);
             req.setAttribute("genders", Arrays.asList(Gender.values()));
             req.setAttribute("organizationGroupList", organizationGroupService.findAll());
             req.getRequestDispatcher("/jsp/person.jsp").forward(req, resp);

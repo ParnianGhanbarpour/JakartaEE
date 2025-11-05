@@ -9,18 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="debug organization">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/UTF8Filter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/DatabaseTestServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
+    <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="debug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/EncodingFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/filter/CharacterEncodingFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/BranchServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/BranchServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/DepartmentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/DepartmentServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/BranchServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/BranchServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/department.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/department.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/PersonServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/PersonServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Person.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/person.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/person.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/project.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/project.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -414,7 +407,7 @@
       <workItem from="1762190832260" duration="2388000" />
       <workItem from="1762235980919" duration="34363000" />
       <workItem from="1762295968053" duration="860000" />
-      <workItem from="1762324541630" duration="33980000" />
+      <workItem from="1762324541630" duration="35957000" />
     </task>
     <task id="LOCAL-00001" summary="organization">
       <option name="closed" value="true" />
@@ -688,7 +681,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762356707878</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="debug">
+      <option name="closed" value="true" />
+      <created>1762367395473</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1762367395473</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -698,7 +699,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="organization" />
     <MESSAGE value="debug organization" />
-    <option name="LAST_COMMIT_MESSAGE" value="debug organization" />
+    <MESSAGE value="debug" />
+    <option name="LAST_COMMIT_MESSAGE" value="debug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

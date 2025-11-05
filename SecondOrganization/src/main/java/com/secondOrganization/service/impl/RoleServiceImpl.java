@@ -23,7 +23,12 @@ public class RoleServiceImpl implements RoleService, Serializable {
     @Transactional
     @Override
     public void save(Role role) throws Exception {
+        if (role.getUser() == null || role.getUser().getUsername() == null) {
+            throw new IllegalArgumentException("Role باید به یک User معتبر متصل باشد");
+        }
+
         entityManager.persist(role);
+        entityManager.flush();
     }
 
     @Transactional

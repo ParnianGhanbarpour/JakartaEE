@@ -44,7 +44,6 @@ public class User extends Base implements Serializable {
     @Column(name = "user_active")
     private boolean active;
 
-    @ElementCollection(targetClass = com.secondOrganization.model.entity.enums.Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_username"))
     @Enumerated(EnumType.STRING)
     private List<com.secondOrganization.model.entity.enums.Role> roleList = new ArrayList<>();

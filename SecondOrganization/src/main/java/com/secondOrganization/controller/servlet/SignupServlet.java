@@ -94,6 +94,7 @@ public class SignupServlet extends HttpServlet {
 
             Optional<User> existingUser = userService.findByUsername(username);
             if (existingUser.isPresent()) {
+                log.warn(" Username already exists: {}", username);
                 req.setAttribute("signupError", "نام کاربری قبلاً استفاده شده است");
                 req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                 return;
@@ -102,6 +103,7 @@ public class SignupServlet extends HttpServlet {
             if (nationalCode != null && !nationalCode.trim().isEmpty()) {
                 Optional<Person> existingPerson = personService.findByNationalCode(nationalCode);
                 if (existingPerson.isPresent()) {
+                    log.warn(" National code already exists: {}", nationalCode);
                     req.setAttribute("signupError", "کد ملی قبلاً ثبت شده است");
                     req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                     return;
@@ -141,6 +143,7 @@ public class SignupServlet extends HttpServlet {
             if (salaryStr != null && !salaryStr.trim().isEmpty()) {
                 try {
                     salary = Double.parseDouble(salaryStr.replace(",", ""));
+                    log.debug(" Salary parsed: {}", salary);
                 } catch (NumberFormatException e) {
                     log.warn("Invalid salary value: {}", salaryStr);
                 }
@@ -150,24 +153,26 @@ public class SignupServlet extends HttpServlet {
             if (birthdate != null && !birthdate.trim().isEmpty()) {
                 try {
                     parsedBirthdate = LocalDate.parse(birthdate);
+                    log.debug(" Birthdate parsed: {}", parsedBirthdate);
                 } catch (Exception e) {
                     log.warn("Invalid birthdate: {}", birthdate);
                 }
             }
 
-            Gender personGender = Gender.male; // پیش‌فرض
+            Gender personGender = Gender.male;
             if (gender != null && !gender.trim().isEmpty()) {
                 try {
                     personGender = Gender.valueOf(gender);
+                    log.debug(" Gender set to: {}", personGender);
                 } catch (IllegalArgumentException e) {
-                    log.warn("Invalid gender: {}, using default", gender);
+                    log.warn(" Invalid gender: {}, using default (male)", gender);
                 }
             }
 
             Person newPerson = Person.builder()
-                    .name(name != null ? name.trim() : username)
-                    .family(family != null ? family.trim() : "کاربر")
-                    .nationalCode(nationalCode != null ? nationalCode.trim() : null)
+                    .name(name != null && !name.trim().isEmpty() ? name.trim() : username)
+                    .family(family != null && !family.trim().isEmpty() ? family.trim() : "کاربر")
+                    .nationalCode(nationalCode != null && !nationalCode.trim().isEmpty() ? nationalCode.trim() : null)
                     .salary(salary)
                     .birthdate(parsedBirthdate)
                     .gender(personGender)
@@ -179,11 +184,13 @@ public class SignupServlet extends HttpServlet {
             personService.save(newPerson);
             log.info(" Person created successfully for user: {}", username);
 
+            log.info(" Signup completed successfully for user: {}", username);
             req.setAttribute("successMessage", "ثبت‌نام با موفقیت انجام شد. اکنون می‌توانید وارد شوید.");
             req.getRequestDispatcher("/login.jsp").forward(req, resp);
 
         } catch (Exception e) {
             log.error(" Signup error for user {}: {}", username, e.getMessage(), e);
+            e.printStackTrace();
 
             try {
                 Optional<User> createdUser = userService.findByUsername(username);
@@ -195,7 +202,12 @@ public class SignupServlet extends HttpServlet {
                 log.error(" Error during rollback: {}", rollbackEx.getMessage());
             }
 
-            req.setAttribute("signupError", "خطا در ثبت‌نام: " + e.getMessage());
+            String errorMessage = "خطا در ثبت‌نام: " + e.getMessage();
+            if (e.getCause() != null) {
+                errorMessage += "\nعلت: " + e.getCause().getMessage();
+            }
+
+            req.setAttribute("signupError", errorMessage);
             req.getRequestDispatcher("/signup.jsp").forward(req, resp);
         }
     }
@@ -203,6 +215,6 @@ public class SignupServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        log.info("SignupServlet - Initialized");
+        log.info(" SignupServlet initialized successfully");
     }
 }

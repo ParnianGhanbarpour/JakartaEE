@@ -422,6 +422,21 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty person.user and not empty person.user.username}">
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-person-check"></i>
+                                        ${person.user.username}
+                                    </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <small class="text-muted">
+                                            <i class="bi bi-x-circle"></i> بدون کاربر
+                                        </small>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
                             <td class="text-center">
                                 <form action="${pageContext.request.contextPath}/person.do"
                                       method="post"

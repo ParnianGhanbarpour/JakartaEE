@@ -90,7 +90,6 @@ public class DepartmentServlet extends HttpServlet {
 
             Branch branch = optionalBranch.get();
 
-            // بررسی تعلق شعبه به سازمان
             if (!branch.getOrganization().getId().equals(organization.getId())) {
                 req.setAttribute("error", "شعبه انتخاب شده متعلق به سازمان انتخاب شده نیست!");
                 loadDataAndForward(req, resp);
@@ -118,17 +117,20 @@ public class DepartmentServlet extends HttpServlet {
             log.info("Department saved successfully: {}", department.getName());
 
             req.setAttribute("success", "دپارتمان با موفقیت ثبت شد");
+            loadDataAndForward(req, resp);
 
         } catch (NumberFormatException e) {
             log.error("Invalid branch ID format: {}", e.getMessage());
             req.setAttribute("error", "شناسه شعبه نامعتبر است");
+            loadDataAndForward(req, resp);
+
         } catch (Exception e) {
             log.error("Error in DepartmentServlet.doPost: {}", e.getMessage(), e);
             req.setAttribute("error", "خطایی در ذخیره دپارتمان رخ داد: " +
                     (e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+            loadDataAndForward(req, resp);
         }
 
-        loadDataAndForward(req, resp);
     }
 
     @Override
@@ -141,14 +143,14 @@ public class DepartmentServlet extends HttpServlet {
         try {
             List<Department> departments = departmentService.findAllWithOrganizationAndBranch();
             List<Organization> organizations = organizationService.findAll();
-            List<Branch> allBranches = branchService.findAll();
+            List<Branch> branchList = branchService.findAll();
 
             req.setAttribute("departmentList", departments);
             req.setAttribute("organizationList", organizations);
-            req.setAttribute("allBranches", allBranches);
+            req.setAttribute("branchList", branchList);
 
             log.info("Loaded {} departments, {} organizations, and {} branches",
-                    departments.size(), organizations.size(), allBranches.size());
+                    departments.size(), organizations.size(), branchList.size());
 
         } catch (Exception e) {
             log.error("Error loading data in DepartmentServlet: {}", e.getMessage(), e);

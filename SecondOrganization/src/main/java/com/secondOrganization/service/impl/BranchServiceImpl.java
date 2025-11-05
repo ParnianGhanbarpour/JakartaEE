@@ -66,7 +66,8 @@ public class BranchServiceImpl implements BranchService, Serializable {
         TypedQuery<Branch> q = entityManager.createQuery(
                 "SELECT b FROM Branch b " +
                         "LEFT JOIN FETCH b.organization " +
-                        "WHERE b.deleted = false", Branch.class);
+                        "WHERE b.deleted = false " +
+                        "ORDER BY b.organization.name, b.name", Branch.class);
 
         List<Branch> branches = q.getResultList();
         log.info("Found {} branches", branches.size());

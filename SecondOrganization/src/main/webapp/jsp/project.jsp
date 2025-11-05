@@ -62,7 +62,7 @@
             font-weight: 600;
             color: #2d3748;
         }
-        .form-control, .form-select, .form-control[type="date"], .form-control[type="datetime-local"] {
+        .form-control, .form-select {
             border: 2px solid #bfdbfe;
             border-radius: 10px;
             padding: 12px;
@@ -94,10 +94,6 @@
             border-radius: 20px;
             transition: all 0.3s;
         }
-        .btn-danger:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(248, 87, 166, 0.5);
-        }
         .btn-home {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -115,19 +111,52 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
             color: white;
         }
-        .table {
-            border-radius: 10px;
-            overflow: hidden;
-        }
         .table thead {
             background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
             color: white;
         }
-        .table tbody tr:hover {
-            background-color: #eff6ff;
+        .members-selector {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            background: #f8fafc;
+        }
+        .member-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
             transition: all 0.2s;
         }
-        .badge-status {
+        .member-checkbox:hover {
+            background: #e0f2fe;
+            transform: translateX(-5px);
+        }
+        .member-checkbox input[type="checkbox"] {
+            margin-left: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: #30cfd0;
+        }
+        .member-checkbox label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+        .member-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 2px;
+            display: inline-block;
+        }
+        .status-badge {
             padding: 8px 15px;
             border-radius: 20px;
             font-weight: 600;
@@ -156,10 +185,6 @@
             margin-bottom: 20px;
             border-left: 4px solid #30cfd0;
         }
-        .info-card i {
-            color: #330867;
-            margin-left: 10px;
-        }
         .budget-badge {
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             color: white;
@@ -178,12 +203,12 @@
     <div class="page-title">
         <i class="bi bi-kanban"></i>
         <h2>سامانه مدیریت پروژه‌های سازمانی</h2>
-        <p>ایجاد، پیگیری و مدیریت پروژه‌های در حال اجرا</p>
+        <p>ایجاد، پیگیری و مدیریت پروژه‌ها با تخصیص اعضا</p>
     </div>
 
     <div class="info-card">
         <i class="bi bi-info-circle-fill"></i>
-        <strong>راهنما:</strong> پروژه‌ها را با مشخصات کامل شامل بودجه، تاریخ شروع و پایان و وضعیت فعلی ثبت کنید.
+        <strong>راهنما:</strong> پروژه‌ها را با مشخصات کامل شامل بودجه، تاریخ، وضعیت و انتخاب اعضای تیم ثبت کنید.
     </div>
 
     <div class="form-section">
@@ -212,8 +237,10 @@
                     <label for="budget" class="form-label">
                         <i class="bi bi-cash-stack"></i> بودجه (ریال) *
                     </label>
-                    <input type="number" name="budget" id="budget" class="form-control"
-                           required step="0.01" min="0" placeholder="مثلاً: 50000000">
+                    <input type="text" name="budget" id="budget" class="form-control"
+                           required placeholder="مثلاً: 50,000,000">
+                    <input type="hidden" name="budgetValue" id="budgetValue">
+                    <small class="text-muted">حداکثر 12 رقم + 2 رقم اعشار</small>
                 </div>
 
                 <div class="col-md-12">
@@ -310,22 +337,22 @@
                             <td class="text-center">
                                 <c:choose>
                                     <c:when test="${project.status == 'ACTIVE'}">
-                                        <span class="badge-status status-active">
+                                        <span class="status-badge status-active">
                                             <i class="bi bi-play-circle"></i> فعال
                                         </span>
                                     </c:when>
                                     <c:when test="${project.status == 'IN_PROGRESS'}">
-                                        <span class="badge-status status-in-progress">
+                                        <span class="status-badge status-in-progress">
                                             <i class="bi bi-hourglass-split"></i> در حال انجام
                                         </span>
                                     </c:when>
                                     <c:when test="${project.status == 'COMPLETED'}">
-                                        <span class="badge-status status-completed">
+                                        <span class="status-badge status-completed">
                                             <i class="bi bi-check-circle"></i> تکمیل شده
                                         </span>
                                     </c:when>
                                     <c:when test="${project.status == 'CANCELLED'}">
-                                        <span class="badge-status status-cancelled">
+                                        <span class="status-badge status-cancelled">
                                             <i class="bi bi-x-circle"></i> لغو شده
                                         </span>
                                     </c:when>
@@ -334,11 +361,12 @@
                             <td class="text-center">
                                 <form action="${pageContext.request.contextPath}/project.do"
                                       method="post"
-                                      onsubmit="return confirm('آیا از حذف پروژه «${project.title}» مطمئن هستید؟');">
+                                      onsubmit="return confirm('آیا از حذف پروژه «${project.title}» مطمئن هستید؟');"
+                                      style="display: inline;">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <input type="hidden" name="id" value="${project.id}"/>
                                     <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash"></i> حذف
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
                             </td>
@@ -361,29 +389,57 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.querySelector('form').addEventListener('submit', function(e) {
-        const startDate = new Date(document.getElementById('startDate').value);
-        const endDate = new Date(document.getElementById('endDate').value);
-        const budget = parseFloat(document.getElementById('budget').value);
+    const budgetInput = document.getElementById('budget');
+    const budgetValueInput = document.getElementById('budgetValue');
 
-        if (endDate <= startDate) {
-            e.preventDefault();
-            alert('تاریخ پایان باید بعد از تاریخ شروع باشد!');
-            return false;
+    budgetInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/,/g, '').replace(/[^\d.]/g, '');
+
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
         }
 
-        if (budget <= 0) {
-            e.preventDefault();
-            alert('بودجه باید بیشتر از صفر باشد!');
-            return false;
+        if (parts[0].length > 12) {
+            parts[0] = parts[0].substring(0, 12);
+        }
+
+        // Limit decimal part to 2 digits
+        if (parts[1] && parts[1].length > 2) {
+            parts[1] = parts[1].substring(0, 2);
+        }
+
+        value = parts.join('.');
+
+        if (value) {
+            const [integer, decimal] = value.split('.');
+            const formatted = parseInt(integer || '0').toLocaleString('en-US');
+            e.target.value = decimal !== undefined ? formatted + '.' + decimal : formatted;
+            budgetValueInput.value = value;
+        } else {
+            budgetValueInput.value = '';
         }
     });
 
-    document.getElementById('budget').addEventListener('input', function(e) {
-        let value = e.target.value.replace(/,/g, '');
-        if (!isNaN(value) && value !== '') {
-            e.target.value = Number(value).toLocaleString('en-US');
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        const startDate = new Date(document.getElementById('startDate').value);
+        const endDate = new Date(document.getElementById('endDate').value);
+        const budgetValue = budgetValueInput.value.replace(/,/g, '');
+
+        if (endDate <= startDate) {
+            e.preventDefault();
+            alert('⚠️ تاریخ پایان باید بعد از تاریخ شروع باشد!');
+            return false;
         }
+
+        if (!budgetValue || parseFloat(budgetValue) <= 0) {
+            e.preventDefault();
+            alert('⚠️ بودجه باید بیشتر از صفر باشد!');
+            return false;
+        }
+
+        budgetInput.value = budgetValue;
     });
 </script>
 </body>

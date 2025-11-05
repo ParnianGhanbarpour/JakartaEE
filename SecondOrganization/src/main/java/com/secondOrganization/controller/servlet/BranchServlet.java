@@ -69,13 +69,11 @@ public class BranchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            // مدیریت پیام موفقیت
             String success = req.getParameter("success");
             if ("true".equals(success)) {
                 req.setAttribute("success", "شعبه با موفقیت ذخیره شد");
             }
 
-            // قرار دادن داده‌ها در request به جای session
             req.setAttribute("branchList", branchService.findAll());
             req.setAttribute("organizationList", organizationService.findAll());
 

@@ -102,6 +102,20 @@
             content: " *";
             color: #e53e3e;
         }
+        .branch-option {
+            transition: all 0.3s ease;
+        }
+
+        .form-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        select:disabled {
+            background-color: #e9ecef;
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body>
@@ -179,8 +193,17 @@
 
                 <div class="col-md-6">
                     <label for="branchId" class="form-label required">شعبه</label>
-                    <select name="branchId" id="branchId" class="form-select" required>
+                    <select name="branchId" id="branchId" class="form-select" required disabled>
                         <option value="">-- ابتدا سازمان را انتخاب کنید --</option>
+                        <c:forEach var="branch" items="${branchList}">
+                            <option value="${branch.id}"
+                                    data-organization="${branch.organization.name}"
+                                    class="branch-option"
+                                    style="display: none;">
+                                    ${branch.name}
+                                <c:if test="${not empty branch.city}"> - ${branch.city}</c:if>
+                            </option>
+                        </c:forEach>
                     </select>
                     <div class="form-text" id="branchHelpText">
                         پس از انتخاب سازمان، شعبه‌های مربوطه نمایش داده می‌شوند
@@ -262,64 +285,42 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const organizationBranches = {};
-
-    <c:forEach var="branch" items="${allBranches}">
-    <c:if test="${not empty branch.organization}">
-    const orgName = '${branch.organization.name}';
-    if (!organizationBranches[orgName]) {
-        organizationBranches[orgName] = [];
-    }
-    organizationBranches[orgName].push({
-        id: ${branch.id},
-        name: '${branch.name}',
-        city: '${branch.city}'
-    });
-    </c:if>
-    </c:forEach>
-
     function filterBranches() {
         const organizationSelect = document.getElementById('organizationName');
         const branchSelect = document.getElementById('branchId');
+        const branchOptions = document.querySelectorAll('.branch-option');
         const helpText = document.getElementById('branchHelpText');
 
         const selectedOrganization = organizationSelect.value;
 
-        branchSelect.innerHTML = '';
+        branchOptions.forEach(option => {
+            option.style.display = 'none';
+        });
+
+        let visibleCount = 0;
 
         if (!selectedOrganization) {
-            branchSelect.innerHTML = '<option value="">-- ابتدا سازمان را انتخاب کنید --</option>';
             helpText.textContent = 'پس از انتخاب سازمان، شعبه‌های مربوطه نمایش داده می‌شوند';
-            return;
-        }
-
-        const branches = organizationBranches[selectedOrganization];
-
-        if (!branches || branches.length === 0) {
-            branchSelect.innerHTML = '<option value="">-- این سازمان شعبه‌ای ندارد --</option>';
-            helpText.textContent = 'این سازمان هیچ شعبه‌ای ندارد. لطفاً ابتدا در بخش مدیریت شعبه‌ها، شعبه ایجاد کنید.';
+            branchSelect.disabled = true;
+            branchSelect.value = '';
         } else {
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = '-- لطفاً شعبه را انتخاب کنید --';
-            branchSelect.appendChild(defaultOption);
-
-            branches.forEach(branch => {
-                const option = document.createElement('option');
-                option.value = branch.id;
-                option.textContent = branch.name + (branch.city ? ' - ' + branch.city : '');
-                branchSelect.appendChild(option);
+            branchOptions.forEach(option => {
+                if (option.getAttribute('data-organization') === selectedOrganization) {
+                    option.style.display = '';
+                    visibleCount++;
+                }
             });
 
-            helpText.textContent = branches.length + ' شعبه یافت شد. لطفاً یکی را انتخاب کنید.';
+            if (visibleCount === 0) {
+                helpText.textContent = 'این سازمان هیچ شعبه‌ای ندارد';
+                branchSelect.disabled = true;
+                branchSelect.innerHTML = '<option value="">-- این سازمان شعبه‌ای ندارد --</option>';
+            } else {
+                helpText.textContent = visibleCount + ' شعبه یافت شد. لطفاً یکی را انتخاب کنید.';
+                branchSelect.disabled = false;
+                branchSelect.value = '';
+            }
         }
-    }
-
-    function resetForm() {
-        const branchSelect = document.getElementById('branchId');
-        branchSelect.innerHTML = '<option value="">-- ابتدا سازمان را انتخاب کنید --</option>';
-        document.getElementById('branchHelpText').textContent =
-            'پس از انتخاب سازمان، شعبه‌های مربوطه نمایش داده می‌شوند';
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -327,15 +328,15 @@
         if (initialOrganization) {
             filterBranches();
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const branchId = urlParams.get('branchId');
-            if (branchId) {
+            const selectedBranchId = '${param.branchId}';
+            if (selectedBranchId) {
                 setTimeout(() => {
-                    const branchSelect = document.getElementById('branchId');
-                    branchSelect.value = branchId;
+                    document.getElementById('branchId').value = selectedBranchId;
                 }, 100);
             }
         }
+
+        document.getElementById('organizationName').addEventListener('change', filterBranches);
     });
 
     document.getElementById('departmentForm').addEventListener('submit', function(e) {

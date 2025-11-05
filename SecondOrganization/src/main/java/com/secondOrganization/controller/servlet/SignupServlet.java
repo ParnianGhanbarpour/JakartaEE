@@ -57,7 +57,6 @@ public class SignupServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
-        String email = req.getParameter("email");
         String name = req.getParameter("name");
         String family = req.getParameter("family");
         String nationalCode = req.getParameter("nationalCode");
@@ -73,14 +72,7 @@ public class SignupServlet extends HttpServlet {
                 req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                 return;
             }
-
-            if (password == null || password.trim().isEmpty()) {
-                req.setAttribute("signupError", "رمز عبور نمی‌تواند خالی باشد");
-                req.getRequestDispatcher("/signup.jsp").forward(req, resp);
-                return;
-            }
-
-            if (password.length() < 6) {
+            if (password == null || password.trim().isEmpty() || password.length() < 6) {
                 req.setAttribute("signupError", "رمز عبور باید حداقل ۶ کاراکتر باشد");
                 req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                 return;
@@ -94,7 +86,7 @@ public class SignupServlet extends HttpServlet {
 
             Optional<User> existingUser = userService.findByUsername(username);
             if (existingUser.isPresent()) {
-                log.warn(" Username already exists: {}", username);
+                log.warn("Username already exists: {}", username);
                 req.setAttribute("signupError", "نام کاربری قبلاً استفاده شده است");
                 req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                 return;
@@ -103,7 +95,7 @@ public class SignupServlet extends HttpServlet {
             if (nationalCode != null && !nationalCode.trim().isEmpty()) {
                 Optional<Person> existingPerson = personService.findByNationalCode(nationalCode);
                 if (existingPerson.isPresent()) {
-                    log.warn(" National code already exists: {}", nationalCode);
+                    log.warn("National code already exists: {}", nationalCode);
                     req.setAttribute("signupError", "کد ملی قبلاً ثبت شده است");
                     req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                     return;
@@ -134,16 +126,17 @@ public class SignupServlet extends HttpServlet {
                 if (!groups.isEmpty()) {
                     defaultGroup = groups.get(0);
                     log.info(" Default group found: {}", defaultGroup.getName());
+                } else {
+                    log.warn(" Default group not found, continuing without it");
                 }
             } catch (Exception e) {
-                log.warn(" No default group found, continuing without it");
+                log.warn(" Error finding default group: {}", e.getMessage());
             }
 
             Double salary = null;
             if (salaryStr != null && !salaryStr.trim().isEmpty()) {
                 try {
                     salary = Double.parseDouble(salaryStr.replace(",", ""));
-                    log.debug(" Salary parsed: {}", salary);
                 } catch (NumberFormatException e) {
                     log.warn("Invalid salary value: {}", salaryStr);
                 }
@@ -153,7 +146,6 @@ public class SignupServlet extends HttpServlet {
             if (birthdate != null && !birthdate.trim().isEmpty()) {
                 try {
                     parsedBirthdate = LocalDate.parse(birthdate);
-                    log.debug(" Birthdate parsed: {}", parsedBirthdate);
                 } catch (Exception e) {
                     log.warn("Invalid birthdate: {}", birthdate);
                 }
@@ -163,9 +155,8 @@ public class SignupServlet extends HttpServlet {
             if (gender != null && !gender.trim().isEmpty()) {
                 try {
                     personGender = Gender.valueOf(gender);
-                    log.debug(" Gender set to: {}", personGender);
                 } catch (IllegalArgumentException e) {
-                    log.warn(" Invalid gender: {}, using default (male)", gender);
+                    log.warn("Invalid gender: {}, using default (male)", gender);
                 }
             }
 
@@ -190,21 +181,26 @@ public class SignupServlet extends HttpServlet {
 
         } catch (Exception e) {
             log.error(" Signup error for user {}: {}", username, e.getMessage(), e);
-            e.printStackTrace();
 
             try {
                 Optional<User> createdUser = userService.findByUsername(username);
                 if (createdUser.isPresent()) {
                     userService.remove(createdUser.get());
-                    log.info(" Rollback: User deleted due to error");
+                    log.info(" Rollback: User soft-deleted due to error");
                 }
             } catch (Exception rollbackEx) {
                 log.error(" Error during rollback: {}", rollbackEx.getMessage());
             }
 
-            String errorMessage = "خطا در ثبت‌نام: " + e.getMessage();
-            if (e.getCause() != null) {
-                errorMessage += "\nعلت: " + e.getCause().getMessage();
+            String errorMessage = "خطا در ثبت‌نام";
+            if (e.getMessage() != null) {
+                if (e.getMessage().contains("UC_USER_TBL_USER_USERNAME")) {
+                    errorMessage = "نام کاربری تکراری است";
+                } else if (e.getMessage().contains("GROUP_ID")) {
+                    errorMessage = "خطا در تخصیص گروه سازمانی. لطفاً دوباره تلاش کنید.";
+                } else {
+                    errorMessage = "خطا در ثبت‌نام: " + e.getMessage();
+                }
             }
 
             req.setAttribute("signupError", errorMessage);

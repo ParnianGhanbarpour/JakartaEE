@@ -24,7 +24,7 @@ import java.util.List;
 @Table(name="organization_tbl")
 public class Organization extends Base {
 
-    @Column(name = "org_name", length = 50)
+    @Column(name = "org_name", length = 100)
     @JsonbProperty("نام سازمان")
 //    @Pattern(regexp = "^[a-zA-Zآ-ی\\s]{3,50}$", message = "نام سازمان معتبر نیست !")
     @Size(min = 3, max = 50, message = "اسم باید بین سه تا پنجاه حرف باشد .")

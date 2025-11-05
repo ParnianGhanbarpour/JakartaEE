@@ -11,13 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="debug organization">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/DatabaseTestServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/d1dda897-902b-411a-a172-0cf41442b8b7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d1dda897-902b-411a-a172-0cf41442b8b7.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/diff-generator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/diff-generator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jpa.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/OrganizationGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/OrganizationGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/SignupServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/SignupServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Organization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Organization.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,6 +98,9 @@
   "keyToStringList": {
     "DatabaseDriversLRU": [
       "oracle"
+    ],
+    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
+      "Oracle"
     ]
   }
 }]]></component>
@@ -403,7 +403,7 @@
       <workItem from="1762190832260" duration="2388000" />
       <workItem from="1762235980919" duration="34363000" />
       <workItem from="1762295968053" duration="860000" />
-      <workItem from="1762324541630" duration="12045000" />
+      <workItem from="1762324541630" duration="14582000" />
     </task>
     <task id="LOCAL-00001" summary="organization">
       <option name="closed" value="true" />
@@ -645,7 +645,23 @@
       <option name="project" value="LOCAL" />
       <updated>1762328975743</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="debug organization">
+      <option name="closed" value="true" />
+      <created>1762341182557</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1762341182557</updated>
+    </task>
+    <task id="LOCAL-00032" summary="debug organization">
+      <option name="closed" value="true" />
+      <created>1762341210961</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1762341210961</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

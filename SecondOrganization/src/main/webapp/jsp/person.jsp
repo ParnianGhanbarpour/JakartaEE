@@ -186,9 +186,26 @@
         <p>ثبت و مدیریت اطلاعات کارکنان و پرسنل</p>
     </div>
 
+    <c:if test="${param.success == 'true'}">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <strong>موفق!</strong> پرسنل با موفقیت ثبت شد.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    </c:if>
+
+    <c:if test="${param.deleted == 'true'}">
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <i class="bi bi-info-circle-fill"></i>
+        <strong>حذف شد!</strong> پرسنل با موفقیت حذف شد.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    </c:if>
+
     <div class="info-card">
         <i class="bi bi-info-circle-fill"></i>
         <strong>راهنما:</strong> اطلاعات کامل پرسنل شامل نام، کد ملی، جنسیت و حقوق را در این بخش ثبت کنید.
+        <br><small>⚠️ کد ملی باید یکتا باشد و username اختیاری است (در صورت عدم ورود، خودکار ایجاد می‌شود)</small>
     </div>
 
     <div class="form-section">
@@ -197,39 +214,41 @@
         </h4>
 
         <c:if test="${not empty error}">
-            <div class="alert alert-danger" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i>
-                <strong>خطا!</strong> ${error}
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <strong>خطا!</strong> ${error}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
         </c:if>
 
-        <form action="${pageContext.request.contextPath}/person.do" method="post">
+        <form action="${pageContext.request.contextPath}/person.do" method="post" id="personForm">
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="name" class="form-label">
                         <i class="bi bi-person"></i> نام *
                     </label>
                     <input type="text" name="name" id="name" class="form-control"
-                           required pattern="^[a-zA-Zآ-ی\s]{3,20}$"
-                           placeholder="مثلاً: علی">
+                           required minlength="3" maxlength="20"
+                           placeholder="مثلا : محمد" >
                 </div>
-
                 <div class="col-md-6">
                     <label for="family" class="form-label">
                         <i class="bi bi-people"></i> نام خانوادگی *
                     </label>
                     <input type="text" name="family" id="family" class="form-control"
-                           required pattern="^[a-zA-Zآ-ی\s]{3,20}$"
+                           required minlength="3" maxlength="20"
                            placeholder="مثلاً: احمدی">
                 </div>
 
                 <div class="col-md-6">
                     <label for="nationalCode" class="form-label">
-                        <i class="bi bi-card-text"></i> کد ملی *
+                        <i class="bi bi-card-text"></i> کد ملی * (باید یکتا باشد)
                     </label>
                     <input type="text" name="nationalCode" id="nationalCode"
-                           class="form-control" required pattern="^[0-9]{10}$"
-                           maxlength="10" placeholder="مثلاً: 1234567890">
+                           class="form-control" required
+                           pattern="[0-9]{10}" maxlength="10"
+                           placeholder="1234567890">
+                    <small class="text-muted">فقط 10 رقم عددی</small>
                 </div>
 
                 <div class="col-md-6">
@@ -246,19 +265,45 @@
 
                 <div class="col-md-6">
                     <label for="salary" class="form-label">
-                        <i class="bi bi-cash-coin"></i> حقوق (ریال)
+                        <i class="bi bi-cash-coin"></i> حقوق (ریال) - اختیاری
                     </label>
-                    <input type="number" name="salary" id="salary"
-                           class="form-control" step="0.01" min="0"
-                           placeholder="مثلاً: 15000000">
+                    <input type="text" name="salary" id="salary"
+                           class="form-control"
+                           placeholder="مثلاً: 15,000,000">
+                    <small class="text-muted">حداکثر 12 رقم + 2 رقم اعشار</small>
                 </div>
 
                 <div class="col-md-6">
                     <label for="birthdate" class="form-label">
-                        <i class="bi bi-calendar-event"></i> تاریخ تولد
+                        <i class="bi bi-calendar-event"></i> تاریخ تولد - اختیاری
                     </label>
                     <input type="date" name="birthdate" id="birthdate"
                            class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="username" class="form-label">
+                        <i class="bi bi-person-circle"></i> نام کاربری - اختیاری
+                    </label>
+                    <input type="text" name="username" id="username"
+                           class="form-control"
+                           pattern="^[A-Za-z][A-Za-z0-9_]{4,19}$"
+                           placeholder="در صورت خالی بودن خودکار ایجاد می‌شود">
+                    <small class="text-muted">اگر خالی بماند، از کد ملی استفاده می‌شود</small>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="organizationGroupId" class="form-label">
+                        <i class="bi bi-collection"></i> گروه سازمانی - اختیاری
+                    </label>
+                    <select name="organizationGroupId" id="organizationGroupId" class="form-select">
+                        <option value="">-- بدون گروه --</option>
+                        <c:forEach var="group" items="${organizationGroupList}">
+                            <option value="${group.id}">
+                                    ${group.name} - ${group.department.name}
+                            </option>
+                        </c:forEach>
+                    </select>
                 </div>
 
                 <div class="col-12 text-center mt-4">
@@ -293,6 +338,8 @@
                         <th class="text-center">جنسیت</th>
                         <th class="text-center">حقوق</th>
                         <th class="text-center">تاریخ تولد</th>
+                        <th>نام کاربری</th>
+                        <th>گروه سازمانی</th>
                         <th class="text-center">عملیات</th>
                     </tr>
                     </thead>
@@ -302,9 +349,9 @@
                             <td class="text-center"><strong>${status.index + 1}</strong></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <span class="person-avatar me-2">
-                                            ${person.name.substring(0,1)}${person.family.substring(0,1)}
-                                    </span>
+                                <span class="person-avatar me-2">
+                                        ${person.name.substring(0,1)}${person.family.substring(0,1)}
+                                </span>
                                     <strong>${person.name} ${person.family}</strong>
                                 </div>
                             </td>
@@ -314,40 +361,70 @@
                             <td class="text-center">
                                 <c:choose>
                                     <c:when test="${person.gender == 'male'}">
-                                        <span class="gender-badge gender-male">
-                                            <i class="bi bi-gender-male"></i> مرد
-                                        </span>
+                                    <span class="gender-badge gender-male">
+                                        <i class="bi bi-gender-male"></i> مرد
+                                    </span>
                                     </c:when>
                                     <c:otherwise>
-                                        <span class="gender-badge gender-female">
-                                            <i class="bi bi-gender-female"></i> زن
-                                        </span>
+                                    <span class="gender-badge gender-female">
+                                        <i class="bi bi-gender-female"></i> زن
+                                    </span>
                                     </c:otherwise>
                                 </c:choose>
                             </td>
                             <td class="text-center">
-                                <c:if test="${not empty person.salary}">
+                                <c:choose>
+                                    <c:when test="${not empty person.salary}">
                                     <span class="salary-badge">
                                         <i class="bi bi-currency-dollar"></i>
                                         ${person.salary}
                                     </span>
-                                </c:if>
-                                <c:if test="${empty person.salary}">
-                                    <small class="text-muted">-</small>
-                                </c:if>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <small class="text-muted">-</small>
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
                             <td class="text-center">
-                                <c:if test="${not empty person.birthdate}">
-                                    <small>${person.birthdate}</small>
-                                </c:if>
-                                <c:if test="${empty person.birthdate}">
-                                    <small class="text-muted">-</small>
-                                </c:if>
+                                <c:choose>
+                                    <c:when test="${not empty person.birthdate}">
+                                        <small>${person.birthdate}</small>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <small class="text-muted">-</small>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty person.user}">
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-person-check"></i>
+                                        ${person.user.username}
+                                    </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <small class="text-muted">بدون کاربر</small>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty person.organizationGroup}">
+                                        <small>
+                                            <i class="bi bi-collection"></i>
+                                                ${person.organizationGroup.name}
+                                        </small>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <small class="text-muted">بدون گروه</small>
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
                             <td class="text-center">
                                 <form action="${pageContext.request.contextPath}/person.do"
                                       method="post"
-                                      onsubmit="return confirm('آیا از حذف ${person.name} ${person.family} مطمئن هستید؟');">
+                                      onsubmit="return confirm('آیا از حذف ${person.name} ${person.family} مطمئن هستید؟\n\n⚠️ توجه: حذف پرسنل، کاربر مرتبط را حذف نمی‌کند.');">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <input type="hidden" name="id" value="${person.id}"/>
                                     <button type="submit" class="btn btn-danger btn-sm">
@@ -371,7 +448,6 @@
         </c:if>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.getElementById('nationalCode').addEventListener('input', function(e) {
@@ -379,31 +455,81 @@
         e.target.value = value.substring(0, 10);
     });
 
-    document.querySelector('form').addEventListener('submit', function(e) {
+    const salaryInput = document.getElementById('salary');
+    salaryInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/,/g, '');
+
+        value = value.replace(/[^\d.]/g, '');
+
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        if (parts[0].length > 12) {
+            parts[0] = parts[0].substring(0, 12);
+        }
+        if (parts[1] && parts[1].length > 2) {
+            parts[1] = parts[1].substring(0, 2);
+        }
+
+        value = parts.join('.');
+
+        if (value) {
+            const [integer, decimal] = value.split('.');
+            const formatted = parseInt(integer).toLocaleString('en-US');
+            e.target.value = decimal !== undefined ? formatted + '.' + decimal : formatted;
+        }
+    });
+
+    document.getElementById('personForm').addEventListener('submit', function(e) {
         const nationalCode = document.getElementById('nationalCode').value;
+        const name = document.getElementById('name').value.trim();
+        const family = document.getElementById('family').value.trim();
 
         if (nationalCode.length !== 10) {
             e.preventDefault();
-            alert('کد ملی باید دقیقاً 10 رقم باشد!');
+            alert(' کد ملی باید دقیقاً 10 رقم باشد!');
+            document.getElementById('nationalCode').focus();
             return false;
         }
 
         if (/^(\d)\1{9}$/.test(nationalCode)) {
             e.preventDefault();
-            alert('کد ملی نامعتبر است! (تمام ارقام یکسان هستند)');
+            alert(' کد ملی نامعتبر است! (تمام ارقام یکسان هستند)');
+            document.getElementById('nationalCode').focus();
             return false;
         }
+
+        if (name.length < 3 || family.length < 3) {
+            e.preventDefault();
+            alert(' نام و نام خانوادگی باید حداقل 3 حرف باشند!');
+            return false;
+        }
+
+        const salaryValue = salaryInput.value.replace(/,/g, '');
+        if (salaryValue && parseFloat(salaryValue) < 0) {
+            e.preventDefault();
+            alert(' حقوق نمی‌تواند منفی باشد!');
+            salaryInput.focus();
+            return false;
+        }
+
+        return true;
     });
 
-    const salaryInput = document.getElementById('salary');
-    if (salaryInput) {
-        salaryInput.addEventListener('blur', function(e) {
-            if (e.target.value) {
-                const value = parseFloat(e.target.value);
-                e.target.value = value.toLocaleString('en-US');
-            }
+    setTimeout(() => {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
         });
-    }
+    }, 5000);
+
+    const birthdateInput = document.getElementById('birthdate');
+    const today = new Date().toISOString().split('T')[0];
+    birthdateInput.setAttribute('max', today);
 </script>
 </body>
 </html>
+

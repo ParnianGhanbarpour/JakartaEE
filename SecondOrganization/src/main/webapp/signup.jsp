@@ -391,6 +391,7 @@
                 <label for="username" class="form-label">
                     <i class="bi bi-person"></i> نام کاربری
                 </label>
+
                 <div class="form-input-wrapper">
                     <input type="text"
                            id="username"
@@ -421,6 +422,95 @@
                            placeholder="example@email.com"
                            autocomplete="email">
                     <i class="bi bi-envelope form-input-icon"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="form-label">
+                    <i class="bi bi-person"></i> نام - اختیاری
+                </label>
+                <div class="form-input-wrapper">
+                    <input type="text"
+                           id="name"
+                           name="name"
+                           class="form-input"
+                           minlength="3"
+                           maxlength="20"
+                           placeholder="نام خود را وارد کنید">
+                    <i class="bi bi-person form-input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="family" class="form-label">
+                    <i class="bi bi-people"></i> نام خانوادگی - اختیاری
+                </label>
+                <div class="form-input-wrapper">
+                    <input type="text"
+                           id="family"
+                           name="family"
+                           class="form-input"
+                           minlength="3"
+                           maxlength="20"
+                           placeholder="نام خانوادگی خود را وارد کنید">
+                    <i class="bi bi-people form-input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nationalCode" class="form-label">
+                    <i class="bi bi-card-text"></i> کد ملی - اختیاری
+                </label>
+                <div class="form-input-wrapper">
+                    <input type="text"
+                           id="nationalCode"
+                           name="nationalCode"
+                           class="form-input"
+                           pattern="[0-9]{10}"
+                           maxlength="10"
+                           placeholder="1234567890">
+                    <i class="bi bi-card-text form-input-icon"></i>
+                </div>
+                <small class="text-muted">فقط 10 رقم عددی</small>
+            </div>
+
+            <div class="form-group">
+                <label for="gender" class="form-label">
+                    <i class="bi bi-gender-ambiguous"></i> جنسیت - اختیاری
+                </label>
+                <div class="form-input-wrapper">
+                    <select id="gender" name="gender" class="form-input">
+                        <option value="">-- انتخاب کنید --</option>
+                        <option value="male">مرد</option>
+                        <option value="female">زن</option>
+                    </select>
+                    <i class="bi bi-gender-ambiguous form-input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="salary" class="form-label">
+                    <i class="bi bi-cash-coin"></i> حقوق (ریال) - اختیاری
+                </label>
+                <div class="form-input-wrapper">
+                    <input type="text"
+                           id="salary"
+                           name="salary"
+                           class="form-input"
+                           placeholder="مثلاً: 15,000,000">
+                    <i class="bi bi-cash-coin form-input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="birthdate" class="form-label">
+                    <i class="bi bi-calendar-event"></i> تاریخ تولد - اختیاری
+                </label>
+                <div class="form-input-wrapper">
+                    <input type="date"
+                           id="birthdate"
+                           name="birthdate"
+                           class="form-input">
+                    <i class="bi bi-calendar-event form-input-icon"></i>
                 </div>
             </div>
 

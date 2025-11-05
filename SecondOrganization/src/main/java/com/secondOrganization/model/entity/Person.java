@@ -18,8 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
-
+@ToString(exclude = {"assignments", "projects"})
 @Entity
 @Table(name = "person_tbl")
 public class Person extends Base{
@@ -60,10 +59,10 @@ public class Person extends Base{
     @JoinColumn(name = "group_id", nullable = true)
     private OrganizationGroup organizationGroup;
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<ProjectAssignment> assignments = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "PERSON_PROJECT",
             joinColumns = @JoinColumn(name = "p_id"),

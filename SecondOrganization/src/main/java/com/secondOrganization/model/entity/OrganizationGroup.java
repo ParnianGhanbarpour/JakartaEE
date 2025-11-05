@@ -12,7 +12,7 @@ import java.util.List;
 
 @Setter
 @Getter
-@ToString
+@ToString(exclude = {"persons"})
 @NoArgsConstructor
 @SuperBuilder
 
@@ -30,7 +30,7 @@ public class OrganizationGroup extends Base {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @OneToMany(mappedBy = "organizationGroup", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "organizationGroup", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Person> persons = new ArrayList<>();
 
     public void addPerson(Person person) {

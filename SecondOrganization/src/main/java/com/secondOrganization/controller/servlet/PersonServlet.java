@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @WebServlet(urlPatterns = "/person.do")
@@ -38,10 +39,57 @@ public class PersonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            req.setAttribute("personList", personService.findAll());
+            String searchName = req.getParameter("searchName");
+            String searchFamily = req.getParameter("searchFamily");
+            String searchNationalCode = req.getParameter("searchNationalCode");
+
+            List<Person> personList;
+
+            if ((searchName != null && !searchName.trim().isEmpty()) ||
+                    (searchFamily != null && !searchFamily.trim().isEmpty()) ||
+                    (searchNationalCode != null && !searchNationalCode.trim().isEmpty())) {
+
+                log.info("Searching persons - name: {}, family: {}, nationalCode: {}",
+                        searchName, searchFamily, searchNationalCode);
+
+                personList = personService.findAll();
+
+                if (searchName != null && !searchName.trim().isEmpty()) {
+                    final String nameLower = searchName.trim().toLowerCase();
+                    personList = personList.stream()
+                            .filter(p -> p.getName() != null &&
+                                    p.getName().toLowerCase().contains(nameLower))
+                            .collect(Collectors.toList());
+                }
+
+                if (searchFamily != null && !searchFamily.trim().isEmpty()) {
+                    final String familyLower = searchFamily.trim().toLowerCase();
+                    personList = personList.stream()
+                            .filter(p -> p.getFamily() != null &&
+                                    p.getFamily().toLowerCase().contains(familyLower))
+                            .collect(Collectors.toList());
+                }
+
+                if (searchNationalCode != null && !searchNationalCode.trim().isEmpty()) {
+                    final String code = searchNationalCode.trim();
+                    personList = personList.stream()
+                            .filter(p -> p.getNationalCode() != null &&
+                                    p.getNationalCode().contains(code))
+                            .collect(Collectors.toList());
+                }
+
+                log.info("Found {} persons matching search criteria", personList.size());
+            } else {
+                personList = personService.findAll();
+                log.info("Loaded all {} persons", personList.size());
+            }
+
+            req.setAttribute("personList", personList);
             req.setAttribute("genders", Arrays.asList(Gender.values()));
             req.setAttribute("organizationGroupList", organizationGroupService.findAll());
+
             req.getRequestDispatcher("/jsp/person.jsp").forward(req, resp);
+
         } catch (Exception e) {
             log.error("Error loading persons", e);
             throw new ServletException("Cannot load persons", e);
@@ -114,10 +162,6 @@ public class PersonServlet extends HttpServlet {
                 Optional<OrganizationGroup> groupOpt = organizationGroupService.findById(groupId);
                 if (groupOpt.isPresent()) {
                     group = groupOpt.get();
-                } else {
-                    req.setAttribute("error", "گروه سازمانی یافت نشد");
-                    loadDataAndForward(req, resp);
-                    return;
                 }
             }
 
@@ -136,7 +180,7 @@ public class PersonServlet extends HttpServlet {
                 } else {
                     user = User.builder()
                             .username(username)
-                            .password(username + "123")  //temporary password
+                            .password(username + "123")
                             .active(true)
                             .deleted(false)
                             .build();
@@ -155,12 +199,12 @@ public class PersonServlet extends HttpServlet {
 
                 user = User.builder()
                         .username(finalUsername)
-                        .password(nationalCode) // nationalCode=پسورد اولیه
+                        .password(nationalCode)
                         .active(true)
                         .deleted(false)
                         .build();
                 userService.save(user);
-                log.info(" Auto-created User: {}", finalUsername);
+                log.info("Auto-created User: {}", finalUsername);
             }
 
             Person person = Person.builder()
@@ -181,7 +225,7 @@ public class PersonServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/person.do?success=true");
 
         } catch (Exception e) {
-            log.error(" Error saving person", e);
+            log.error("Error saving person", e);
             req.setAttribute("error", "خطا در ذخیره پرسنل: " + e.getMessage());
             loadDataAndForward(req, resp);
         }
@@ -191,11 +235,13 @@ public class PersonServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             long id = Long.parseLong(req.getParameter("id"));
+
             personService.removeById(id);
-            log.info(" Person deleted: {}", id);
+            log.info("Person soft deleted: {}", id);
+
             resp.sendRedirect(req.getContextPath() + "/person.do?deleted=true");
         } catch (Exception e) {
-            log.error(" Error deleting person", e);
+            log.error("Error deleting person", e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
@@ -205,17 +251,10 @@ public class PersonServlet extends HttpServlet {
         try {
             List<Person> personList = personService.findAll();
 
-            log.info("=== DEBUG: Loaded {} persons ===", personList.size());
-            for (Person person : personList) {
-                log.info("Person: {} {} - User: {} - Username: {}",
-                        person.getName(), person.getFamily(),
-                        person.getUser() != null ? "exists" : "null",
-                        person.getUser() != null ? person.getUser().getUsername() : "N/A");
-            }
-
             req.setAttribute("personList", personList);
             req.setAttribute("genders", Arrays.asList(Gender.values()));
             req.setAttribute("organizationGroupList", organizationGroupService.findAll());
+
             req.getRequestDispatcher("/jsp/person.jsp").forward(req, resp);
         } catch (Exception e) {
             throw new ServletException("Cannot load persons", e);

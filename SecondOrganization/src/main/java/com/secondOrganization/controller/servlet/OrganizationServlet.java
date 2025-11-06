@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = "/organization.do")
 @Slf4j
@@ -22,6 +23,13 @@ public class OrganizationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String method = req.getParameter("_method");
+
+        if ("delete".equalsIgnoreCase(method)) {
+            doDelete(req, resp);
+            return;
+        }
+
         try {
             String name = req.getParameter("name");
             String orgType = req.getParameter("type");
@@ -55,12 +63,43 @@ public class OrganizationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            log.info("Loading organizations...");
-            List<Organization> list = service.findAll();
-            log.info("Loaded {} organizations", list.size());
+            String searchName = req.getParameter("searchName");
+            String searchType = req.getParameter("searchType");
+
+            List<Organization> list;
+
+            if ((searchName != null && !searchName.trim().isEmpty()) ||
+                    (searchType != null && !searchType.trim().isEmpty())) {
+
+                log.info("Searching organizations - name: {}, type: {}", searchName, searchType);
+                list = service.findAll();
+
+                if (searchName != null && !searchName.trim().isEmpty()) {
+                    final String nameLower = searchName.trim().toLowerCase();
+                    list = list.stream()
+                            .filter(o -> o.getName() != null &&
+                                    o.getName().toLowerCase().contains(nameLower))
+                            .collect(Collectors.toList());
+                }
+
+                if (searchType != null && !searchType.trim().isEmpty()) {
+                    final String typeLower = searchType.trim().toLowerCase();
+                    list = list.stream()
+                            .filter(o -> o.getOrganizationType() != null &&
+                                    o.getOrganizationType().toLowerCase().contains(typeLower))
+                            .collect(Collectors.toList());
+                }
+
+                log.info("Found {} organizations matching search criteria", list.size());
+            } else {
+                log.info("Loading all organizations...");
+                list = service.findAll();
+                log.info("Loaded {} organizations", list.size());
+            }
 
             req.setAttribute("organizationList", list);
             req.getRequestDispatcher("/jsp/organization.jsp").forward(req, resp);
+
         } catch (Exception e) {
             log.error("Error in doGet: {}", e.getMessage(), e);
             req.setAttribute("error", "خطا در بارگذاری لیست: " + e.getMessage());
@@ -70,26 +109,24 @@ public class OrganizationServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json; charset=UTF-8");
         try {
             String idParam = req.getParameter("id");
             if (idParam == null || idParam.isEmpty()) {
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                resp.getWriter().write("{\"error\": \"ID not provided\"}");
+                log.error("Delete request without ID");
+                resp.sendRedirect(req.getContextPath() + "/organization.do?error=noId");
                 return;
             }
 
             long id = Long.parseLong(idParam);
-            service.removeById(id);
-            log.info("Organization deleted: {}", id);
 
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write("{\"message\": \"Deleted successfully\"}");
+            service.removeById(id);
+            log.info("Organization soft deleted: {}", id);
+
+            resp.sendRedirect(req.getContextPath() + "/organization.do?success=deleted");
 
         } catch (Exception e) {
             log.error("Error in doDelete: {}", e.getMessage(), e);
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
+            resp.sendRedirect(req.getContextPath() + "/organization.do?error=deleteFailed");
         }
     }
 }

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مدیریت سازمان‌ها</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -17,7 +18,7 @@
         .container {
             margin-top: 30px;
         }
-        .form-section, .table-section {
+        .form-section, .table-section, .search-section {
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -29,11 +30,10 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        h2 {
+        h2, h4 {
             color: #919cff;
             font-weight: bold;
             margin-bottom: 25px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
         .form-label {
             font-weight: 600;
@@ -60,6 +60,26 @@
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
+        .btn-search {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+        .btn-clear {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
         .btn-home {
             background: linear-gradient(135deg, #1c3551 0%, #7fbbff 100%);
             color: white;
@@ -72,14 +92,10 @@
             display: inline-block;
             margin-bottom: 20px;
         }
-        .btn-home:hover {
+        .btn-home:hover, .btn-custom:hover, .btn-search:hover, .btn-clear:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
             color: white;
-        }
-        .btn-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
         .table {
             border-radius: 10px;
@@ -121,11 +137,33 @@
             transform: scale(1.05);
             box-shadow: 0 4px 15px rgba(252, 70, 107, 0.4);
         }
+        .search-input-group {
+            position: relative;
+        }
+        .search-input-group .bi-search {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+        }
+        .search-input {
+            padding-right: 45px !important;
+        }
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-
     <a href="${pageContext.request.contextPath}/dashboard.jsp" class="btn-home">
         <i class="bi bi-house-door"></i> بازگشت به داشبورد
     </a>
@@ -133,6 +171,46 @@
     <h2 class="text-center">
         <i class="bi bi-building"></i> سامانه مدیریت سازمان‌ها
     </h2>
+
+    <div class="search-section">
+        <h4 class="mb-4">
+            <i class="bi bi-search"></i> جستجوی سازمان
+        </h4>
+        <form method="get" action="${pageContext.request.contextPath}/organization.do">
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label for="searchName" class="form-label">نام سازمان</label>
+                    <div class="search-input-group">
+                        <input type="text"
+                               id="searchName"
+                               name="searchName"
+                               class="form-control search-input"
+                               placeholder="نام سازمان را وارد کنید"
+                               value="${param.searchName}">
+                        <i class="bi bi-search"></i>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label for="searchType" class="form-label">نوع سازمان</label>
+                    <input type="text"
+                           id="searchType"
+                           name="searchType"
+                           class="form-control"
+                           placeholder="نوع سازمان را وارد کنید"
+                           value="${param.searchType}">
+                </div>
+                <div class="col-md-2 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-search flex-fill">
+                        <i class="bi bi-search"></i> جستجو
+                    </button>
+                    <a href="${pageContext.request.contextPath}/organization.do"
+                       class="btn btn-clear">
+                        <i class="bi bi-x-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <div class="form-section">
         <h4 class="mb-4">افزودن سازمان جدید</h4>
@@ -158,11 +236,33 @@
     </div>
 
     <div class="table-section">
-        <h4 class="text-center mb-4">لیست سازمان‌های ثبت‌شده</h4>
+        <h4 class="text-center mb-4">
+            <c:if test="${not empty param.searchName or not empty param.searchType}">
+                نتایج جستجو
+            </c:if>
+            <c:if test="${empty param.searchName and empty param.searchType}">
+                لیست سازمان‌های ثبت‌شده
+            </c:if>
+        </h4>
 
         <c:if test="${empty organizationList}">
-            <div class="alert alert-info text-center" role="alert">
-                هیچ سازمانی ثبت نشده است. لطفاً سازمان جدید اضافه کنید.
+            <div class="no-results">
+                <i class="bi bi-inbox"></i>
+                <h5>
+                    <c:choose>
+                        <c:when test="${not empty param.searchName or not empty param.searchType}">
+                            نتیجه‌ای یافت نشد!
+                        </c:when>
+                        <c:otherwise>
+                            هیچ سازمانی ثبت نشده است.
+                        </c:otherwise>
+                    </c:choose>
+                </h5>
+                <p class="text-muted">
+                    <c:if test="${not empty param.searchName or not empty param.searchType}">
+                        لطفاً معیارهای جستجوی دیگری امتحان کنید
+                    </c:if>
+                </p>
             </div>
         </c:if>
 
@@ -199,7 +299,8 @@
                             <td>
                                 <form action="${pageContext.request.contextPath}/organization.do"
                                       method="post"
-                                      onsubmit="return confirm('آیا از حذف «${o.name}» مطمئن هستید؟');">
+                                      onsubmit="return confirm('آیا از حذف «${o.name}» مطمئن هستید؟');"
+                                      style="display:inline;">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <input type="hidden" name="id" value="${o.id}"/>
                                     <button type="submit" class="btn btn-delete">
@@ -211,6 +312,15 @@
                     </c:forEach>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="mt-3 text-center">
+                <small class="text-muted">
+                    تعداد نتایج: ${organizationList.size()}
+                    <c:if test="${not empty param.searchName or not empty param.searchType}">
+                        | <a href="${pageContext.request.contextPath}/organization.do">نمایش همه</a>
+                    </c:if>
+                </small>
             </div>
         </c:if>
     </div>

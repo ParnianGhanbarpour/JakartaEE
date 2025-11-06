@@ -172,6 +172,106 @@
             color: white;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+        .search-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            margin-bottom: 30px;
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.5);
+            color: white;
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .btn-clear:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+            color: white;
+        }
+
+        .projects-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .btn-view-projects {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .btn-view-projects:hover {
+            transform: scale(1.05);
+            color: white;
+        }
+
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            border-bottom: none;
+        }
+
+        .project-item {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .project-item:hover {
+            border-color: #fa709a;
+            transform: translateX(-5px);
+            box-shadow: 0 4px 15px rgba(250, 112, 154, 0.2);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
     </style>
 </head>
 <body>
@@ -185,6 +285,43 @@
         <i class="bi bi-person-badge"></i>
         <h2>سامانه مدیریت پرسنل سازمان</h2>
         <p>ثبت و مدیریت اطلاعات کارکنان و پرسنل</p>
+    </div>
+
+    <div class="search-section">
+        <h4 class="mb-4">
+            <i class="bi bi-search"></i> جستجوی پرسنل
+        </h4>
+        <form method="get" action="${pageContext.request.contextPath}/person.do">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="searchName" class="form-label">نام</label>
+                    <input type="text" id="searchName" name="searchName"
+                           class="form-control" value="${param.searchName}"
+                           placeholder="نام را وارد کنید">
+                </div>
+                <div class="col-md-4">
+                    <label for="searchFamily" class="form-label">نام خانوادگی</label>
+                    <input type="text" id="searchFamily" name="searchFamily"
+                           class="form-control" value="${param.searchFamily}"
+                           placeholder="نام خانوادگی را وارد کنید">
+                </div>
+                <div class="col-md-4">
+                    <label for="searchNationalCode" class="form-label">کد ملی</label>
+                    <input type="text" id="searchNationalCode" name="searchNationalCode"
+                           class="form-control" value="${param.searchNationalCode}"
+                           placeholder="کد ملی را وارد کنید" maxlength="10">
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-search me-2">
+                        <i class="bi bi-search"></i> جستجو
+                    </button>
+                    <a href="${pageContext.request.contextPath}/person.do"
+                       class="btn btn-clear">
+                        <i class="bi bi-x-circle"></i> پاک کردن فیلترها
+                    </a>
+                </div>
+            </div>
+        </form>
     </div>
 
     <c:if test="${param.success == 'true'}">
@@ -322,9 +459,23 @@
         </h4>
 
         <c:if test="${empty personList}">
-            <div class="alert alert-info text-center" role="alert">
-                <i class="bi bi-info-circle"></i>
-                هیچ پرسنلی ثبت نشده است. لطفاً پرسنل جدید اضافه کنید.
+            <div class="no-results">
+                <i class="bi bi-inbox" style="font-size: 48px; color: #cbd5e1; margin-bottom: 15px;"></i>
+                <h5 class="text-muted">
+                    <c:choose>
+                        <c:when test="${not empty param.searchName or not empty param.searchFamily or not empty param.searchNationalCode}">
+                            نتیجه‌ای برای جستجوی شما یافت نشد!
+                        </c:when>
+                        <c:otherwise>
+                            هیچ پرسنلی ثبت نشده است. لطفاً پرسنل جدید اضافه کنید.
+                        </c:otherwise>
+                    </c:choose>
+                </h5>
+                <c:if test="${not empty param.searchName or not empty param.searchFamily or not empty param.searchNationalCode}">
+                    <a href="${pageContext.request.contextPath}/person.do" class="btn btn-custom mt-3">
+                        <i class="bi bi-arrow-counterclockwise"></i> نمایش همه پرسنل
+                    </a>
+                </c:if>
             </div>
         </c:if>
 
@@ -341,6 +492,7 @@
                         <th class="text-center">تاریخ تولد</th>
                         <th>نام کاربری</th>
                         <th>گروه سازمانی</th>
+                        <th class="text-center">پروژه‌ها</th>
                         <th class="text-center">عملیات</th>
                     </tr>
                     </thead>
@@ -350,9 +502,9 @@
                             <td class="text-center"><strong>${status.index + 1}</strong></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                    <span class="person-avatar me-2">
-                            ${person.name.substring(0,1)}${person.family.substring(0,1)}
-                    </span>
+                                    <span class="person-avatar me-2">
+                                            ${person.name.substring(0,1)}${person.family.substring(0,1)}
+                                    </span>
                                     <strong>${person.name} ${person.family}</strong>
                                 </div>
                             </td>
@@ -362,24 +514,24 @@
                             <td class="text-center">
                                 <c:choose>
                                     <c:when test="${person.gender == 'male'}">
-                        <span class="gender-badge gender-male">
-                            <i class="bi bi-gender-male"></i> مرد
-                        </span>
+                                        <span class="gender-badge gender-male">
+                                            <i class="bi bi-gender-male"></i> مرد
+                                        </span>
                                     </c:when>
                                     <c:otherwise>
-                        <span class="gender-badge gender-female">
-                            <i class="bi bi-gender-female"></i> زن
-                        </span>
+                                        <span class="gender-badge gender-female">
+                                            <i class="bi bi-gender-female"></i> زن
+                                        </span>
                                     </c:otherwise>
                                 </c:choose>
                             </td>
                             <td class="text-center">
                                 <c:choose>
                                     <c:when test="${not empty person.salary}">
-                        <span class="salary-badge">
-                            <i class="bi bi-currency-dollar"></i>
-                            ${person.salary}
-                        </span>
+                                        <span class="salary-badge">
+                                            <i class="bi bi-currency-dollar"></i>
+                                            ${person.salary}
+                                        </span>
                                     </c:when>
                                     <c:otherwise>
                                         <small class="text-muted">-</small>
@@ -399,10 +551,10 @@
                             <td>
                                 <c:choose>
                                     <c:when test="${not empty person.user and not empty person.user.username}">
-                        <span class="badge bg-success">
-                            <i class="bi bi-person-check"></i>
-                            ${person.user.username}
-                        </span>
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-person-check"></i>
+                                            ${person.user.username}
+                                        </span>
                                     </c:when>
                                     <c:otherwise>
                                         <small class="text-muted">
@@ -423,6 +575,76 @@
                                     </c:when>
                                     <c:otherwise>
                                         <small class="text-muted">بدون گروه</small>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td class="text-center">
+                                <c:choose>
+                                    <c:when test="${not empty person.projects && !empty person.projects}">
+                                        <button type="button" class="btn btn-view-projects"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#projectsModal${person.id}">
+                                            <i class="bi bi-kanban"></i> ${person.projects.size()} پروژه
+                                        </button>
+
+                                        <div class="modal fade" id="projectsModal${person.id}" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">
+                                                            <i class="bi bi-kanban"></i>
+                                                            پروژه‌های ${person.name} ${person.family}
+                                                        </h5>
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                                data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <c:forEach var="project" items="${person.projects}">
+                                                            <div class="project-item">
+                                                                <div class="d-flex justify-content-between align-items-start">
+                                                                    <div>
+                                                                        <h6 class="mb-2">
+                                                                            <i class="bi bi-bookmark-fill" style="color: #fa709a;"></i>
+                                                                                ${project.title}
+                                                                        </h6>
+                                                                        <p class="mb-2 text-muted small">
+                                                                                ${project.description}
+                                                                        </p>
+                                                                        <div class="d-flex gap-3 flex-wrap">
+                                                                            <small>
+                                                                                <i class="bi bi-calendar-check"></i>
+                                                                                شروع: ${project.startDate}
+                                                                            </small>
+                                                                            <small>
+                                                                                <i class="bi bi-calendar-x"></i>
+                                                                                پایان: ${project.endDate}
+                                                                            </small>
+                                                                            <small>
+                                                                                <i class="bi bi-cash-stack"></i>
+                                                                                بودجه: ${project.budget}
+                                                                            </small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <span class="badge"
+                                                                          style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                                                            ${project.status.persianTitle}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </c:forEach>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">بستن</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <small class="text-muted">
+                                            <i class="bi bi-x-circle"></i> بدون پروژه
+                                        </small>
                                     </c:otherwise>
                                 </c:choose>
                             </td>
@@ -448,11 +670,17 @@
                     <i class="bi bi-bar-chart-fill"></i>
                     <strong>تعداد کل پرسنل:</strong>
                     <span class="badge bg-primary fs-6 ms-2">${personList.size()}</span>
+                    <c:if test="${not empty param.searchName or not empty param.searchFamily or not empty param.searchNationalCode}">
+                        <span class="ms-3 text-success">
+                            <i class="bi bi-funnel"></i> جستجو فعال
+                        </span>
+                    </c:if>
                 </div>
             </div>
         </c:if>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.getElementById('nationalCode').addEventListener('input', function(e) {

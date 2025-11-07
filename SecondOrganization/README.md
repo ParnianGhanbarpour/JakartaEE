@@ -230,10 +230,11 @@ http://localhost:80/SecondOrganization/
 ### حساب‌های پیش‌فرض
 سیستم با 3 حساب آزمایشی راه‌اندازی می‌شود:
 
-نقش	نام کاربری 	رمز عبور	دسترسی‌ها
-👑 Admin	admin	admin123	دسترسی کامل به سیستم
-👔 Manager	manager	manager123	مدیریت دپارتمان
-👤 User	 user	user123	عملیات پایه
+| نقش | نام کاربری | رمز عبور | دسترسی‌ها |
+|-----|------------|----------|-----------|
+| 👑 Admin | admin | admin123 | دسترسی کامل به سیستم |
+| 👔 Manager | manager | manager123 | مدیریت دپارتمان |
+| 👤 User | user | user123 | عملیات پایه |
 
 ### 📖 استفاده
 سناریوی کاری استاندارد
@@ -266,13 +267,13 @@ http://localhost:80/SecondOrganization/
 
 ## 🌐 مستندات API
 ### Organizations API
-
-Method	Endpoint	توضیحات
-GET	/api/organization	دریافت تمام سازمان‌ها
-GET	/api/organization/{id}	دریافت سازمان با ID
-POST	/api/organization	ایجاد سازمان جدید
-PUT	/api/organization	به‌روزرسانی سازمان
-DELETE	/api/organization/{id}	حذف سازمان
+| Method | Endpoint | توضیحات |
+|--------|----------|----------|
+| GET | `/api/organization` | دریافت تمام سازمان‌ها |
+| GET | `/api/organization/{id}` | دریافت سازمان با ID |
+| POST | `/api/organization` | ایجاد سازمان جدید |
+| PUT | `/api/organization` | به‌روزرسانی سازمان |
+| DELETE | `/api/organization/{id}` | حذف سازمان |
 
 ## 🤝 مشارکت
 

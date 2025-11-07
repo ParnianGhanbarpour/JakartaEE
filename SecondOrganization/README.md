@@ -6,6 +6,8 @@
 
 [ویژگی‌ها](#-ویژگیها) • [نصب](#-نصب-و-راهاندازی) • [استفاده](#-استفاده) • [API](#-مستندات-api) • [مشارکت](#-مشارکت)
 
+
+
 </div>
 
 ## 📑 فهرست
@@ -263,6 +265,148 @@ http://localhost:80/SecondOrganization/
 - سازمان: شرکت فناوری پارس
 - ذخیره
 ```
+#### 4️⃣ ایجاد دپارتمان
+```text
+دپارتمان‌ها → افزودن دپارتمان جدید
+
+- نام: دپارتمان IT
+- رشته فعالیت: فناوری اطلاعات
+- بودجه: 50,000,000
+- شعبه: شعبه مرکزی
+- ذخیره
+```
+
+#### 5️⃣ ثبت پرسنل
+```text
+پرسنل → افزودن پرسنل جدید
+
+- نام و نام خانوادگی
+- کد ملی (یکتا)
+- جنسیت
+- حقوق
+- گروه سازمانی
+- ذخیره
+```
+
+#### 6️⃣ ایجاد پروژه
+```text
+پروژه‌ها → افزودن پروژه جدید
+
+- عنوان: پروژه توسعه سایت
+- بودجه: 100,000,000
+- تاریخ شروع و پایان
+- وضعیت: فعال
+- اعضای تیم: انتخاب از لیست پرسنل
+- ذخیره
+```
+## استفاده از REST API
+دریافت لیست سازمان‌ها
+```bash
+curl -X GET http://localhost:8080/SecondOrganization/api/organization \
+  -H "Content-Type: application/json"
+  ```
+به‌روزرسانی پروژه
+```bash
+curl -X PUT http://localhost:8080/SecondOrganization/api/project/1 \
+-H "Content-Type: application/json" \
+-d '{
+"status": "COMPLETED"
+}'
+```
+حذف پرسنل
+```curl -X DELETE http://localhost:8080/SecondOrganization/api/persons/5
+```
+
+---
+
+## 📁 ساختار پروژه
+```
+SecondOrganization/
+│
+├── 📂 src/main/
+│   ├── 📂 java/com/secondOrganization/
+│   │   ├── 📂 config/                    # پیکربندی‌ها
+│   │   │   ├── DataInitializer.java      # داده‌های اولیه
+│   │   │   └── LoggingInitializer.java   # تنظیمات لاگ
+│   │   │
+│   │   ├── 📂 controller/                # کنترلرها
+│   │   │   ├── 📂 api/                   # REST APIs
+│   │   │   │   ├── OrganizationApi.java
+│   │   │   │   ├── PersonApi.java
+│   │   │   │   ├── ProjectApi.java
+│   │   │   │   ├── DepartmentApi.java
+│   │   │   │   └── BranchApi.java
+│   │   │   │
+│   │   │   ├── 📂 servlet/               # Web Servlets
+│   │   │   │   ├── LoginServlet.java
+│   │   │   │   ├── SignupServlet.java
+│   │   │   │   ├── OrganizationServlet.java
+│   │   │   │   └── PersonServlet.java
+│   │   │   │
+│   │   │   ├── 📂 filter/                # فیلترها
+│   │   │   └── 📂 exception/             # مدیریت خطا
+│   │   │
+│   │   ├── 📂 model/                     # مدل‌ها
+│   │   │   ├── 📂 entity/                # Entity Classes
+│   │   │   │   ├── Base.java
+│   │   │   │   ├── Organization.java
+│   │   │   │   ├── Branch.java
+│   │   │   │   ├── Department.java
+│   │   │   │   ├── Person.java
+│   │   │   │   ├── Project.java
+│   │   │   │   ├── User.java
+│   │   │   │   └── Role.java
+│   │   │   │
+│   │   │   └── 📂 enums/                 # Enumerations
+│   │   │       ├── Gender.java
+│   │   │       ├── ProjectStatus.java
+│   │   │       └── Role.java
+│   │   │
+│   │   ├── 📂 repository/                # لایه داده
+│   │   │   ├── BaseRepository.java
+│   │   │   ├── OrganizationRepository.java
+│   │   │   └── PersonRepository.java
+│   │   │
+│   │   ├── 📂 service/                   # Business Logic
+│   │   │   ├── OrganizationService.java
+│   │   │   ├── PersonService.java
+│   │   │   └── 📂 impl/
+│   │   │       ├── OrganizationServiceImpl.java
+│   │   │       └── PersonServiceImpl.java
+│   │   │
+│   │   └── 📂 utils/                     # ابزارهای کمکی
+│   │
+│   ├── 📂 resources/
+│   │   ├── 📂 META-INF/
+│   │   │   ├── beans.xml
+│   │   │   └── persistence.xml
+│   │   └── logback.xml
+│   │
+│   └── 📂 webapp/
+│       ├── 📂 WEB-INF/
+│       │   ├── web.xml
+│       │   └── resources.xml
+│       │
+│       ├── 📂 jsp/                       # صفحات JSP
+│       │   ├── organization.jsp
+│       │   ├── department.jsp
+│       │   ├── branch.jsp
+│       │   ├── person.jsp
+│       │   ├── project.jsp
+│       │   └── organizationGroup.jsp
+│       │
+│       ├── 📂 assets/
+│       │   ├── 📂 css/
+│       │   └── 📂 js/
+│       │
+│       ├── login.jsp
+│       ├── signup.jsp
+│       ├── dashboard.jsp
+│       └── index.jsp
+│
+└── 📄 pom.xml                            # Maven Config
+
+```
 
 ## 🌐 مستندات API
 ### Organizations API
@@ -299,6 +443,14 @@ git push origin feature/amazing-feature
 ایجاد Pull Request
 ```
 5. ایجاد Pull Request
+
+
+
+## 👨‍💻 توسعه‌دهنده
+<div align="center">
+Parnian Ghanbarpour 
+
+</div>
 
 [⬆ بازگشت به بالا
 ](#-سیستم-مدیریت-سازمانی---secondorganization)

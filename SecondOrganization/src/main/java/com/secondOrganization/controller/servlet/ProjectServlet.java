@@ -9,10 +9,13 @@ import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,18 +54,17 @@ public class ProjectServlet extends HttpServlet {
             String description = req.getParameter("description");
             LocalDateTime startDate = LocalDateTime.parse(req.getParameter("startDate"));
             LocalDateTime endDate = LocalDateTime.parse(req.getParameter("endDate"));
-            double budget = Double.parseDouble(req.getParameter("budget"));
+            BigDecimal budget = BigDecimal.valueOf(Double.parseDouble(req.getParameter("budget")));
             ProjectStatus status = ProjectStatus.valueOf(req.getParameter("status"));
 
-            Project project = Project.builder()
-                    .title(title)
-                    .description(description)
-                    .startDate(startDate)
-                    .endDate(endDate)
-                    .budget(budget)
-                    .status(status)
-                    .deleted(false)
-                    .build();
+            Project project = new Project();
+            project.setTitle(title);
+            project.setDescription(description);
+            project.setStartDate(startDate);
+            project.setEndDate(endDate);
+            project.setBudget(budget);
+            project.setStatus(status);
+            project.setDeleted(false);
 
             projectService.save(project);
             log.info("Project created: {}", project.getTitle());
@@ -179,7 +181,15 @@ public class ProjectServlet extends HttpServlet {
     private void loadDataAndForward(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         try {
-            List<Project> projects = projectService.findAll();
+            List<Project> projects;
+            try {
+                projects = projectService.findAll();
+            } catch (Exception e) {
+                log.error("Error loading projects, trying fallback...", e);
+                projects = Collections.emptyList();
+                req.setAttribute("error", "برخی پروژه‌ها دارای داده‌های نامعتبر هستند");
+            }
+
             req.setAttribute("projectList", projects);
 
             List<Person> persons = personService.findAll();
@@ -189,8 +199,8 @@ public class ProjectServlet extends HttpServlet {
 
             req.getRequestDispatcher("/jsp/project.jsp").forward(req, resp);
         } catch (Exception e) {
-            log.error("Error loading projects", e);
-            throw new ServletException("Cannot load projects", e);
+            log.error("Error loading data", e);
+            throw new ServletException("Cannot load data", e);
         }
     }
 }

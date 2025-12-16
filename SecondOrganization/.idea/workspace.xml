@@ -9,14 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="Dto &amp; security">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/utils/GeneratePasswordHashes.java" afterDir="false" />
+    <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment=" security">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/d1dda897-902b-411a-a172-0cf41442b8b7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d1dda897-902b-411a-a172-0cf41442b8b7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/SignupServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/SignupServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/GlobalExceptionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/GlobalExceptionMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/ProjectServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/ProjectServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Project.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/signup.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/signup.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/enums/ProjectStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/enums/ProjectStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/PersonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/PersonServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/ProjectServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/ProjectServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/utils/GeneratePasswordHashes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/utils/GeneratePasswordHashes.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,6 +242,18 @@
         </option>
       </method>
     </configuration>
+    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
+      <deployment />
+      <server-settings />
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="login.jsp" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" temporary="true" APPLICATION_SERVER_NAME="Tomcat 9.0.107" ALTERNATIVE_JRE_ENABLED="false">
       <option name="OPEN_IN_BROWSER_URL" value="http://localhost:80/login.jsp" />
       <option name="UPDATING_POLICY" value="hot-swap-classes" />
@@ -424,7 +439,7 @@
       <workItem from="1763551793198" duration="5000" />
       <workItem from="1765872442890" duration="12913000" />
       <workItem from="1765895387405" duration="2240000" />
-      <workItem from="1765898006725" duration="5958000" />
+      <workItem from="1765898006725" duration="18709000" />
     </task>
     <task id="LOCAL-00001" summary="organization">
       <option name="closed" value="true" />
@@ -762,7 +777,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765885089559</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary=" security">
+      <option name="closed" value="true" />
+      <created>1765904151445</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1765904151445</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -775,7 +798,8 @@
     <MESSAGE value="debug" />
     <MESSAGE value="readME" />
     <MESSAGE value="Dto &amp; security" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dto &amp; security" />
+    <MESSAGE value=" security" />
+    <option name="LAST_COMMIT_MESSAGE" value=" security" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

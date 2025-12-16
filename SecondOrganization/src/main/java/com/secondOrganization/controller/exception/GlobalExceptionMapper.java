@@ -5,11 +5,13 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
+@NoArgsConstructor
 
 @Provider
 class GlobalExceptionMapper implements ExceptionMapper<Exception> {

@@ -48,6 +48,7 @@ public class User extends Base implements Serializable {
     @Enumerated(EnumType.STRING)
     private List<com.secondOrganization.model.entity.enums.Role> roleList = new ArrayList<>();
 
+
     public void addRole(com.secondOrganization.model.entity.enums.Role role) {
         if (roleList == null) {
             roleList = new ArrayList<>();

@@ -82,8 +82,8 @@ public class PersonServiceImpl implements PersonService, Serializable {
         TypedQuery<Person> query = entityManager.createQuery(
                 "SELECT DISTINCT p FROM Person p " +
                         "LEFT JOIN FETCH p.user " +
-                        "LEFT JOIN FETCH p.organizationGroup g " +
-                        "LEFT JOIN FETCH g.department " +
+                        "LEFT JOIN FETCH p.organizationGroup " +
+                        "LEFT JOIN FETCH p.organizationGroup.department " +
                         "WHERE p.deleted = false",
                 Person.class
         );

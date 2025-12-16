@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"assignments", "persons"})
-@SuperBuilder
+@Builder(toBuilder = true)
 
 @Entity
 @Table(name = "project_tbl")
@@ -36,13 +37,13 @@ public class Project extends Base {
     private LocalDateTime startDate;
 
     @Column(name = "end_date", nullable = false)
-    @Future(message = "تاریخ پایان باید در آینده باشد")
     private LocalDateTime endDate;
 
-    @Column(name = "budget", nullable = false, precision = 14, scale = 2)
+    @Column(name = "budget", nullable = false, precision = 20, scale = 2)
     @DecimalMin(value = "0.0", inclusive = false, message = "بودجه باید بیشتر از صفر باشد")
-    @Digits(integer = 12, fraction = 2, message = "بودجه باید عددی معتبر با حداکثر ۱۲ رقم صحیح و ۲ رقم اعشار باشد")
-    private double budget;
+    @Digits(integer = 18, fraction = 2, message = "بودجه باید عددی معتبر با حداکثر ۱۸ رقم صحیح و ۲ رقم اعشار باشد")
+    private BigDecimal budget;
+
 
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR2(20)")
     @Enumerated(EnumType.STRING)

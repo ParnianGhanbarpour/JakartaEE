@@ -30,7 +30,8 @@ public class GeneratePasswordHashes {
         String[][] remainingUsers = {
                 {"parnian", "Parnian123"},
                 {"fateme12", "fateme12123"},
-                {"amir123", "amir123123"}
+                {"amir123", "amir123123"},
+                {"user", "user123"}
         };
 
         for (String[] user : remainingUsers) {

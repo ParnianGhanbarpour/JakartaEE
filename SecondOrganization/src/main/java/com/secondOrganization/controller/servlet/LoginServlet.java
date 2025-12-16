@@ -3,6 +3,7 @@ package com.secondOrganization.controller.servlet;
 import com.secondOrganization.model.entity.*;
 import com.secondOrganization.model.entity.enums.Gender;
 import com.secondOrganization.service.*;
+import com.secondOrganization.utils.PasswordUtil;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -190,10 +191,9 @@ public class LoginServlet extends HttpServlet {
                 return;
             }
 
-            Optional<User> userOpt = userService.findByUsernameAndPassword(username, password);
+            Optional<User> userOpt = userService.findByUsername(username);
 
             if (userOpt.isEmpty()) {
-                log.warn(" Failed login attempt for user: {}", username);
                 req.setAttribute("loginError", "نام کاربری یا رمز عبور اشتباه است");
                 req.getRequestDispatcher("/login.jsp").forward(req, resp);
                 return;
@@ -201,9 +201,8 @@ public class LoginServlet extends HttpServlet {
 
             User user = userOpt.get();
 
-            if (!user.isActive()) {
-                log.warn(" Inactive user tried to login: {}", username);
-                req.setAttribute("loginError", "حساب کاربری شما غیرفعال است");
+            if (!PasswordUtil.checkPassword(password, user.getPassword())) {
+                req.setAttribute("loginError", "نام کاربری یا رمز عبور اشتباه است");
                 req.getRequestDispatcher("/login.jsp").forward(req, resp);
                 return;
             }

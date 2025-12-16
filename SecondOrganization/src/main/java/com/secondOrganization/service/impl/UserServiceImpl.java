@@ -5,6 +5,7 @@ import com.secondOrganization.model.entity.Department;
 import com.secondOrganization.model.entity.User;
 import com.secondOrganization.model.entity.enums.Role;
 import com.secondOrganization.service.UserService;
+import com.secondOrganization.utils.PasswordUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -27,17 +28,29 @@ public class UserServiceImpl implements UserService, Serializable {
 
     @Transactional
     @Override
-    public void save(User user)  throws Exception {
+    public void save(User user) throws Exception {
         log.info("Saving user: {}", user.getUsername());
 
         try {
-            Optional<User> existing = findByUsername(user.getUsername());
+            if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+                throw new IllegalArgumentException("Username cannot be null or empty");
+            }
+
+            if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+                throw new IllegalArgumentException("Password cannot be null or empty");
+            }
+
+            Optional<User> existing = findByUsername(user.getUsername().trim());
             if (existing.isPresent()) {
                 String msg = "Username already exists: " + user.getUsername();
                 log.warn(msg);
                 throw new IllegalArgumentException(msg);
             }
 
+            String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+
+            user.setUsername(user.getUsername().trim());
             user.setActive(true);
             user.setDeleted(false);
 
@@ -48,16 +61,28 @@ public class UserServiceImpl implements UserService, Serializable {
 
         } catch (ConstraintViolationException e) {
             Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+            StringBuilder errorMsg = new StringBuilder("Validation errors: ");
+
             for (ConstraintViolation<?> violation : violations) {
                 log.error("Validation error: {} = {}",
                         violation.getPropertyPath(),
                         violation.getMessage());
+                errorMsg.append(violation.getPropertyPath())
+                        .append(": ")
+                        .append(violation.getMessage())
+                        .append("; ");
             }
-            throw new Exception("Validation failed for user: " + user.getUsername(), e);
+
+            throw new Exception(errorMsg.toString(), e);
+
+        } catch (IllegalArgumentException e) {
+            log.warn("Business rule violation: {}", e.getMessage());
+            throw e;
 
         } catch (Exception e) {
-            log.error("Error saving user {}: {}", user.getUsername(), e.getMessage(), e);
-            throw e;
+            log.error("Unexpected error saving user {}: {}",
+                    user.getUsername(), e.getMessage(), e);
+            throw new Exception("Failed to save user: " + e.getMessage(), e);
         }
     }
 
@@ -153,49 +178,69 @@ public class UserServiceImpl implements UserService, Serializable {
     }
 
 
-    @Transactional
+//    @Transactional
+//    @Override
+//    public Optional<User> findByUsernameAndPassword(String username, String password) throws Exception {
+//        log.debug("Attempting authentication for user: {}", username);
+//
+//        if (username == null || password == null) {
+//            return Optional.empty();
+//        }
+//
+//        try {
+//            TypedQuery<User> query = entityManager.createQuery(
+//                    "SELECT u FROM User u WHERE u.username = :username AND u.deleted = false",
+//                    User.class
+//            );
+//            query.setParameter("username", username.trim());
+//
+//            List<User> results = query.getResultList();
+//
+//            if (results.isEmpty()) {
+//                log.warn(" User not found: {}", username);
+//                return Optional.empty();
+//            }
+//
+//            User user = results.get(0);
+//
+//            if (user.getPassword().equals(password)) {
+//                if (!user.isActive()) {
+//                    log.warn(" User is inactive: {}", username);
+//                    return Optional.empty();
+//                }
+//
+//                log.info(" Authentication successful for user: {}", username);
+//                return Optional.of(user);
+//            } else {
+//                log.warn(" Invalid password for user: {}", username);
+//                return Optional.empty();
+//            }
+//
+//        } catch (Exception e) {
+//            log.error("Error during authentication for user {}: {}", username, e.getMessage());
+//            throw e;
+//        }
+//    }
+
     @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) throws Exception {
-        log.debug("Attempting authentication for user: {}", username);
 
-        if (username == null || password == null) {
-            return Optional.empty();
+        Optional<User> userOpt = findByUsername(username);
+        if (userOpt.isEmpty()) return Optional.empty();
+
+        User user = userOpt.get();
+
+        if (!user.isActive()) return Optional.empty();
+
+        if (PasswordUtil.checkPassword(password, user.getPassword())) {
+            log.info(" Authentication successful for user: {}", username);
+            return Optional.of(user);
         }
 
-        try {
-            TypedQuery<User> query = entityManager.createQuery(
-                    "SELECT u FROM User u WHERE u.username = :username AND u.deleted = false",
-                    User.class
-            );
-            query.setParameter("username", username.trim());
-
-            List<User> results = query.getResultList();
-
-            if (results.isEmpty()) {
-                log.warn(" User not found: {}", username);
-                return Optional.empty();
-            }
-
-            User user = results.get(0);
-
-            if (user.getPassword().equals(password)) {
-                if (!user.isActive()) {
-                    log.warn(" User is inactive: {}", username);
-                    return Optional.empty();
-                }
-
-                log.info(" Authentication successful for user: {}", username);
-                return Optional.of(user);
-            } else {
-                log.warn(" Invalid password for user: {}", username);
-                return Optional.empty();
-            }
-
-        } catch (Exception e) {
-            log.error("Error during authentication for user {}: {}", username, e.getMessage());
-            throw e;
-        }
+        log.warn(" Invalid password for user: {}", username);
+        return Optional.empty();
     }
+
 
 
     @Transactional

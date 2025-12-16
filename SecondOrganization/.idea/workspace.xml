@@ -9,13 +9,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="debug">
+    <list default="true" id="3e06608e-4e6e-474d-80ee-2c5d35475ef5" name="Changes" comment="readME">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/BusinessException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/DuplicateResourceException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/ErrorCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/ErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/GlobalExceptionMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/ResourceNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/exception/ValidationException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/dto/PersonDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/model/Mapper/PersonMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/utils/PasswordUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/person-ajax.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/OrganizationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/OrganizationServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/PersonServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/PersonServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/organization.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/organization.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/person.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/person.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/project.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/project.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/PersonApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/api/PersonApi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/controller/servlet/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/DepartmentServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/DepartmentServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/PersonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/PersonServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/secondOrganization/service/impl/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +39,9 @@
         <option value="HTML File" />
         <option value="cdi.beans_4_0" />
         <option value="package.json" />
-        <option value="Jsp File" />
+        <option value="Enum" />
         <option value="Class" />
+        <option value="Jsp File" />
       </list>
     </option>
   </component>
@@ -106,6 +118,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.secondOrganization.controller.exception" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\pavilion\Desktop\JavaEEExercise\SecondOrganization\src\main\resources" />
       <recent name="C:\Users\pavilion\Desktop\JavaEEExercise\SecondOrganization\src\main\webapp\assets" />
@@ -218,18 +233,6 @@
         <option name="BuildArtifacts" enabled="true">
           <artifact name="SecondOrganization:war exploded" />
         </option>
-      </method>
-    </configuration>
-    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
-      <deployment />
-      <server-settings />
-      <predefined_log_file enabled="true" id="Tomcat" />
-      <predefined_log_file enabled="true" id="Tomcat Catalina" />
-      <predefined_log_file id="Tomcat Manager" />
-      <predefined_log_file id="Tomcat Host Manager" />
-      <predefined_log_file id="Tomcat Localhost Access" />
-      <method v="2">
-        <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="login.jsp" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" temporary="true" APPLICATION_SERVER_NAME="Tomcat 9.0.107" ALTERNATIVE_JRE_ENABLED="false">
@@ -410,7 +413,10 @@
       <workItem from="1762235980919" duration="34363000" />
       <workItem from="1762295968053" duration="860000" />
       <workItem from="1762324541630" duration="38576000" />
-      <workItem from="1762446762618" duration="5627000" />
+      <workItem from="1762446762618" duration="6574000" />
+      <workItem from="1762488012336" duration="8508000" />
+      <workItem from="1763551793198" duration="5000" />
+      <workItem from="1765872442890" duration="12065000" />
     </task>
     <task id="LOCAL-00001" summary="organization">
       <option name="closed" value="true" />
@@ -700,7 +706,47 @@
       <option name="project" value="LOCAL" />
       <updated>1762369224729</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="debug">
+      <option name="closed" value="true" />
+      <created>1762454933565</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1762454933565</updated>
+    </task>
+    <task id="LOCAL-00038" summary="debug">
+      <option name="closed" value="true" />
+      <created>1762495277882</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1762495277882</updated>
+    </task>
+    <task id="LOCAL-00039" summary="debug">
+      <option name="closed" value="true" />
+      <created>1762495523841</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1762495523841</updated>
+    </task>
+    <task id="LOCAL-00040" summary="debug">
+      <option name="closed" value="true" />
+      <created>1762495574235</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1762495574235</updated>
+    </task>
+    <task id="LOCAL-00041" summary="readME">
+      <option name="closed" value="true" />
+      <created>1762496836276</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1762496836276</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -711,7 +757,8 @@
     <MESSAGE value="organization" />
     <MESSAGE value="debug organization" />
     <MESSAGE value="debug" />
-    <option name="LAST_COMMIT_MESSAGE" value="debug" />
+    <MESSAGE value="readME" />
+    <option name="LAST_COMMIT_MESSAGE" value="readME" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -720,11 +767,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/secondOrganization/model/entity/Branch.java</url>
           <line>46</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/webapp/jsp/organizationGroup.jsp</url>
-          <line>39</line>
-          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

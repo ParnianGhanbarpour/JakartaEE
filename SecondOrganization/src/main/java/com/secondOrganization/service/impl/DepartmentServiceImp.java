@@ -140,4 +140,15 @@ public class DepartmentServiceImp implements DepartmentService, Serializable {
             throw new Exception("خطا در یافتن دپارتمان با نام", e);
         }
     }
+
+    public List<Department> findDepartmentsWithHighBudget() throws Exception {
+        TypedQuery<Department> query = entityManager.createQuery(
+                "SELECT d FROM Department d " +
+                        "WHERE d.budget > (SELECT AVG(d2.budget) FROM Department d2) " +
+                        "AND d.deleted = false " +
+                        "ORDER BY d.budget DESC",
+                Department.class
+        );
+        return query.getResultList();
+    }
 }

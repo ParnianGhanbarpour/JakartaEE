@@ -630,6 +630,15 @@
     const username = document.getElementById('username');
     const password = document.getElementById('password');
     const confirmPassword = document.getElementById('confirmPassword');
+    const confirmError = document.getElementById('confirmError');
+
+    confirmPassword.addEventListener('input', function() {
+        if (this.value && this.value !== password.value) {
+            confirmError.style.display = 'block';
+        } else {
+            confirmError.style.display = 'none';
+        }
+    });
 
     form.addEventListener('submit', function(e) {
         let isValid = true;
@@ -640,6 +649,12 @@
         document.querySelectorAll('.error-message').forEach(msg => {
             msg.style.display = 'none';
         });
+
+        if (password.value !== confirmPassword.value) {
+            e.preventDefault();
+            alert('رمز عبور و تکرار آن یکسان نیستند!');
+            return false;
+        }
 
         if (!username.validity.valid) {
             username.classList.add('input-error');

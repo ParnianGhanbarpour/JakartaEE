@@ -72,8 +72,8 @@ public class SignupServlet extends HttpServlet {
                 req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                 return;
             }
-            if (password == null || password.trim().isEmpty() || password.length() < 6) {
-                req.setAttribute("signupError", "رمز عبور باید حداقل ۶ کاراکتر باشد");
+            if (password == null || password.trim().isEmpty() || password.length() < 3) {
+                req.setAttribute("signupError", "رمز عبور باید حداقل ۳ کاراکتر باشد");
                 req.getRequestDispatcher("/signup.jsp").forward(req, resp);
                 return;
             }

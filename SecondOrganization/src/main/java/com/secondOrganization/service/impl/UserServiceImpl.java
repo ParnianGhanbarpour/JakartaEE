@@ -40,6 +40,11 @@ public class UserServiceImpl implements UserService, Serializable {
                 throw new IllegalArgumentException("Password cannot be null or empty");
             }
 
+            String rawPassword = user.getPassword();
+            if (rawPassword.length() < 5 || rawPassword.length() > 20) {
+                throw new IllegalArgumentException("Password must be between 5 and 20 characters");
+            }
+
             Optional<User> existing = findByUsername(user.getUsername().trim());
             if (existing.isPresent()) {
                 String msg = "Username already exists: " + user.getUsername();
@@ -47,8 +52,14 @@ public class UserServiceImpl implements UserService, Serializable {
                 throw new IllegalArgumentException(msg);
             }
 
-            String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
-            user.setPassword(hashedPassword);
+            String password = user.getPassword();
+            if (!password.startsWith("$2a$") && !password.startsWith("$2b$") && !password.startsWith("$2y$")) {
+                password = PasswordUtil.hashPassword(password);
+                user.setPassword(password);
+                log.debug("Password hashed for user: {}", user.getUsername());
+            } else {
+                log.debug("Password already hashed for user: {}", user.getUsername());
+            }
 
             user.setUsername(user.getUsername().trim());
             user.setActive(true);
@@ -58,22 +69,6 @@ public class UserServiceImpl implements UserService, Serializable {
             entityManager.flush();
 
             log.info(" User saved successfully: {}", user.getUsername());
-
-        } catch (ConstraintViolationException e) {
-            Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-            StringBuilder errorMsg = new StringBuilder("Validation errors: ");
-
-            for (ConstraintViolation<?> violation : violations) {
-                log.error("Validation error: {} = {}",
-                        violation.getPropertyPath(),
-                        violation.getMessage());
-                errorMsg.append(violation.getPropertyPath())
-                        .append(": ")
-                        .append(violation.getMessage())
-                        .append("; ");
-            }
-
-            throw new Exception(errorMsg.toString(), e);
 
         } catch (IllegalArgumentException e) {
             log.warn("Business rule violation: {}", e.getMessage());
@@ -124,7 +119,7 @@ public class UserServiceImpl implements UserService, Serializable {
             entityManager.merge(user);
             log.info(" User soft deleted by username: {}", username);
         } else {
-            log.warn("  User not found: {}", username);
+            log.warn("User not found: {}", username);
         }
     }
 
@@ -177,71 +172,49 @@ public class UserServiceImpl implements UserService, Serializable {
         }
     }
 
-
-//    @Transactional
-//    @Override
-//    public Optional<User> findByUsernameAndPassword(String username, String password) throws Exception {
-//        log.debug("Attempting authentication for user: {}", username);
-//
-//        if (username == null || password == null) {
-//            return Optional.empty();
-//        }
-//
-//        try {
-//            TypedQuery<User> query = entityManager.createQuery(
-//                    "SELECT u FROM User u WHERE u.username = :username AND u.deleted = false",
-//                    User.class
-//            );
-//            query.setParameter("username", username.trim());
-//
-//            List<User> results = query.getResultList();
-//
-//            if (results.isEmpty()) {
-//                log.warn(" User not found: {}", username);
-//                return Optional.empty();
-//            }
-//
-//            User user = results.get(0);
-//
-//            if (user.getPassword().equals(password)) {
-//                if (!user.isActive()) {
-//                    log.warn(" User is inactive: {}", username);
-//                    return Optional.empty();
-//                }
-//
-//                log.info(" Authentication successful for user: {}", username);
-//                return Optional.of(user);
-//            } else {
-//                log.warn(" Invalid password for user: {}", username);
-//                return Optional.empty();
-//            }
-//
-//        } catch (Exception e) {
-//            log.error("Error during authentication for user {}: {}", username, e.getMessage());
-//            throw e;
-//        }
-//    }
-
     @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) throws Exception {
+        log.debug("Attempting authentication for user: {}", username);
 
         Optional<User> userOpt = findByUsername(username);
-        if (userOpt.isEmpty()) return Optional.empty();
+        if (userOpt.isEmpty()) {
+            log.warn(" User not found: {}", username);
+            return Optional.empty();
+        }
 
         User user = userOpt.get();
 
-        if (!user.isActive()) return Optional.empty();
-
-        if (PasswordUtil.checkPassword(password, user.getPassword())) {
-            log.info(" Authentication successful for user: {}", username);
-            return Optional.of(user);
+        if (!user.isActive()) {
+            log.warn(" User is inactive: {}", username);
+            return Optional.empty();
         }
 
-        log.warn(" Invalid password for user: {}", username);
-        return Optional.empty();
+        String storedPassword = user.getPassword();
+        boolean passwordMatches;
+
+        if (storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2b$") || storedPassword.startsWith("$2y$")) {
+            passwordMatches = PasswordUtil.checkPassword(password, storedPassword);
+            log.debug("BCrypt password check for user {}: {}", username, passwordMatches);
+        } else {
+            passwordMatches = storedPassword.equals(password);
+            log.debug("Plain text password check for user {}: {}", username, passwordMatches);
+
+            if (passwordMatches) {
+                log.info("Upgrading plain text password to BCrypt for user: {}", username);
+                user.setPassword(PasswordUtil.hashPassword(password));
+                entityManager.merge(user);
+                entityManager.flush();
+            }
+        }
+
+        if (passwordMatches) {
+            log.info(" Authentication successful for user: {}", username);
+            return Optional.of(user);
+        } else {
+            log.warn(" Invalid password for user: {}", username);
+            return Optional.empty();
+        }
     }
-
-
 
     @Transactional
     @Override
@@ -265,7 +238,6 @@ public class UserServiceImpl implements UserService, Serializable {
         query.setParameter("active", active);
         return query.getResultList();
     }
-
 
     @Transactional
     @Override
